@@ -8,10 +8,10 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `src/agentscope/__init__.py` | ~160 | 包初始化、子模块导入、`__all__` | ch13 |
-| `src/agentscope/_run_config.py` | ~74 | `_ConfigCls`（ContextVar 配置） | ch34 |
-| `src/agentscope/_logging.py` | ~60 | 日志配置 | ch13 |
-| `src/agentscope/_version.py` | ~5 | 版本号 | — |
+| `src/agentscope/__init__.py` | ~180 | 包初始化、子模块导入、`__all__` | ch13 |
+| `src/agentscope/_run_config.py` | ~73 | `_ConfigCls`（ContextVar 配置） | ch34 |
+| `src/agentscope/_logging.py` | ~47 | 日志配置 | ch13 |
+| `src/agentscope/_version.py` | ~4 | 版本号 | — |
 
 ---
 
@@ -19,8 +19,8 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_message_base.py` | ~120 | `Msg` 类 | ch04 |
-| `_message_block.py` | ~100 | 7 种 `ContentBlock` TypedDict | ch04 |
+| `_message_base.py` | ~240 | `Msg` 类 | ch04 |
+| `_message_block.py` | ~130 | 7 种 `ContentBlock` TypedDict | ch04 |
 
 ---
 
@@ -28,7 +28,7 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_state_module.py` | ~120 | `StateModule`（序列化） | ch14 |
+| `_state_module.py` | ~150 | `StateModule`（序列化） | ch14 |
 
 ---
 
@@ -37,8 +37,8 @@
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
 | `_working_memory/_base.py` | ~170 | `MemoryBase` 抽象接口 | ch06 |
-| `_working_memory/_in_memory_memory.py` | ~300 | `InMemoryMemory` | ch06 |
-| `_long_term_memory/_long_term_memory_base.py` | ~200 | `LongTermMemoryBase` | ch07 |
+| `_working_memory/_in_memory_memory.py` | ~305 | `InMemoryMemory` | ch06 |
+| `_long_term_memory/_long_term_memory_base.py` | ~95 | `LongTermMemoryBase` | ch07 |
 
 ---
 
@@ -46,10 +46,10 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_model_base.py` | ~100 | `ChatModelBase` 抽象接口 | ch09 |
-| `_openai_model.py` | ~500 | `OpenAIChatModel` | ch09 |
-| `_model_response.py` | ~100 | `ChatResponse` | ch09 |
-| `_model_usage.py` | ~50 | `ChatUsage` | ch09 |
+| `_model_base.py` | ~80 | `ChatModelBase` 抽象接口 | ch09 |
+| `_openai_model.py` | ~795 | `OpenAIChatModel` | ch09 |
+| `_model_response.py` | ~42 | `ChatResponse` | ch09 |
+| `_model_usage.py` | ~26 | `ChatUsage` | ch09 |
 
 ---
 
@@ -58,9 +58,9 @@
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
 | `_formatter_base.py` | ~130 | `FormatterBase` 抽象接口 | ch08, ch16 |
-| `_truncated_formatter_base.py` | ~100 | 带截断的模板方法 | ch08, ch16 |
-| `_openai_formatter.py` | ~400 | `OpenAIChatFormatter` | ch08 |
-| `_anthropic_formatter.py` | ~400 | `AnthropicChatFormatter` | ch16 |
+| `_truncated_formatter_base.py` | ~300 | 带截断的模板方法 | ch08, ch16 |
+| `_openai_formatter.py` | ~540 | `OpenAIChatFormatter` | ch08 |
+| `_anthropic_formatter.py` | ~355 | `AnthropicChatFormatter` | ch16 |
 
 ---
 
@@ -68,8 +68,8 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_toolkit.py` | ~1680 | `Toolkit` 类 | ch10, ch17, ch18 |
-| `_response.py` | ~30 | `ToolResponse` | ch10 |
+| `_toolkit.py` | ~1685 | `Toolkit` 类 | ch10, ch17, ch18 |
+| `_response.py` | ~32 | `ToolResponse` | ch10 |
 | `_types.py` | ~160 | `RegisteredToolFunction`, `ToolGroup` | ch10, ch17 |
 
 ---
@@ -78,10 +78,10 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_agent_base.py` | ~500 | `AgentBase` | ch05, ch14 |
-| `_agent_meta.py` | ~170 | `_AgentMeta` 元类 + `_wrap_with_hooks` | ch15 |
-| `_react_agent_base.py` | ~120 | `ReActAgentBase` 抽象 | ch14 |
-| `_react_agent.py` | ~1100 | `ReActAgent` 完整实现 | ch11 |
+| `_agent_base.py` | ~775 | `AgentBase` | ch05, ch14 |
+| `_agent_meta.py` | ~192 | `_AgentMeta` 元类 + `_wrap_with_hooks` | ch15 |
+| `_react_agent_base.py` | ~116 | `ReActAgentBase` 抽象 | ch14 |
+| `_react_agent.py` | ~1140 | `ReActAgent` 完整实现 | ch11 |
 
 ---
 
@@ -89,9 +89,9 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_msghub.py` | ~160 | `MsgHub` | ch19 |
-| `_functional.py` | ~190 | `sequential_pipeline`, `fanout_pipeline` | ch19 |
-| `_class.py` | ~100 | `SequentialPipeline`, `FanoutPipeline` | ch19 |
+| `_msghub.py` | ~156 | `MsgHub` | ch19 |
+| `_functional.py` | ~192 | `sequential_pipeline`, `fanout_pipeline` | ch19 |
+| `_class.py` | ~90 | `SequentialPipeline`, `FanoutPipeline` | ch19 |
 
 ---
 
@@ -99,7 +99,7 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_trace.py` | ~600 | 5 种 trace 装饰器 | ch20 |
+| `_trace.py` | ~650 | 5 种 trace 装饰器 | ch20 |
 | `_setup.py` | ~50 | `setup_tracing` | ch20 |
 
 ---
@@ -108,7 +108,7 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_common.py` | ~200 | `_parse_tool_function` 等 | ch17 |
+| `_common.py` | ~500 | `_parse_tool_function` 等 | ch17 |
 
 ---
 

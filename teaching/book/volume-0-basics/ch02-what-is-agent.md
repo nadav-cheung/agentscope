@@ -201,7 +201,7 @@ memory = InMemoryMemory()
 
 这样 LLM 就能看到完整的对话历史，做出连贯的回答。
 
-除了 `InMemoryMemory`，AgentScope 还提供了其他记忆实现——比如用 Redis 存储的 `RedisMemory`，用数据库存储的 `SQLAlchemyMemory`。它们的接口一样，只是存储位置不同。我们在卷一第 6 章会深入源码看 Memory 的实现。
+除了 `InMemoryMemory`，AgentScope 还提供了其他记忆实现——比如用 Redis 存储的 `RedisMemory`，用数据库存储的 `AsyncSQLAlchemyMemory`。它们的接口一样，只是存储位置不同。我们在卷一第 6 章会深入源码看 Memory 的实现。
 
 ### 2.3.3 Tool（工具）
 

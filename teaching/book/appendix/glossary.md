@@ -36,7 +36,7 @@
 | 内容块 | ContentBlock | 消息中的结构化内容（文本、图片、工具调用等） |
 | 工作记忆 | Working Memory | 当前对话的短期记忆 |
 | 长期记忆 | Long-term Memory | 跨会话的持久化记忆 |
-| 格式化器 | Formatter | 将 Msg 转换为模型 API 需要的格式 |
+| 格式转换器 | Formatter | 将 Msg 转换为模型 API 需要的格式 |
 | 工具箱 | Toolkit | 管理工具函数的注册和调用 |
 | 中间件 | Middleware | 包裹工具执行的拦截器 |
 | Hook | Hook | 在方法前后自动执行的回调函数 |

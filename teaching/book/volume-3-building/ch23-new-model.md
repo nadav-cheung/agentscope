@@ -127,7 +127,7 @@ from agentscope.message import Msg
 
 
 class FastLLMFormatter(TruncatedFormatterBase):
-    """FastLLM API 的消息格式化器。
+    """FastLLM API 的消息格式转换器。
 
     FastLLM 的格式和 OpenAI 基本相同，
     但系统消息放在单独的 system 字段，不在 messages 数组中。
