@@ -1,160 +1,89 @@
-# 第 8 章 第 5 站：格式转换
+# 第 8 站：格式转换
 
-> **追踪线**：消息和知识都准备好了，但模型 API 需要特定的 JSON 格式。Formatter 负责这个转换。
-> 本章你将理解：Msg 列表 → API messages 格式、Token 截断、JSON Schema。
+> 消息在 Agent 内部用的是 `Msg` 对象，但 OpenAI API 要的是 `[{"role": "user", "content": "..."}]` 这样的 JSON——谁来负责翻译？
+
+## 路线图
+
+前几站我们追踪了消息从诞生到存储的路径。现在消息即将被发送给大模型，但有一个问题：**大模型 API 有自己要求的格式**。
+
+```
+Agent 内部: Msg(name="user", content=[TextBlock(...)], role="user")
+                                    ↓
+                          Formatter 翻译
+                                    ↓
+OpenAI API:  {"role": "user", "content": "北京今天天气怎么样？"}
+```
+
+这一站，我们打开 **Formatter（格式转换器）**，看翻译如何完成。
+
+读完本章，你会理解：
+- Formatter 的继承链：`FormatterBase` → `TruncatedFormatterBase` → `OpenAIChatFormatter`
+- Token 截断策略：消息太长怎么办？
+- 为什么 Formatter 独立于 Model（而不是 Model 自己做翻译）
 
 ---
 
-## 8.1 路线图
+## 知识补全：JSON Schema
 
-```mermaid
-graph LR
-    Init["init()"] --> Msg["Msg 诞生"]
-    Msg --> Agent["Agent 收信"]
-    Agent --> Memory["工作记忆"]
-    Memory --> Retrieve["检索知识"]
-    Retrieve --> Format["格式转换"]
-    Format --> Model["请求模型"]
-    Model --> Tool["执行工具"]
-    Tool --> Loop["循环/返回"]
+Formatter 的输出是 JSON 字典列表。`{"role": "user", "content": "..."}` 这种结构就是 JSON。
 
-    style Init fill:#e0e0e0
-    style Msg fill:#e0e0e0
-    style Agent fill:#e0e0e0
-    style Memory fill:#e0e0e0
-    style Retrieve fill:#e0e0e0
-    style Format fill:#4caf50,color:white
-```
+JSON Schema 是一种描述 JSON 格式的规范——"这个字段必须是字符串""这个字段只能是 user/assistant/system 之一"。OpenAI API 就是用 JSON Schema 来定义请求格式的。
 
-绿色是当前位置——Formatter 把消息转为模型格式。
-
-> **源码验证日期**: 2026-05-11, commit `f17cfd0a`
+不需要深入了解 JSON Schema 规范。只要知道：**Formatter 的任务就是把 `Msg` 对象翻译成符合特定 API JSON 格式的字典列表**。
 
 ---
 
-## 8.2 知识补全：JSON Schema
-
-Formatter 需要把工具定义转成 JSON Schema 格式告诉模型。JSON Schema 是什么？
-
-### JSON Schema 是什么
-
-JSON Schema 是一种用 JSON 描述 JSON 数据结构的规范。它回答的问题是："这个 JSON 应该长什么样？"
-
-```json
-{
-    "type": "object",
-    "properties": {
-        "city": {
-            "type": "string",
-            "description": "城市名"
-        }
-    },
-    "required": ["city"]
-}
-```
-
-这段 JSON Schema 描述了一个对象：必须有一个 `city` 字符串字段。AgentScope 用 JSON Schema 来描述工具函数的参数，这样模型就知道该怎么调用工具。
-
-### 从函数到 JSON Schema
-
-```python
-def get_weather(city: str, unit: str = "celsius") -> str:
-    """获取城市天气"""
-    ...
-```
-
-AgentScope 会自动把这个函数转换成 JSON Schema：
-
-```json
-{
-    "name": "get_weather",
-    "description": "获取城市天气",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "city": {"type": "string"},
-            "unit": {"type": "string", "default": "celsius"}
-        },
-        "required": ["city"]
-    }
-}
-```
-
-这个转换在 Toolkit 注册工具时自动完成，Formatter 只需要把结果格式化给模型。
-
----
-
-## 8.3 源码入口
-
-| 文件 | 内容 |
-|------|------|
-| `src/agentscope/formatter/_formatter_base.py` | `FormatterBase` 基类 |
-| `src/agentscope/formatter/_truncated_formatter_base.py` | `TruncatedFormatterBase` 截断基类 |
-| `src/agentscope/formatter/_openai_formatter.py` | `OpenAIChatFormatter` 实现 |
-| `src/agentscope/token/` | Token 计数 |
-
----
-
-## 8.4 逐行阅读
-
-### Formatter 的三层继承
-
-```mermaid
-graph TB
-    FB["FormatterBase<br/>抽象接口"]
-    TFB["TruncatedFormatterBase<br/>Token 截断逻辑"]
-    OCF["OpenAIChatFormatter<br/>OpenAI 格式"]
-
-    FB --> TFB
-    TFB --> OCF
-
-    style FB fill:#e8f5e9
-    style TFB fill:#fff3e0
-    style OCF fill:#e3f2fd
-```
-
-- **FormatterBase**：定义 `format()` 抽象方法
-- **TruncatedFormatterBase**：加上 Token 截断逻辑
-- **OpenAIChatFormatter**：实现 OpenAI API 的具体格式
-
-### FormatterBase：抽象接口
+## 第一层：FormatterBase
 
 打开 `src/agentscope/formatter/_formatter_base.py`：
 
 ```python
+# _formatter_base.py:11
 class FormatterBase:
     @abstractmethod
     async def format(self, *args, **kwargs) -> list[dict[str, Any]]:
-        """Format the Msg objects to a list of dictionaries."""
+        """把 Msg 对象格式化为 API 需要的字典列表"""
 ```
 
-接口很简单——输入 `Msg` 列表，输出字典列表。字典的格式由具体实现决定。
+这就是全部的接口定义——**一个抽象方法**。输入是 `Msg` 列表，输出是字典列表。
 
-### TruncatedFormatterBase：截断逻辑
-
-这是 Formatter 的核心。打开 `src/agentscope/formatter/_truncated_formatter_base.py`：
+还有一个实用静态方法：
 
 ```python
+# _formatter_base.py:37
+@staticmethod
+def convert_tool_result_to_string(
+    output: str | list[TextBlock | ImageBlock | AudioBlock | VideoBlock],
+) -> tuple[str, ...]:
+    """把工具结果转换为文本（有些 API 不支持工具结果中的多模态数据）"""
+```
+
+当工具返回了图片或音频，但目标 API 不支持在工具结果中放多模态数据时，这个方法会把它们提取出来，转为文本描述。
+
+---
+
+## 第二层：TruncatedFormatterBase
+
+打开 `src/agentscope/formatter/_truncated_formatter_base.py`：
+
+```python
+# _truncated_formatter_base.py:19
 class TruncatedFormatterBase(FormatterBase, ABC):
     def __init__(
         self,
         token_counter: TokenCounterBase | None = None,
         max_tokens: int | None = None,
-    ):
-        self.token_counter = token_counter
-        self.max_tokens = max_tokens
+    ): ...
 ```
 
-两个可选参数：
-- `token_counter`：Token 计数器，计算消息占多少 token
-- `max_tokens`：最大 token 数限制
-
-#### format() 主流程
+这一层加入了**Token 截断**功能。看看核心的 `format` 方法：
 
 ```python
+# _truncated_formatter_base.py:48
+@trace_format
 async def format(self, msgs: list[Msg], **kwargs) -> list[dict[str, Any]]:
     self.assert_list_of_msgs(msgs)
-    msgs = deepcopy(msgs)
+    msgs = deepcopy(msgs)    # 先深拷贝，不修改原始消息
 
     while True:
         formatted_msgs = await self._format(msgs)
@@ -167,200 +96,343 @@ async def format(self, msgs: list[Msg], **kwargs) -> list[dict[str, Any]]:
         ):
             return formatted_msgs
 
-        msgs = await self._truncate(msgs)
+        # Token 数超标 → 截断旧消息 → 重新格式化
+        msgs = self._truncate(msgs)
 ```
 
-核心循环：
+这是一个**循环截断**策略：
 
 ```mermaid
-graph TD
-    Start["deepcopy 消息"] --> Format["_format(): 格式化"]
-    Format --> Count["_count(): 计算 Token 数"]
-    Count --> Check{"Token 数 ≤ 限制？"}
-    Check -->|"是"| Return["返回格式化结果"]
-    Check -->|"否"| Truncate["_truncate(): 截断消息"]
-    Truncate --> Format
-
-    style Start fill:#e8f5e9
-    style Return fill:#e8f5e9
+flowchart TD
+    A[格式化消息] --> B[计算 Token 数]
+    B --> C{Token 数 ≤ 上限？}
+    C -->|是| D[返回格式化结果]
+    C -->|否| E[截断旧消息]
+    E --> A
 ```
 
-1. 格式化消息
-2. 计算 token 数
-3. 如果没超限，返回
-4. 如果超限，截断最早的几条消息，重新格式化
+关键点：`_format` 和 `_truncate` 都是抽象方法，由具体子类实现。
 
-#### _format()：消息分组与格式化
+### TokenCounterBase
+
+Token 计数器是一个独立的抽象：
 
 ```python
-async def _format(self, msgs: list[Msg]) -> list[dict[str, Any]]:
-    formatted_msgs = []
-    start_index = 0
-
-    # 系统消息单独处理
-    if len(msgs) > 0 and msgs[0].role == "system":
-        formatted_msgs.append(await self._format_system_message(msgs[0]))
-        start_index = 1
-
-    # 消息分组：tool_sequence vs agent_message
-    async for typ, group in self._group_messages(msgs[start_index:]):
-        match typ:
-            case "tool_sequence":
-                formatted_msgs.extend(await self._format_tool_sequence(group))
-            case "agent_message":
-                formatted_msgs.extend(
-                    await self._format_agent_message(group, is_first_agent_message),
-                )
+# _token_base.py:7
+class TokenCounterBase:
+    @abstractmethod
+    async def count(self, messages: list[dict], **kwargs) -> int:
+        """计算消息列表的 Token 数"""
 ```
 
-消息被分成两类：
-
-| 类型 | 包含 | 格式化策略 |
-|------|------|-----------|
-| `tool_sequence` | ToolUseBlock / ToolResultBlock | 按 API 要求的工具调用格式 |
-| `agent_message` | 纯文本消息 | 按 API 要求的 assistant/user 格式 |
-
-#### _truncate()：截断策略
-
-当消息超过 token 限制时，截断策略是**删除最早的消息**，但保留系统消息和配对的工具调用/结果：
-
-```python
-async def _truncate(self, msgs: list[Msg]) -> list[Msg]:
-    # 系统消息不能删
-    start_index = 0
-    if len(msgs) > 0 and msgs[0].role == "system":
-        start_index = 1
-
-    # 从最早的非系统消息开始删除
-    # 注意：工具调用和工具结果必须一起删除
-    tool_call_ids = set()
-    for i in range(start_index, len(msgs)):
-        for block in msg.get_content_blocks("tool_use"):
-            tool_call_ids.add(block["id"])
-        for block in msg.get_content_blocks("tool_result"):
-            tool_call_ids.remove(block["id"])
-
-        # 找到配对的最后一个工具结果后，截断到这里
-        if len(tool_call_ids) == 0:
-            return msgs[:start_index] + msgs[i + 1:]
-```
-
-关键约束：**工具调用和工具结果必须配对删除**。如果只删除了工具调用但保留了工具结果，API 会报错。
-
-### OpenAIChatFormatter：具体格式
-
-打开 `src/agentscope/formatter/_openai_formatter.py`：
-
-```python
-class OpenAIChatFormatter(TruncatedFormatterBase):
-```
-
-它实现了 `_format_tool_sequence()` 和 `_format_agent_message()` 两个抽象方法，把消息转成 OpenAI API 要求的格式。
-
-例如，一条包含 TextBlock 的 assistant 消息会被格式化为：
-
-```json
-{"role": "assistant", "content": "让我查一下天气"}
-```
-
-一条 ToolUseBlock 会被格式化为：
-
-```json
-{
-    "role": "assistant",
-    "tool_calls": [{
-        "id": "call_001",
-        "type": "function",
-        "function": {
-            "name": "get_weather",
-            "arguments": "{\"city\": \"北京\"}"
-        }
-    }]
-}
-```
-
-对应的 ToolResultBlock 会被格式化为：
-
-```json
-{
-    "role": "tool",
-    "tool_call_id": "call_001",
-    "content": "晴天，25°C"
-}
-```
+为什么 Token 计数要单独抽象？因为不同模型计算 Token 的方式不同——GPT-4o 和 Claude 的 tokenizer 不一样。
 
 ---
 
-## 8.5 调试实践
+## 第三层：OpenAIChatFormatter
 
-### 查看格式化后的消息
+打开 `src/agentscope/formatter/_openai_formatter.py`，找到第 168 行：
 
 ```python
-from agentscope.message import Msg
-from agentscope.formatter import OpenAIChatFormatter
-from agentscope.message._message_block import TextBlock, ToolUseBlock
+# _openai_formatter.py:168
+class OpenAIChatFormatter(TruncatedFormatterBase):
+    support_tools_api: bool = True
+    support_multiagent: bool = True
+    support_vision: bool = True
+    supported_blocks: list[type] = [
+        TextBlock, ImageBlock, AudioBlock, ToolUseBlock, ToolResultBlock,
+    ]
+```
 
-formatter = OpenAIChatFormatter()
+这个类声明了它支持的能力：工具调用 API、多 Agent 对话、视觉（图片）、以及支持哪些 ContentBlock 类型。
 
+### format 方法的实际工作
+
+`OpenAIChatFormatter._format()` 方法（大约在第 210 行开始）做这些事：
+
+1. **遍历每条消息**，按消息的 `name` 和 `role` 确定 OpenAI 格式中的 `role` 字段
+2. **处理每个 ContentBlock**：
+   - `TextBlock` → `{"type": "text", "text": "..."}`
+   - `ImageBlock` → `{"type": "image_url", "image_url": {"url": "..."}}`
+   - `ToolUseBlock` → `{"type": "function", "function": {"name": "...", "arguments": "..."}}`
+   - `ToolResultBlock` → `{"type": "function", "output": "..."}`
+3. **处理特殊的图片提升**：有些 API 不支持工具结果中带图片，`promote_tool_result_images=True` 会把图片提取到单独的用户消息中
+
+```mermaid
+flowchart LR
+    subgraph 输入
+        MSG["Msg(name='assistant', content=[TextBlock, ToolUseBlock])"]
+    end
+
+    subgraph Formatter 翻译
+        MSG --> ROLE["role: 'assistant'"]
+        MSG --> TB["TextBlock → {type: 'text', text: '...'}"]
+        MSG --> TUB["ToolUseBlock → {type: 'function', ...}"]
+    end
+
+    subgraph 输出
+        ROLE --> OUT["{'role': 'assistant', 'content': [...]}"]
+        TB --> OUT
+        TUB --> OUT
+    end
+```
+
+### 其他 Formatter 实现
+
+AgentScope 为不同的模型 API 提供了不同的 Formatter：
+
+```
+src/agentscope/formatter/
+├── _formatter_base.py              # 基类
+├── _truncated_formatter_base.py    # Token 截断层
+├── _openai_formatter.py            # OpenAI / GPT 系列
+├── _anthropic_formatter.py         # Anthropic / Claude
+├── _dashscope_formatter.py         # 阿里云通义千问
+├── _gemini_formatter.py            # Google Gemini
+├── _ollama_formatter.py            # Ollama 本地模型
+├── _deepseek_formatter.py          # DeepSeek
+└── _a2a_formatter.py               # Agent-to-Agent 协议
+```
+
+每个 API 对消息格式的要求略有不同。比如 Anthropic 把系统提示放在单独的 `system` 字段，而不是 `{"role": "system"}` 消息中。
+
+> **设计一瞥**：为什么 Formatter 独立于 Model？
+> 你可能觉得"格式转换应该是模型自己的事"。但把它们分开有一个大好处：**同一个 Formatter 可以搭配不同的模型**。
+> 比如 `OpenAIChatFormatter` 适用于所有兼容 OpenAI API 的服务（OpenAI、DeepSeek、本地 Ollama 等）。
+> 如果 Formatter 和 Model 绑定，换一个兼容服务就要写一个新的 Model 类。
+> 代价：用户需要自己选择 Formatter 和 Model 的组合。详见卷四第 35 章。
+
+---
+
+## _truncate 截断策略深入分析
+
+当 Token 数超过 `max_tokens` 时，`_truncate` 方法（第 151 行）负责裁剪消息。它的策略是**从旧到新删除消息对**，但有几条重要规则：
+
+### 规则 1：系统提示不截断
+
+```python
+# _truncated_formatter_base.py:179-189
+if len(msgs) > 0 and msgs[0].role == "system":
+    if len(msgs) == 1:
+        raise ValueError("系统提示已经超过 Token 限制！")
+    start_index = 1   # 跳过系统提示，只截断后面的消息
+```
+
+系统提示（`sys_prompt`）是最重要的上下文，永远不被截断。如果连系统提示都超限了，直接报错。
+
+### 规则 2：工具调用和结果成对删除
+
+```python
+# _truncated_formatter_base.py:193-207
+tool_call_ids = set()
+for i in range(start_index, len(msgs)):
+    # 遇到 ToolUseBlock → 加入待删除集合
+    for block in msg.get_content_blocks("tool_use"):
+        tool_call_ids.add(block["id"])
+
+    # 遇到对应的 ToolResultBlock → 从集合中移除（配对完成）
+    for block in msg.get_content_blocks("tool_result"):
+        tool_call_ids.remove(block["id"])
+
+    # 所有工具调用都配对完成 → 截断到当前位置
+    if len(tool_call_ids) == 0:
+        return msgs[:start_index] + msgs[i + 1:]
+```
+
+工具调用和工具结果必须成对出现，否则 API 会报错。所以截断时，代码追踪每个 `tool_call_id`，确保不会留下"只有调用没有结果"的消息。
+
+### 规则 3：从旧到新删除
+
+截断从最早的消息开始删除（`start_index = 1` 表示跳过系统提示，从第二条开始）。最近的消息被保留——因为最近的对话上下文最相关。
+
+---
+
+## Token 计数器
+
+Token 计数器的实现在 `src/agentscope/token/` 中：
+
+```python
+# _token_base.py
+class TokenCounterBase:
+    @abstractmethod
+    async def count(self, messages: list[dict], **kwargs) -> int:
+        """计算消息列表的 Token 数"""
+```
+
+如果没有传入 `token_counter`，`_count` 方法返回 `None`，截断循环直接跳过——不会截断任何消息。这就是为什么你可以不设 `max_tokens` 和 `token_counter` 来使用 Formatter。
+
+AgentScope 提供了基于 tiktoken（OpenAI 的分词器）的实现，也支持通过 API 远程计数（更精确但更慢）。
+
+---
+
+## 不同 Provider 的格式差异
+
+虽然 `OpenAIChatFormatter` 适用于所有兼容 OpenAI API 的服务，但其他 Provider 有独特的格式要求：
+
+| Provider | 系统提示 | 工具结果 | 多模态 |
+|----------|---------|---------|--------|
+| **OpenAI** | `{"role": "system", "content": "..."}` | `{"role": "tool", "tool_call_id": "...", "content": "..."}` | 支持 ImageBlock |
+| **Anthropic** | 独立的 `system` 参数，不在 messages 中 | `{"role": "user", "content": [ToolResultBlock]}` | 支持 ImageBlock |
+| **Gemini** | `{"role": "user", "parts": [{"text": "..."}]}` | 不同的 parts 结构 | 支持 ImageBlock |
+| **Ollama** | 兼容 OpenAI 格式 | 兼容 OpenAI 格式 | 取决于模型 |
+
+最大的差异在于**系统提示**和**工具结果**的处理。Anthropic 把系统提示放在请求的 `system` 字段（不在 `messages` 列表中），工具结果放在 `user` 角色消息中（不是 `tool` 角色）。这就是为什么每种 Provider 需要自己的 Formatter 子类。
+
+---
+
+## 调试实践：观察 Formatter 的格式化过程
+
+这个练习不需要 API key。
+
+### 技巧 1：观察消息分组
+
+在 `_truncated_formatter_base.py` 的 `_group_messages` 方法中（第 260 行），加一行 print：
+
+```python
+for msg in msgs:
+    print(f"[DEBUG] 消息: name={msg.name}, role={msg.role}, "
+          f"有tool_use={msg.has_content_blocks('tool_use')}, "
+          f"有tool_result={msg.has_content_blocks('tool_result')}")
+```
+
+运行 test_formatter.py，你会看到消息是如何被分组为 `agent_message` 和 `tool_sequence` 的。
+
+### 技巧 2：观察截断效果
+
+创建一个超长消息列表，测试截断行为：
+
+```python
+# 在 test_formatter.py 中替换消息列表
+from agentscope.token import TokenCounterBase
+
+class SimpleCounter(TokenCounterBase):
+    """简单的字符计数器（不是真正的 Token 计数）"""
+    async def count(self, messages, **kwargs):
+        total = sum(len(str(m)) for m in messages)
+        return total
+
+formatter = OpenAIChatFormatter(
+    token_counter=SimpleCounter(),
+    max_tokens=100,  # 设置很小的限制
+)
+
+# 创建超过 100 字符的消息列表
 msgs = [
-    Msg("system", "你是天气助手", "system"),
-    Msg("user", "北京天气怎么样？", "user"),
-    Msg("assistant", [
-        TextBlock(type="text", text="让我查一下"),
-        ToolUseBlock(type="tool_use", id="call_001", name="get_weather",
-                     input={"city": "北京"}),
-    ], "assistant"),
+    Msg("system", "你是助手。" + "x" * 50, "system"),
+    Msg("user", "第一条很长的消息" + "y" * 50, "user"),
+    Msg("assistant", "回答" + "z" * 50, "assistant"),
+    Msg("user", "最新的短消息", "user"),
 ]
 
-formatted = await formatter.format(msgs)
-import json
-for msg in formatted:
-    print(json.dumps(msg, ensure_ascii=False, indent=2))
+result = await formatter.format(msgs)
+print(f"截断后剩余消息数: {len(result)}")
 ```
+
+你会看到旧消息被截断，只保留系统提示和最新的消息。
+
+**改完后恢复：**
+
+```bash
+rm test_formatter.py
+git checkout src/agentscope/formatter/
+```
+
+AgentScope 官方文档的 Building Blocks > Models 页面展示了不同模型的使用方法。本章解释了 Formatter 的三层继承体系（FormatterBase → TruncatedFormatterBase → OpenAIChatFormatter）和 Token 截断循环的实现。
+
+AgentScope 1.0 论文对 Formatter 与 Model 分离的设计说明是：
+
+> "we abstract foundational components essential for agentic applications and provide unified interfaces and extensible modules"
+>
+> — AgentScope 1.0: A Comprehensive Framework for Building Agentic Applications, arXiv:2508.16279, Section 2.1
+
+Formatter 的独立设计正是"可扩展模块"思想的体现——新增模型提供商只需要实现对应的 Formatter，不需要修改 Model 的代码。
 
 ---
 
-## 8.6 试一试
+## 试一试：观察 Formatter 的输入和输出
 
-### 在 Formatter 中加 print 观察截断
+这个练习不需要 API key。
 
-打开 `src/agentscope/formatter/_truncated_formatter_base.py`，在 `format()` 的循环中加 print：
+**目标**：直接调用 Formatter，看看它如何把 `Msg` 转换成 OpenAI 格式。
+
+**步骤**：
+
+1. 在项目根目录创建一个测试脚本 `test_formatter.py`：
 
 ```python
-while True:
-    formatted_msgs = await self._format(msgs)
-    n_tokens = await self._count(formatted_msgs)
-    print(f"[FORMAT] 消息数={len(formatted_msgs)}, tokens={n_tokens}, 限制={self.max_tokens}")  # 加这行
+import asyncio
+from agentscope.message import Msg, TextBlock, ToolUseBlock
+from agentscope.formatter import OpenAIChatFormatter
 
-    if n_tokens is None or self.max_tokens is None or n_tokens <= self.max_tokens:
-        return formatted_msgs
-    msgs = await self._truncate(msgs)
+async def main():
+    formatter = OpenAIChatFormatter()
+
+    # 创建几条消息
+    msgs = [
+        Msg(name="system", content="你是天气助手。", role="system"),
+        Msg(name="user", content="北京天气如何？", role="user"),
+        Msg(
+            name="assistant",
+            content=[
+                TextBlock(type="text", text="让我查一下天气。"),
+                ToolUseBlock(
+                    type="tool_use",
+                    id="call_123",
+                    name="get_weather",
+                    input={"city": "北京"},
+                ),
+            ],
+            role="assistant",
+        ),
+    ]
+
+    # 格式化
+    result = await formatter.format(msgs)
+
+    # 打印结果
+    import json
+    for msg in result:
+        print(json.dumps(msg, ensure_ascii=False, indent=2))
+        print("---")
+
+asyncio.run(main())
 ```
 
-如果你设置了 `max_tokens`，会看到消息被逐步截断的过程。
+2. 运行：
 
-### 修改截断策略
+```bash
+python test_formatter.py
+```
 
-默认截断策略是"删除最早的"。你可以尝试改为"删除最旧的但保留系统消息"，只需在 `_truncate()` 中调整逻辑。
+3. 观察输出：每条消息如何被转换成 OpenAI API 的 JSON 格式。
+
+4. **进阶**：在 `src/agentscope/formatter/_openai_formatter.py` 的 `_format` 方法中加一行 `print(f"[DEBUG] 格式化消息: {msg.name}")`，再运行一次，观察遍历过程。
+
+**完成后清理：**
+
+```bash
+rm test_formatter.py
+git checkout src/agentscope/formatter/
+```
 
 ---
 
-## 8.7 检查点
+## 检查点
 
-你现在已经理解了：
+你现在理解了：
 
-- **Formatter 三层继承**：FormatterBase → TruncatedFormatterBase → OpenAIChatFormatter
-- **format() 流程**：deepcopy → 格式化 → 计数 → 检查 → 截断（循环）
-- **消息分组**：tool_sequence（工具调用序列）和 agent_message（普通消息）
-- **Token 截断**：超过限制时删除最早的消息，保持工具调用配对
-- **JSON Schema**：描述工具参数的标准格式
+- **Formatter** 是 `Msg` 对象和模型 API 之间的翻译器
+- 三层继承链：`FormatterBase`（接口）→ `TruncatedFormatterBase`（加 Token 截断）→ 具体实现（如 `OpenAIChatFormatter`）
+- Token 截断是一个"格式化 → 计数 → 超标则截断旧消息 → 重新格式化"的循环
+- Formatter 独立于 Model，使得同一格式转换可以复用于多个兼容模型
 
 **自检练习**：
-1. 为什么要 deepcopy 消息再格式化？（提示：格式化会修改消息内容）
-2. 工具调用和工具结果为什么要配对删除？
+
+1. 如果不传 `token_counter` 和 `max_tokens`，`TruncatedFormatterBase.format()` 的 `while True` 循环会执行几次？（提示：看 `n_tokens` 为 `None` 时的判断）
+2. AgentScope 提供了多少种 Formatter 实现？（提示：`ls src/agentscope/formatter/`）
 
 ---
 
 ## 下一站预告
 
-消息已经格式化好了。下一站，把这些消息发送给模型。
+消息已经被格式化成 OpenAI API 需要的 JSON 了。下一站，我们追踪最核心的一步——**调用大模型**。看看 `ChatModelBase` 如何发送请求、接收响应、处理流式返回。
