@@ -1,0 +1,16 @@
+{
+  "id": "mock-ch01-001",
+  "object": "chat.completion",
+  "created": 1715472000,
+  "model": "mock",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "大语言模型（LLM）是一种通过海量文本数据训练的深度学习模型，能够理解和生成人类语言，执行翻译、摘要、问答等多种任务。"
+      },
+      "finish_reason": "stop"
+    }
+  ]
+}

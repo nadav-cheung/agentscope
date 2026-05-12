@@ -13,7 +13,8 @@
 
 1. **clone 仓库**：`git clone https://github.com/modelscope/agentscope.git`
 2. **安装开发模式**：`cd agentscope && pip install -e .`
-3. **边读边改**：每章都有"试一试"环节，改一行源码观察变化
+3. **配套代码**：`teaching/book/lab/` 目录包含每章的可运行代码，支持 DeepSeek/OpenAI/Anthropic 三 provider 切换，以及离线 Mock 模式
+4. **边读边改**：每章都有"试一试"环节，改一行源码观察变化
 
 ## 五卷简介
 

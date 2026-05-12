@@ -1,0 +1,5276 @@
+{
+  "metrics": [
+    {
+      "file": "README.md",
+      "chapter": null,
+      "total_lines": 142,
+      "code_lines": 24,
+      "code_blocks": 1,
+      "mermaid_diagrams": 0,
+      "table_rows": 14,
+      "headings": {
+        "h1": 1,
+        "h2": 8,
+        "h3": 6
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 1099,
+      "code_ratio": 16.9
+    },
+    {
+      "file": "appendix/glossary.md",
+      "chapter": null,
+      "total_lines": 106,
+      "code_lines": 0,
+      "code_blocks": 0,
+      "mermaid_diagrams": 0,
+      "table_rows": 62,
+      "headings": {
+        "h1": 1,
+        "h2": 8,
+        "h3": 0
+      },
+      "try_it_sections": 0,
+      "chinese_chars": 773,
+      "code_ratio": 0.0
+    },
+    {
+      "file": "appendix/python-primer.md",
+      "chapter": null,
+      "total_lines": 195,
+      "code_lines": 102,
+      "code_blocks": 9,
+      "mermaid_diagrams": 0,
+      "table_rows": 0,
+      "headings": {
+        "h1": 6,
+        "h2": 10,
+        "h3": 0
+      },
+      "try_it_sections": 0,
+      "chinese_chars": 309,
+      "code_ratio": 52.3
+    },
+    {
+      "file": "appendix/source-map.md",
+      "chapter": null,
+      "total_lines": 129,
+      "code_lines": 0,
+      "code_blocks": 0,
+      "mermaid_diagrams": 0,
+      "table_rows": 65,
+      "headings": {
+        "h1": 1,
+        "h2": 12,
+        "h3": 0
+      },
+      "try_it_sections": 0,
+      "chinese_chars": 301,
+      "code_ratio": 0.0
+    },
+    {
+      "file": "volume-0-basics/ch01-what-is-llm.md",
+      "chapter": 1,
+      "total_lines": 482,
+      "code_lines": 247,
+      "code_blocks": 16,
+      "mermaid_diagrams": 4,
+      "table_rows": 25,
+      "headings": {
+        "h1": 7,
+        "h2": 5,
+        "h3": 10
+      },
+      "try_it_sections": 4,
+      "chinese_chars": 2479,
+      "code_ratio": 51.2
+    },
+    {
+      "file": "volume-0-basics/ch02-what-is-agent.md",
+      "chapter": 2,
+      "total_lines": 506,
+      "code_lines": 251,
+      "code_blocks": 17,
+      "mermaid_diagrams": 3,
+      "table_rows": 6,
+      "headings": {
+        "h1": 4,
+        "h2": 5,
+        "h3": 11
+      },
+      "try_it_sections": 10,
+      "chinese_chars": 3410,
+      "code_ratio": 49.6
+    },
+    {
+      "file": "volume-1-journey/ch03-toolbox.md",
+      "chapter": 3,
+      "total_lines": 533,
+      "code_lines": 236,
+      "code_blocks": 26,
+      "mermaid_diagrams": 2,
+      "table_rows": 13,
+      "headings": {
+        "h1": 28,
+        "h2": 8,
+        "h3": 15
+      },
+      "try_it_sections": 8,
+      "chinese_chars": 2588,
+      "code_ratio": 44.3
+    },
+    {
+      "file": "volume-1-journey/ch04-message-born.md",
+      "chapter": 4,
+      "total_lines": 620,
+      "code_lines": 279,
+      "code_blocks": 30,
+      "mermaid_diagrams": 2,
+      "table_rows": 21,
+      "headings": {
+        "h1": 18,
+        "h2": 8,
+        "h3": 12
+      },
+      "try_it_sections": 7,
+      "chinese_chars": 2821,
+      "code_ratio": 45.0
+    },
+    {
+      "file": "volume-1-journey/ch05-agent-receives.md",
+      "chapter": 5,
+      "total_lines": 540,
+      "code_lines": 232,
+      "code_blocks": 26,
+      "mermaid_diagrams": 4,
+      "table_rows": 10,
+      "headings": {
+        "h1": 5,
+        "h2": 8,
+        "h3": 11
+      },
+      "try_it_sections": 8,
+      "chinese_chars": 2392,
+      "code_ratio": 43.0
+    },
+    {
+      "file": "volume-1-journey/ch06-memory-store.md",
+      "chapter": 6,
+      "total_lines": 426,
+      "code_lines": 213,
+      "code_blocks": 22,
+      "mermaid_diagrams": 1,
+      "table_rows": 0,
+      "headings": {
+        "h1": 18,
+        "h2": 9,
+        "h3": 5
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 2214,
+      "code_ratio": 50.0
+    },
+    {
+      "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+      "chapter": 7,
+      "total_lines": 431,
+      "code_lines": 161,
+      "code_blocks": 22,
+      "mermaid_diagrams": 2,
+      "table_rows": 4,
+      "headings": {
+        "h1": 14,
+        "h2": 10,
+        "h3": 11
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 2314,
+      "code_ratio": 37.4
+    },
+    {
+      "file": "volume-1-journey/ch08-formatter.md",
+      "chapter": 8,
+      "total_lines": 439,
+      "code_lines": 199,
+      "code_blocks": 19,
+      "mermaid_diagrams": 2,
+      "table_rows": 6,
+      "headings": {
+        "h1": 12,
+        "h2": 12,
+        "h3": 8
+      },
+      "try_it_sections": 5,
+      "chinese_chars": 1895,
+      "code_ratio": 45.3
+    },
+    {
+      "file": "volume-1-journey/ch09-model.md",
+      "chapter": 9,
+      "total_lines": 505,
+      "code_lines": 206,
+      "code_blocks": 28,
+      "mermaid_diagrams": 2,
+      "table_rows": 18,
+      "headings": {
+        "h1": 18,
+        "h2": 14,
+        "h3": 9
+      },
+      "try_it_sections": 6,
+      "chinese_chars": 2242,
+      "code_ratio": 40.8
+    },
+    {
+      "file": "volume-1-journey/ch10-toolkit.md",
+      "chapter": 10,
+      "total_lines": 457,
+      "code_lines": 239,
+      "code_blocks": 24,
+      "mermaid_diagrams": 2,
+      "table_rows": 0,
+      "headings": {
+        "h1": 15,
+        "h2": 10,
+        "h3": 7
+      },
+      "try_it_sections": 5,
+      "chinese_chars": 1717,
+      "code_ratio": 52.3
+    },
+    {
+      "file": "volume-1-journey/ch11-loop-return.md",
+      "chapter": 11,
+      "total_lines": 597,
+      "code_lines": 302,
+      "code_blocks": 33,
+      "mermaid_diagrams": 3,
+      "table_rows": 6,
+      "headings": {
+        "h1": 32,
+        "h2": 15,
+        "h3": 10
+      },
+      "try_it_sections": 5,
+      "chinese_chars": 2360,
+      "code_ratio": 50.6
+    },
+    {
+      "file": "volume-1-journey/ch12-journey-review.md",
+      "chapter": 12,
+      "total_lines": 250,
+      "code_lines": 62,
+      "code_blocks": 2,
+      "mermaid_diagrams": 1,
+      "table_rows": 32,
+      "headings": {
+        "h1": 5,
+        "h2": 9,
+        "h3": 6
+      },
+      "try_it_sections": 0,
+      "chinese_chars": 2157,
+      "code_ratio": 24.8
+    },
+    {
+      "file": "volume-2-patterns/ch13-module-system.md",
+      "chapter": 13,
+      "total_lines": 299,
+      "code_lines": 103,
+      "code_blocks": 15,
+      "mermaid_diagrams": 0,
+      "table_rows": 0,
+      "headings": {
+        "h1": 9,
+        "h2": 9,
+        "h3": 8
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 1253,
+      "code_ratio": 34.4
+    },
+    {
+      "file": "volume-2-patterns/ch14-inheritance.md",
+      "chapter": 14,
+      "total_lines": 307,
+      "code_lines": 103,
+      "code_blocks": 17,
+      "mermaid_diagrams": 1,
+      "table_rows": 0,
+      "headings": {
+        "h1": 9,
+        "h2": 11,
+        "h3": 5
+      },
+      "try_it_sections": 2,
+      "chinese_chars": 1233,
+      "code_ratio": 33.6
+    },
+    {
+      "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+      "chapter": 15,
+      "total_lines": 319,
+      "code_lines": 138,
+      "code_blocks": 17,
+      "mermaid_diagrams": 1,
+      "table_rows": 7,
+      "headings": {
+        "h1": 10,
+        "h2": 10,
+        "h3": 4
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 1184,
+      "code_ratio": 43.3
+    },
+    {
+      "file": "volume-2-patterns/ch16-formatter-strategy.md",
+      "chapter": 16,
+      "total_lines": 287,
+      "code_lines": 101,
+      "code_blocks": 16,
+      "mermaid_diagrams": 1,
+      "table_rows": 7,
+      "headings": {
+        "h1": 6,
+        "h2": 9,
+        "h3": 6
+      },
+      "try_it_sections": 4,
+      "chinese_chars": 1315,
+      "code_ratio": 35.2
+    },
+    {
+      "file": "volume-2-patterns/ch17-schema-factory.md",
+      "chapter": 17,
+      "total_lines": 281,
+      "code_lines": 133,
+      "code_blocks": 14,
+      "mermaid_diagrams": 1,
+      "table_rows": 0,
+      "headings": {
+        "h1": 9,
+        "h2": 7,
+        "h3": 3
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 1147,
+      "code_ratio": 47.3
+    },
+    {
+      "file": "volume-2-patterns/ch18-middleware.md",
+      "chapter": 18,
+      "total_lines": 325,
+      "code_lines": 173,
+      "code_blocks": 16,
+      "mermaid_diagrams": 1,
+      "table_rows": 0,
+      "headings": {
+        "h1": 6,
+        "h2": 7,
+        "h3": 6
+      },
+      "try_it_sections": 2,
+      "chinese_chars": 1066,
+      "code_ratio": 53.2
+    },
+    {
+      "file": "volume-2-patterns/ch19-pubsub.md",
+      "chapter": 19,
+      "total_lines": 295,
+      "code_lines": 131,
+      "code_blocks": 14,
+      "mermaid_diagrams": 2,
+      "table_rows": 0,
+      "headings": {
+        "h1": 8,
+        "h2": 8,
+        "h3": 3
+      },
+      "try_it_sections": 2,
+      "chinese_chars": 1151,
+      "code_ratio": 44.4
+    },
+    {
+      "file": "volume-2-patterns/ch20-observability.md",
+      "chapter": 20,
+      "total_lines": 292,
+      "code_lines": 99,
+      "code_blocks": 13,
+      "mermaid_diagrams": 1,
+      "table_rows": 17,
+      "headings": {
+        "h1": 9,
+        "h2": 9,
+        "h3": 6
+      },
+      "try_it_sections": 5,
+      "chinese_chars": 1412,
+      "code_ratio": 33.9
+    },
+    {
+      "file": "volume-3-building/ch21-dev-setup.md",
+      "chapter": 21,
+      "total_lines": 462,
+      "code_lines": 191,
+      "code_blocks": 19,
+      "mermaid_diagrams": 1,
+      "table_rows": 23,
+      "headings": {
+        "h1": 17,
+        "h2": 8,
+        "h3": 16
+      },
+      "try_it_sections": 10,
+      "chinese_chars": 2014,
+      "code_ratio": 41.3
+    },
+    {
+      "file": "volume-3-building/ch22-new-tool.md",
+      "chapter": 22,
+      "total_lines": 523,
+      "code_lines": 329,
+      "code_blocks": 18,
+      "mermaid_diagrams": 2,
+      "table_rows": 0,
+      "headings": {
+        "h1": 8,
+        "h2": 11,
+        "h3": 11
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 1416,
+      "code_ratio": 62.9
+    },
+    {
+      "file": "volume-3-building/ch23-new-model.md",
+      "chapter": 23,
+      "total_lines": 495,
+      "code_lines": 312,
+      "code_blocks": 15,
+      "mermaid_diagrams": 2,
+      "table_rows": 0,
+      "headings": {
+        "h1": 2,
+        "h2": 11,
+        "h3": 11
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 1144,
+      "code_ratio": 63.0
+    },
+    {
+      "file": "volume-3-building/ch24-new-memory.md",
+      "chapter": 24,
+      "total_lines": 580,
+      "code_lines": 406,
+      "code_blocks": 17,
+      "mermaid_diagrams": 3,
+      "table_rows": 0,
+      "headings": {
+        "h1": 9,
+        "h2": 12,
+        "h3": 9
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 948,
+      "code_ratio": 70.0
+    },
+    {
+      "file": "volume-3-building/ch25-new-agent.md",
+      "chapter": 25,
+      "total_lines": 463,
+      "code_lines": 298,
+      "code_blocks": 14,
+      "mermaid_diagrams": 2,
+      "table_rows": 7,
+      "headings": {
+        "h1": 4,
+        "h2": 10,
+        "h3": 10
+      },
+      "try_it_sections": 4,
+      "chinese_chars": 1245,
+      "code_ratio": 64.4
+    },
+    {
+      "file": "volume-3-building/ch26-mcp-server.md",
+      "chapter": 26,
+      "total_lines": 377,
+      "code_lines": 185,
+      "code_blocks": 13,
+      "mermaid_diagrams": 2,
+      "table_rows": 0,
+      "headings": {
+        "h1": 10,
+        "h2": 13,
+        "h3": 9
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 1286,
+      "code_ratio": 49.1
+    },
+    {
+      "file": "volume-3-building/ch27-advanced-extension.md",
+      "chapter": 27,
+      "total_lines": 443,
+      "code_lines": 240,
+      "code_blocks": 22,
+      "mermaid_diagrams": 3,
+      "table_rows": 0,
+      "headings": {
+        "h1": 14,
+        "h2": 11,
+        "h3": 13
+      },
+      "try_it_sections": 3,
+      "chinese_chars": 1349,
+      "code_ratio": 54.2
+    },
+    {
+      "file": "volume-3-building/ch28-integration-capstone.md",
+      "chapter": 28,
+      "total_lines": 596,
+      "code_lines": 427,
+      "code_blocks": 15,
+      "mermaid_diagrams": 2,
+      "table_rows": 10,
+      "headings": {
+        "h1": 13,
+        "h2": 12,
+        "h3": 12
+      },
+      "try_it_sections": 4,
+      "chinese_chars": 1156,
+      "code_ratio": 71.6
+    },
+    {
+      "file": "volume-4-why/ch29-msg-interface.md",
+      "chapter": 29,
+      "total_lines": 206,
+      "code_lines": 65,
+      "code_blocks": 8,
+      "mermaid_diagrams": 1,
+      "table_rows": 6,
+      "headings": {
+        "h1": 9,
+        "h2": 8,
+        "h3": 5
+      },
+      "try_it_sections": 0,
+      "chinese_chars": 1005,
+      "code_ratio": 31.6
+    },
+    {
+      "file": "volume-4-why/ch30-no-decorator.md",
+      "chapter": 30,
+      "total_lines": 219,
+      "code_lines": 81,
+      "code_blocks": 10,
+      "mermaid_diagrams": 0,
+      "table_rows": 6,
+      "headings": {
+        "h1": 9,
+        "h2": 9,
+        "h3": 3
+      },
+      "try_it_sections": 1,
+      "chinese_chars": 884,
+      "code_ratio": 37.0
+    },
+    {
+      "file": "volume-4-why/ch31-god-class.md",
+      "chapter": 31,
+      "total_lines": 200,
+      "code_lines": 47,
+      "code_blocks": 3,
+      "mermaid_diagrams": 0,
+      "table_rows": 29,
+      "headings": {
+        "h1": 8,
+        "h2": 8,
+        "h3": 5
+      },
+      "try_it_sections": 0,
+      "chinese_chars": 1146,
+      "code_ratio": 23.5
+    },
+    {
+      "file": "volume-4-why/ch32-compile-time-hooks.md",
+      "chapter": 32,
+      "total_lines": 214,
+      "code_lines": 63,
+      "code_blocks": 8,
+      "mermaid_diagrams": 0,
+      "table_rows": 14,
+      "headings": {
+        "h1": 16,
+        "h2": 10,
+        "h3": 7
+      },
+      "try_it_sections": 7,
+      "chinese_chars": 1320,
+      "code_ratio": 29.4
+    },
+    {
+      "file": "volume-4-why/ch33-typedict-union.md",
+      "chapter": 33,
+      "total_lines": 198,
+      "code_lines": 85,
+      "code_blocks": 6,
+      "mermaid_diagrams": 1,
+      "table_rows": 6,
+      "headings": {
+        "h1": 8,
+        "h2": 8,
+        "h3": 3
+      },
+      "try_it_sections": 0,
+      "chinese_chars": 719,
+      "code_ratio": 42.9
+    },
+    {
+      "file": "volume-4-why/ch34-contextvar.md",
+      "chapter": 34,
+      "total_lines": 235,
+      "code_lines": 99,
+      "code_blocks": 9,
+      "mermaid_diagrams": 0,
+      "table_rows": 6,
+      "headings": {
+        "h1": 5,
+        "h2": 9,
+        "h3": 4
+      },
+      "try_it_sections": 2,
+      "chinese_chars": 910,
+      "code_ratio": 42.1
+    },
+    {
+      "file": "volume-4-why/ch35-formatter-separate.md",
+      "chapter": 35,
+      "total_lines": 198,
+      "code_lines": 74,
+      "code_blocks": 8,
+      "mermaid_diagrams": 1,
+      "table_rows": 6,
+      "headings": {
+        "h1": 7,
+        "h2": 8,
+        "h3": 6
+      },
+      "try_it_sections": 1,
+      "chinese_chars": 846,
+      "code_ratio": 37.4
+    },
+    {
+      "file": "volume-4-why/ch36-panorama.md",
+      "chapter": 36,
+      "total_lines": 240,
+      "code_lines": 83,
+      "code_blocks": 2,
+      "mermaid_diagrams": 2,
+      "table_rows": 29,
+      "headings": {
+        "h1": 1,
+        "h2": 6,
+        "h3": 10
+      },
+      "try_it_sections": 0,
+      "chinese_chars": 1107,
+      "code_ratio": 34.6
+    }
+  ],
+  "issues": {
+    "syntax": [
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 169,
+        "type": "syntax_error",
+        "detail": "invalid syntax (line 1, col 1)",
+        "snippet": "finally:⏎    if reply_msg:⏎        await self._broadcast_to_subscribers(reply_msg)⏎    self._reply_task = None⏎"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 233,
+        "type": "syntax_error",
+        "detail": "expected an indented block after class definition on line 1 (line 1, col 52)",
+        "snippet": "class AgentBase(StateModule, metaclass=_AgentMeta):⏎"
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 31,
+        "type": "syntax_error",
+        "detail": "invalid syntax (line 1, col 20)",
+        "snippet": "async def __call__(...) -> ChatResponse | AsyncGenerator[ChatResponse, None]:⏎"
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 508,
+        "type": "syntax_error",
+        "detail": "expected an indented block after 'for' statement on line 1 (line 1, col 32)",
+        "snippet": "for _ in range(self.max_iters):⏎"
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 558,
+        "type": "syntax_error",
+        "detail": "invalid syntax (line 1, col 1)",
+        "snippet": "finally:⏎    print(f\"[DEBUG] _acting 完成: tool={tool_call.get('name')}, \"⏎          f\"结果消息长度={len(str(tool_res_msg.conten"
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 183,
+        "type": "syntax_error",
+        "detail": "invalid syntax (line 1, col 19)",
+        "snippet": "def init(project, ...):⏎    # 1. 设置全局配置⏎    _ConfigCls(...)⏎⏎    # 2. 导入所有子模块（触发子模块的 __init__.py）⏎    from . import agen"
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 78,
+        "type": "syntax_error",
+        "detail": "positional argument follows keyword argument (line 1, col 41)",
+        "snippet": "agent = ReActAgent(name=\"assistant\", ...)⏎state = agent.state_dict()        # 保存整个 Agent 状态⏎# state = {\"memory\": {...}, "
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 186,
+        "type": "syntax_error",
+        "detail": "positional argument follows keyword argument (line 1, col 36)",
+        "snippet": "agent = ReActAgent(name=\"test\", ...)⏎state = agent.state_dict()⏎print(\"memory\" in state)          # 应该是 True⏎print(state"
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 290,
+        "type": "syntax_error",
+        "detail": "invalid syntax (line 2, col 24)",
+        "snippet": "class MyAgent(AgentBase):⏎    def __init__(self, ...):⏎        super().__init__(...)⏎        self.counter = 0           "
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 139,
+        "type": "syntax_error",
+        "detail": "invalid syntax (line 1, col 45)",
+        "snippet": "def register_tool_function(self, tool_func, ...):⏎    # 解析函数⏎    parsed = _parse_tool_function(tool_func, ...)⏎⏎    # 创建"
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 142,
+        "type": "syntax_error",
+        "detail": "positional argument follows keyword argument (line 1, col 41)",
+        "snippet": "agent = ReActAgent(name=\"assistant\", ...)⏎# ... 运行了一段时间 ...⏎⏎# 保存状态⏎state = agent.state_dict()⏎⏎# 之后可以恢复⏎agent2 = ReActA"
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 33,
+        "type": "syntax_error",
+        "detail": "invalid syntax (line 9, col 5)",
+        "snippet": "def register_tool_function(⏎    self,⏎    tool_func: ToolFunction,⏎    group_name: str | Literal[\"basic\"] = \"basic\",⏎   "
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 190,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    async def add(⏎        self,⏎        memories: Msg | list[Msg] | None = None,⏎        marks: list[str] | None = None"
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 241,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    async def get_memory(⏎        self,⏎        mark: list[str] | str | None = None,⏎        exclude_mark: list[str] | s"
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 302,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    async def delete(self, msg_ids: list[str], **kwargs) -> int:⏎        \"\"\"按 ID 删除消息。\"\"\"⏎        conn = sqlite3.connect"
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 357,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    def state_dict(self) -> dict:⏎        \"\"\"序列化：保存数据库路径和摘要。\"\"\"⏎        return {⏎            \"db_path\": self.db_path,⏎  "
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 160,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    async def reply(self, msg: Msg | list[Msg] | None = None, **kwargs) -> Msg:⏎        \"\"\"Plan-Execute 的主循环。\"\"\"⏎       "
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 198,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    async def _plan_phase(self, is_revision: bool = False) -> list[dict]:⏎        \"\"\"生成或修改计划。\"\"\"⏎        if is_revision:"
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 248,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    async def _execute_step(self, step: dict) -> dict:⏎        \"\"\"执行计划中的一个步骤。\"\"\"⏎        step_prompt = f\"执行步骤: {step.get"
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 284,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    async def _review_phase(self) -> dict:⏎        \"\"\"审查当前步骤的执行结果。\"\"\"⏎        review_prompt = (⏎            f\"检查步骤 '{sel"
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 319,
+        "type": "syntax_error",
+        "detail": "unexpected indent (line 1, col 4)",
+        "snippet": "    async def _summarize_results(self) -> Msg:⏎        \"\"\"总结所有执行结果，返回最终回复。\"\"\"⏎        summary_prompt = (⏎            \"所有"
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 53,
+        "type": "syntax_error",
+        "detail": "expected an indented block after function definition on line 1 (line 7, col 11)",
+        "snippet": "def create_tool_group(⏎    self,⏎    group_name: str,⏎    description: str,⏎    active: bool = False,⏎    notes: str | N"
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 11,
+        "type": "syntax_error",
+        "detail": "invalid syntax (line 2, col 60)",
+        "snippet": "class Msg:⏎    def __init__(self, name, content, role, metadata=None, ...):⏎        self.name = name           # 发送者名称⏎ "
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 143,
+        "type": "syntax_error",
+        "detail": "expected an indented block after 'try' statement on line 4 (line 6, col 1)",
+        "snippet": "if hasattr(self, '_hook_running') and self._hook_running:⏎    return await actual_logic()⏎self._hook_running = True⏎try:"
+      }
+    ],
+    "source_refs": [
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "type": "missing_file",
+        "detail": "src/agentscope/agent/_.py"
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "type": "missing_class_method",
+        "detail": "Model.__call__"
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "type": "missing_class_method",
+        "detail": "Msg.content"
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "type": "missing_class_method",
+        "detail": "SKILL.md"
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "type": "missing_class_method",
+        "detail": "SKILL.md"
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "type": "missing_class_method",
+        "detail": "SKILL.md"
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "type": "missing_class_method",
+        "detail": "Msg.role"
+      }
+    ],
+    "no_lang": [
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 33,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "Agent = LLM + 记忆(Memory) + 工具(Tool) + 循环(Loop)"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 104,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "用户：\"北京今天天气怎么样？\"⏎⏎第 1 轮 —— 思考（Reasoning）⏎Agent 想：用户想知道北京的天气，我有一个 get_weather 工具可以"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 175,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "你：\"北京天气怎么样？\"⏎Agent：\"北京今天 22 度，晴天。\"⏎你：\"上海呢？\"⏎Agent：\"上海什么？你之前没说过什么话题。\""
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 184,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "你：\"北京天气怎么样？\"⏎Agent：\"北京今天 22 度，晴天。\"⏎你：\"上海呢？\"⏎Agent：\"上海今天 18 度，多云。\"    <-- Agent 理"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 260,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "循环开始：⏎  1. Think  —— LLM 思考当前情况，决定下一步做什么⏎  2. Act    —— 执行动作（调用工具，或生成最终回复）⏎  3. "
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 439,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "=== 最简天气 Agent ===⏎输入城市名查询天气，输入'退出'结束。⏎⏎你: 北京天气怎么样⏎Agent: 北京今天22度，晴。⏎⏎你: 上海呢⏎Age"
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 486,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "Msg(id='Kx8mP2vNqRtY', name='user', content='北京今天天气怎么样？', role='user', metadata="
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 558,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "=== to_dict ===⏎  id: <一个 shortuuid>⏎  name: user⏎  role: user⏎  content: [{'typ"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 490,
+        "type": "no_lang_marker",
+        "guessed_lang": "json",
+        "snippet": "[收信] assistant 收到来自 user 的消息"
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 53,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "src/agentscope/memory/⏎  _working_memory/⏎    _base.py              # MemoryBase"
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 378,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "总消息数: 4⏎⏎全部消息 (4 条):⏎  [user] 你好，今天天气怎么样？⏎  [assistant] 今天北京晴，25度。⏎  [user] 帮我规划"
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 11,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "用户消息 ──→ Agent.reply()⏎                │⏎                ├── 长期记忆（LongTermMemory"
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 34,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "\"北京天气\"     → [0.12, -0.34, 0.56, ...]   (假设 1536 维)⏎\"北京气候\"     → [0.11, -0.33, 0"
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 61,
+        "type": "no_lang_marker",
+        "guessed_lang": "python",
+        "snippet": "while 还有任务没完成:⏎    检查哪些 IO 操作完成了（如网络请求返回了）⏎    如果有完成的 → 恢复对应的协程（继续 await 后面的代码）⏎"
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 192,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "src/agentscope/memory/_long_term_memory/_mem0/⏎├── _mem0_long_term_memory.py   #"
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 202,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "src/agentscope/memory/_long_term_memory/_reme/⏎├── _reme_long_term_memory_base.p"
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 9,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "Agent 内部: Msg(name=\"user\", content=[TextBlock(...)], role=\"user\")⏎              "
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 184,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "src/agentscope/formatter/⏎├── _formatter_base.py              # 基类⏎├── _truncate"
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 9,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "Formatter 输出: [{\"role\": \"user\", \"content\": \"北京天气如何？\"}, ...]⏎                    "
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 12,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "模型返回 ToolUseBlock(name=\"get_weather\", input={\"city\": \"北京\"})⏎                    "
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 23,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "src/agentscope/agent/⏎├── __init__.py⏎├── _agent_base.py           # 下划线前缀 = 内部实"
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 71,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "agentscope                    # 顶层包⏎├── .agent                    # 子包⏎│   ├── R"
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 152,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "src/agentscope/_utils/⏎├── __init__.py⏎├── _common.py      # 通用工具函数⏎└── _mixin.p"
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 27,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "StateModule                    # 序列化能力⏎  └── AgentBase                # Agent 基础"
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 108,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "pre_hook(实例级) → pre_hook(类级别) → 原始函数 → post_hook(实例级) → post_hook(类级别)"
+      },
+      {
+        "file": "volume-2-patterns/ch16-formatter-strategy.md",
+        "line": 11,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "┌──────────────┐⏎              │ FormatterBase │  ← 统一接口⏎              │  format"
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 11,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "请求 ──────────────────────▶⏎    ┌────────────────────────────┐⏎    │  Middleware "
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 106,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "_middlewares = [A, B]"
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 118,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "A 进入 → B 进入 → 核心操作 → B 返回 → A 返回"
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 11,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "发布者 (Agent A)⏎      │⏎      ▼ 发布消息⏎  ┌─────────┐⏎  │  MsgHub  │  ← 消息总线⏎  │ (调度中"
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 17,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "Trace: agent1.reply()⏎├── Span: format()           # 消息格式化⏎├── Span: model.__cal"
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 162,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "ReActAgent.state_dict()⏎├── memory: InMemoryMemory.state_dict()⏎│   ├── content:"
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 47,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "agentscope/                          # 仓库根目录⏎├── src/agentscope/                "
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 165,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "tests/⏎├── toolkit_basic_test.py            # Toolkit 基础功能⏎├── toolkit_async_exe"
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 283,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "tests/config_test.py::ConfigTest::test_config_attributes PASSED⏎================"
+      },
+      {
+        "file": "volume-3-building/ch23-new-model.md",
+        "line": 246,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "data: {\"id\": \"resp_123\", \"delta\": {\"text\": \"你\"}, \"done\": false}⏎data: {\"id\": \"re"
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 45,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "src/agentscope/mcp/⏎├── __init__.py⏎├── _client_base.py              # MCPClient"
+      },
+      {
+        "file": "volume-4-why/ch34-contextvar.md",
+        "line": 84,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "线程 1⏎├── 协程 A → 修改 _config.model_name = \"gpt-4o\"⏎├── 协程 B → 修改 _config.model_nam"
+      },
+      {
+        "file": "volume-4-why/ch34-contextvar.md",
+        "line": 120,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "asyncio 事件循环⏎├── Task A 的上下文⏎│   └── trace_enabled = True⏎├── Task B 的上下文⏎│   └─"
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 9,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "Agent 调用流程：⏎⏎Msg 列表 → Formatter.format() → dict 列表 → Model.__call__() → ChatResp"
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 163,
+        "type": "no_lang_marker",
+        "guessed_lang": "unknown",
+        "snippet": "Formatter.format(msgs, tools, stream) → (formatted_messages, tool_schemas, strea"
+      }
+    ],
+    "punctuation": [],
+    "headings": [
+      {
+        "file": "appendix/python-primer.md",
+        "line": 150,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"自动生成 JSON Schema\""
+      },
+      {
+        "file": "appendix/python-primer.md",
+        "line": 152,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"{\"type\": \"object\", \"properties\": {\"name\": {\"type\": \"string\"}, ...}}\""
+      },
+      {
+        "file": "appendix/python-primer.md",
+        "line": 154,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"自动验证\""
+      },
+      {
+        "file": "appendix/python-primer.md",
+        "line": 173,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"name: <class 'str'>, default=<Parameter.empty>\""
+      },
+      {
+        "file": "appendix/python-primer.md",
+        "line": 174,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"greeting: <class 'str'>, default=Hello\""
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "line": 110,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"模拟 Chat API 调用（不需要 API key）\""
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "line": 133,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"试试看\""
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "line": 410,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1. 克隆仓库\""
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "line": 414,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"2. 开发模式安装（-e 表示 editable，改源码立刻生效）\""
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "line": 417,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"3. 验证\""
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "line": 423,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"验证贯穿示例\""
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "line": 437,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"以下构造不需要 API key\""
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 343,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"版本 A：简洁助手\""
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 350,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"版本 B：热情助手\""
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 357,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"版本 C：严格助手（不回答天气以外的问题）\""
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "line": 376,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"2.4.2 无 API key 变体：用纯 Python 模拟 Agent 循环\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 54,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"同步写法\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 57,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"总共 4 秒\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 62,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"async/await 的解决方案\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 65,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"异步写法\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 79,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"三个关键字\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 118,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"...\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 122,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"...\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 127,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.4.2 模块导入时发生了什么\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 132,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"__init__.py 第 5-13 行\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 149,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"__init__.py 第 22-41 行（简化展示）\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 164,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"__init__.py 第 43-59 行\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 189,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"__init__.py 第 61-69 行\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 199,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.4.3 init() 函数逐行读\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 204,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"__init__.py 第 72-80 行\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 233,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"__init__.py 第 106-113 行\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 249,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"__init__.py 第 115 行\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 258,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"__init__.py 第 117-146 行（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 278,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.4.4 _ConfigCls：配置的容器\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 283,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_run_config.py 第 6-23 行\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 305,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_run_config.py 第 45-53 行\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 317,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.4.5 ContextVar：上下文隔离的全局变量\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 324,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"假设用普通变量存配置\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 327,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"异步任务 A 设置了自己的项目名\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 329,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"异步任务 B 读到的也变了！这不对。\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 339,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"异步任务 A\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 341,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"异步任务 B\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 343,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"异步任务 A 再读——还是 \"weather-demo\"，不受任务 B 影响\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 358,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.4.6 init() 的全流程\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 407,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"src/agentscope/__init__.py，第 105 行之后\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 418,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"技巧 2：查看 _config 的当前值\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 443,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"test_init.py\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 446,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"用 DEBUG 级别初始化，你会看到更多日志\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 468,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"实验 2：不调用 init() 会怎样\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 473,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"test_no_init.py\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 476,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"不调用 init()，直接访问 _config\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 483,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"实验 3：传入非法日志级别\""
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "line": 495,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_logging.py 第 28-32 行\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 62,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"类型检查器知道 user[\"name\"] 是 str，user[\"age\"] 是 int\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 68,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"4.2.2 为什么不用普通 dict\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 115,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"src/agentscope/message/_message_base.py:21\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 126,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"src/agentscope/message/_message_base.py:24\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 150,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"src/agentscope/message/_message_base.py:52-73\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 183,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"4.4.2 content 的两种形态\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 213,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"src/agentscope/message/_message_base.py:216-219\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 223,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"4.4.3 七种 ContentBlock\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 358,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"src/agentscope/message/_message_base.py:75-84\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 377,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"src/agentscope/message/_message_base.py:87-99\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 396,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"4.4.5 DictMixin 的角色\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 401,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"src/agentscope/_utils/_mixin.py:5-9\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 414,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"ChatResponse 继承了 DictMixin\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 510,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"只获取图片 block\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 513,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"[{'type': 'image', 'source': {'type': 'url', 'url': 'https://example.com/cat.jpg'}}]\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 527,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 1 步：导入需要的类\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 530,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 2 步：创建一个 URLSource（图片来源）\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 531,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"注意：TypedDict 直接用关键字参数构造\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 534,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 3 步：构建 ContentBlock 列表\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 540,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 4 步：创建 Msg\""
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 543,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 5 步：观察结构\""
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 58,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"不用元类：每个子类都必须记得加装饰器\""
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 72,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"用元类：定义类时自动包装，无需手动操作\""
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 308,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"Initialize the instance-level hooks\""
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 332,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"5.4.4 广播机制：通知其他 Agent\""
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 434,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"检查 reply 方法是否被包装\""
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "line": 440,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"5.5.3 使用断点\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 71,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 4 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 80,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 14-20 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 90,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 32-47 行 —— add\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 103,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 50-64 行 —— delete\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 115,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 66-89 行 —— delete_by_mark\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 128,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 105-132 行 —— get_memory\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 149,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"6.4.2 InMemoryMemory：内存中的实现\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 154,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 13-20 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 163,
+        "type": "heading_skip",
+        "detail": "H1 -> H4: \"get_memory 的过滤逻辑\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 166,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 67-71 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 177,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 74-79 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 189,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 81-91 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 200,
+        "type": "heading_skip",
+        "detail": "H1 -> H4: \"add 的去重机制\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 203,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 112-135 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 222,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 130-132 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 231,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 134-135 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 238,
+        "type": "heading_skip",
+        "detail": "H1 -> H4: \"delete_by_mark 的逐 mark 过滤\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 241,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第 191-197 行\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 285,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"直接访问 content 属性，查看消息和 mark 的对应关系\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 293,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"不带 mark —— 看全部\""
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "line": 297,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"带 mark —— 看过滤后\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 103,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_long_term_memory_base.py:11\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 109,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"四个核心方法\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 116,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_long_term_memory_base.py:24\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 120,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_long_term_memory_base.py:35\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 128,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_long_term_memory_base.py:48\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 132,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_long_term_memory_base.py:69\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 139,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"两种控制模式\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 144,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:286\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 147,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:289\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 168,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:303\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 227,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_document.py:35\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 241,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_embedding_base.py:8\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 256,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_store_base.py:10\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 265,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"KnowledgeBase：把它们串起来\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 270,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_knowledge_base.py:13\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 297,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"ReActAgent 如何使用 KnowledgeBase\""
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "line": 302,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:318\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 41,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_formatter_base.py:11\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 53,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_formatter_base.py:37\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 70,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_truncated_formatter_base.py:19\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 82,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_truncated_formatter_base.py:48\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 116,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"TokenCounterBase\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 121,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_token_base.py:7\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 137,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_formatter.py:168\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 149,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"format 方法的实际工作\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 214,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_truncated_formatter_base.py:179-189\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 223,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"规则 2：工具调用和结果成对删除\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 226,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_truncated_formatter_base.py:193-207\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 244,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"规则 3：从旧到新删除\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 255,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_token_base.py\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 305,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"在 test_formatter.py 中替换消息列表\""
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 319,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"创建超过 100 字符的消息列表\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 54,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_model_base.py:13\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 71,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_model_base.py:46\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 85,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_model_response.py:20\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 105,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"ChatUsage\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 108,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_model_usage.py:11\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 125,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:71\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 129,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"__call__ 方法的签名\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 132,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:176\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 158,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"流式解析\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 179,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:376\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 188,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"结构化输出\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 191,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:730\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 204,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:293-318（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 226,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:592（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 272,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:422\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 288,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_model_base.py:46\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 304,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_model_base.py:67-77（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 308,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"否则，检查是否是已注册的工具名\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 323,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:74\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 350,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:241\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 373,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"在 _openai_model.py 第 248 行后加一行：\""
+      },
+      {
+        "file": "volume-1-journey/ch09-model.md",
+        "line": 381,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"技巧 2：观察流式解析的累积过程\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 61,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:117\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 68,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"内部数据结构\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 71,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:157\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 80,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"RegisteredToolFunction\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 85,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_types.py:16\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 108,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:274\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 148,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:853\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 159,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"执行流程\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 162,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"简化的执行逻辑（_toolkit.py:853 之后）\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 164,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1. 检查工具是否存在\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 168,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"2. 检查工具分组是否激活\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 172,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"3. 合并参数\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 175,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"4. 执行函数 → 返回 AsyncGenerator[ToolResponse]\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 180,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"ToolResponse\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 183,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_response.py:12\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 200,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:187\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 234,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:1441\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 261,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"`_apply_middlewares` 装饰器\""
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "line": 264,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:57\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 49,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:376\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 104,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:408\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 115,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:411-413\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 132,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:432\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 138,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3a. 记忆压缩\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 141,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:434\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 154,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"压缩的完整流程\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 159,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:1015-1137（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 161,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1. 获取未压缩的消息\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 164,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"2. 保留最近 N 条（keep_recent 参数）\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 165,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"关键：ToolUseBlock 和 ToolResultBlock 必须成对保留\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 181,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"3. 计算待压缩消息的 Token 数\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 185,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"4. 超过阈值？→ 用大模型压缩\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 196,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3b. 推理：_reasoning\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 199,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:540\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 206,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1. 如果有计划，插入计划提示\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 211,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"2. 格式化消息\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 217,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"3. 调用大模型\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 220,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"4. 处理流式/非流式响应\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 229,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"5. 存入记忆\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 240,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3c. 行动：_acting\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 243,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:657\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 250,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1. 创建工具结果消息\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 253,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"2. 执行工具\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 256,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"3. 流式处理结果\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 261,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"4. 结果存入记忆\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 284,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:496（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 292,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"退出 2：结构化输出成功\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 295,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:455（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 305,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"退出 3：达到最大迭代次数\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 308,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:525（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 320,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:725\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 340,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_plan_notebook.py:172\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 346,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"PlanNotebook 的完整工作流程\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 364,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:334（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 390,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"TTS（语音合成）\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 398,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:579（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 421,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:440-451\""
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "line": 538,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:671-714（简化）\""
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "line": 219,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"验证类是否存在，以及它的继承关系\""
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "line": 222,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"查找某个方法在哪个文件、哪一行\""
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "line": 225,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"追踪一个调用链：从 Agent 调用到 Model\""
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "line": 228,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"查看类的所有方法\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 40,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"不推荐：直接导入内部文件\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 43,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"推荐：通过包的公共 API\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 50,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"agent/__init__.py:3-6\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 108,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"... 等等\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 115,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"子包的 `__init__.py`\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 120,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"agent/__init__.py\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 206,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"agentscope/__init__.py\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 218,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"输出所有公共 API 的导入行\""
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "line": 249,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"这可以工作但不推荐\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 43,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_state_module.py:20\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 49,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"核心机制\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 54,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_state_module.py:24-25\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 76,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"序列化示例\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 81,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"state = {\"memory\": {...}, \"toolkit\": {...}, ...}\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 94,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:30\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 106,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"Hook 字典\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 109,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:43\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 119,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"__call__ 的调用链\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 122,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:448\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 140,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent_base.py:12\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 153,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"元类 `_ReActAgentMeta`\""
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 162,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py:98\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 16,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"MyClass 是 type 的实例！\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 44,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_meta.py:159\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 119,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent_base.py:28-31\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 173,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"调用方式 1：位置参数\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 176,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"调用方式 2：关键字参数\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 179,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_normalize_to_kwargs 把两者都转成：\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 185,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"Hook 类型的完整列表\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 200,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_meta.py:159\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 203,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent_base.py:12\""
+      },
+      {
+        "file": "volume-2-patterns/ch15-metaclass-hooks.md",
+        "line": 287,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"在 pre-hooks 循环前加\""
+      },
+      {
+        "file": "volume-2-patterns/ch16-formatter-strategy.md",
+        "line": 45,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_react_agent.py 中 _reasoning 方法\""
+      },
+      {
+        "file": "volume-2-patterns/ch16-formatter-strategy.md",
+        "line": 52,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"另一个策略模式：Model\""
+      },
+      {
+        "file": "volume-2-patterns/ch16-formatter-strategy.md",
+        "line": 57,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_model_base.py:13\""
+      },
+      {
+        "file": "volume-2-patterns/ch16-formatter-strategy.md",
+        "line": 116,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_truncated_formatter_base.py:231\""
+      },
+      {
+        "file": "volume-2-patterns/ch16-formatter-strategy.md",
+        "line": 139,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"OpenAI: 系统提示是 messages 列表中的第一条\""
+      },
+      {
+        "file": "volume-2-patterns/ch16-formatter-strategy.md",
+        "line": 146,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"Anthropic: 系统提示是请求的独立字段\""
+      },
+      {
+        "file": "volume-2-patterns/ch16-formatter-strategy.md",
+        "line": 153,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"工具结果的角色\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 50,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"339: def _parse_tool_function\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 58,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_common.py:362\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 68,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_common.py:366-373\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 82,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_common.py:421-432（简化）\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 104,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_common.py:434-439\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 113,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"_create_tool_from_base_model\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 118,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_common.py:310-322\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 135,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"register_tool_function 中的组装\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 228,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"在遍历参数时加 print\""
+      },
+      {
+        "file": "volume-2-patterns/ch17-schema-factory.md",
+        "line": 251,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"观察：max_results 变成了 optional 参数\""
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 42,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1441:    def register_middleware(\""
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 48,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:1537-1539\""
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 55,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"_apply_middlewares 装饰器\""
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 60,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:851-853\""
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 70,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:57-114\""
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 102,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"组装过程详解\""
+      },
+      {
+        "file": "volume-2-patterns/ch18-middleware.md",
+        "line": 282,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"在 async for chunk in await current_handler(tool_call=tool_call) 之前\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 45,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:168\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 51,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"第二层：Agent.__call__() 中的广播\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 56,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:448-467\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 70,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:469-485\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 81,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"第三层：MsgHub 的订阅管理\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 86,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_msghub.py:42-71\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 109,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_msghub.py:89-93\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 179,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:496-498\""
+      },
+      {
+        "file": "volume-2-patterns/ch19-pubsub.md",
+        "line": 279,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:185\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 35,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_setup.py:11-38\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 56,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"开关：_check_tracing_enabled\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 59,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_trace.py:69-77\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 66,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"核心：trace 装饰器\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 71,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_trace.py:232-268 (简化)\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 123,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:851-852\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 144,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"... 运行了一段时间 ...\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 146,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"保存状态\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 149,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"之后可以恢复\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 160,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"序列化层级\""
+      },
+      {
+        "file": "volume-2-patterns/ch20-observability.md",
+        "line": 228,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"在 _trace.py 的 wrapper 函数（约 232 行）\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 93,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1. 克隆仓库\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 97,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"2. 创建虚拟环境（推荐 Python 3.10+）\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 100,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \".venv\\Scripts\\activate   # Windows\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 102,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"3. 以开发模式安装（包含全部依赖和开发工具）\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 127,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"第二步：配置 pre-commit\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 132,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"安装 Git 钩子\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 161,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"第三步：了解测试目录结构\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 189,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"tests/config_test.py:1\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 223,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"tests/toolkit_basic_test.py:335\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 240,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"第五步：运行测试\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 243,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"运行全部测试\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 246,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"运行单个测试文件\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 249,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"按关键字筛选（运行所有包含 \"toolkit\" 的测试）\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 252,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"运行单个测试方法\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 255,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"进程隔离模式（每个测试独立进程，避免状态泄漏）\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 258,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"显示详细输出\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 342,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"正确：懒加载\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 347,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"错误：顶部导入\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 351,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"pre-commit 跳过规则\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 385,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"tests/test_env_setup.py\""
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 417,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"练习三：理解测试模式（无 API Key）\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 173,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"查看自动生成的 JSON Schema\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 185,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"1.4 模拟工具调用\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 296,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:870-1033（简化）\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 306,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"2.3 测试流式工具\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 343,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:937（简化）\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 349,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.2 完整的 Agent 配置\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 372,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"调用（需要 API key）\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 373,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"result = await agent(Msg(\"user\", \"有多少活跃用户？\", \"user\"))\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 376,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.3 不用 API key 的替代验证\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 470,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第一次调用（实际查询）\""
+      },
+      {
+        "file": "volume-3-building/ch22-new-tool.md",
+        "line": 477,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"第二次调用（命中缓存）\""
+      },
+      {
+        "file": "volume-3-building/ch23-new-model.md",
+        "line": 318,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_openai_model.py:376（简化）\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 31,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_base.py:32\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 35,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_base.py:50\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 39,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_base.py:92\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 43,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_base.py:101\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 47,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_base.py:105\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 55,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_base.py:66\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 58,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_base.py:134\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 62,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"InMemoryMemory 的参考实现\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 67,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_in_memory_memory.py:26\""
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 82,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"StateModule 的序列化机制\""
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 34,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:197\""
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 39,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_base.py:448\""
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 46,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"ReActAgentBase 中间层\""
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 377,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"result = await agent(Msg(\"user\", \"分析最近的销售数据趋势\", \"user\"))\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 61,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_client_base.py\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 117,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"简化的 MCP 工具注册流程\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 120,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"获取工具列表\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 146,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"用法示意（非真实 API）\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 156,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"2.2 HTTP 传输\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 180,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"simple_mcp_server.py\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 206,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.2 用 stdio 客户端连接\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 256,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"MCP 工具和普通 Python 工具对 Agent 来说完全一样\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 257,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"Agent 不知道也不需要知道工具是本地函数还是远程 MCP 服务\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 267,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"注册时指定分组\""
+      },
+      {
+        "file": "volume-3-building/ch26-mcp-server.md",
+        "line": 273,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"默认不激活\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 225,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"基础工具（始终激活）\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 229,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"高级工具（默认不激活）\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 238,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"管理工具（默认不激活）\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 248,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"2.2 查看分组状态\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 261,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"在 ReActAgent 的循环中，模型可以决定激活 \"advanced_search\" 分组\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 262,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"这通过调用 reset_equipped_tools 工具实现\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 268,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:880（简化）\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 298,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"数据分析技能\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 310,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"3.3 Skill 如何影响 Agent 行为\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 316,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"返回类似：\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 317,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"\"你拥有以下技能：\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 318,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1. data_analysis: 分析 CSV 和 Excel 数据，生成统计报告\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 319,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"2. web_search: 搜索互联网获取最新信息\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 320,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"...\"\""
+      },
+      {
+        "file": "volume-3-building/ch27-advanced-extension.md",
+        "line": 401,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"... 运行几次工具调用 ...\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 50,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"ch22: 自定义工具\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 53,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"ch23: 自定义 Model 和 Formatter\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 57,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"ch24: 自定义 Memory\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 60,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"ch27: 中间件\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 69,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"1.2 组装 Toolkit\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 74,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"注册普通工具\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 78,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"创建场景分组\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 90,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"注册中间件\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 97,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"1.3 组装 Agent\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 102,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"方案 A：使用 OpenAI（需要 API key）\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 113,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"方案 B：使用 FastLLM（mock，不需要 API key）\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 430,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"运行所有集成测试\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 433,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"运行单个测试\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 436,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"运行并显示 print 输出\""
+      },
+      {
+        "file": "volume-3-building/ch28-integration-capstone.md",
+        "line": 440,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"5.2 测试覆盖率\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 86,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"简单场景\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 89,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"复杂场景：文本 + 工具调用\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 154,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_message_base.py:149-229\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 174,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"便捷文本提取\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 179,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"content = \"hello\" → 返回 \"hello\"\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 180,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"content = [TextBlock(text=\"a\"), TextBlock(text=\"b\")] → 返回 \"a\\nb\"\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 181,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"content = [ToolUseBlock(...)] → 返回 None（无文本块）\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 184,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"序列化\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 191,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"{\"id\": \"...\", \"name\": \"user\", \"content\": [{\"type\": \"text\", \"text\": \"你好\"}], ...}\""
+      },
+      {
+        "file": "volume-4-why/ch29-msg-interface.md",
+        "line": 194,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"完整恢复，包括 id\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 14,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"方式一：装饰器注册（其实是语法糖）\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 19,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"方式二：方法调用注册\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 46,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"全局装饰器的问题\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 51,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"Agent A（普通用户）不应该有这个工具\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 54,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"Agent B（管理员）才有\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 65,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:170-173\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 159,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_toolkit.py:274\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 177,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"与 ch17 的关联\""
+      },
+      {
+        "file": "volume-4-why/ch30-no-decorator.md",
+        "line": 198,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"两个独立的 Toolkit\""
+      },
+      {
+        "file": "volume-4-why/ch31-god-class.md",
+        "line": 32,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"拆分方案\""
+      },
+      {
+        "file": "volume-4-why/ch31-god-class.md",
+        "line": 86,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"注册相关\""
+      },
+      {
+        "file": "volume-4-why/ch31-god-class.md",
+        "line": 90,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"调用相关\""
+      },
+      {
+        "file": "volume-4-why/ch31-god-class.md",
+        "line": 94,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"配置相关\""
+      },
+      {
+        "file": "volume-4-why/ch31-god-class.md",
+        "line": 99,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"查询相关\""
+      },
+      {
+        "file": "volume-4-why/ch31-god-class.md",
+        "line": 173,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"当前：Toolkit 自己管理中间件\""
+      },
+      {
+        "file": "volume-4-why/ch31-god-class.md",
+        "line": 178,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"重构后：中间件管理委托给专门类\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 12,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_agent_meta.py:159\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 128,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"元类包装后的实际调用链（简化）：\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 129,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"1. ReActAgent.reply 的 async_wrapper（由 _ReActAgentMeta 包装）\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 130,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ 检测 hook_guard，发现是 False → 继续\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 131,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ 设置 hook_guard = True\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 132,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ 执行 pre-hooks\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 133,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ 调用原始 ReActAgent.reply()\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 134,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ 内部可能有 super().reply() 调用\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 135,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ ReActAgentBase.reply 的 async_wrapper（由 _AgentMeta 包装）\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 136,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ 检测 hook_guard，发现是 True → 跳过，直接调用原始方法\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 137,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ 执行 post-hooks\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 138,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"→ 设置 hook_guard = False\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 155,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"_normalize_to_kwargs 的必要性\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 160,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"调用方式可以是：\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 164,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_normalize_to_kwargs 统一转为 {\"msg\": msg}\""
+      },
+      {
+        "file": "volume-4-why/ch32-compile-time-hooks.md",
+        "line": 165,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"Hook 函数接收和修改的都是 kwargs 字典\""
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 12,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_message_block.py:9-94\""
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 31,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"... 还有 AudioBlock, VideoBlock, ToolResultBlock\""
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 101,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"创建——和普通 dict 一样\""
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 104,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"类型检查——mypy/pyright 可以检查字段\""
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 109,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"序列化——不需要 .to_dict()，它就是 dict\""
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 113,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"与 API 响应兼容——API 返回的 dict 直接就是 TextBlock\""
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 115,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"不需要转换！\""
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 118,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"Union 类型的匹配\""
+      },
+      {
+        "file": "volume-4-why/ch34-contextvar.md",
+        "line": 12,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"_run_config.py:6-23\""
+      },
+      {
+        "file": "volume-4-why/ch34-contextvar.md",
+        "line": 39,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"方案一：全局变量\""
+      },
+      {
+        "file": "volume-4-why/ch34-contextvar.md",
+        "line": 166,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"读取\""
+      },
+      {
+        "file": "volume-4-why/ch34-contextvar.md",
+        "line": 169,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"写入\""
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 59,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"不分离时\""
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 64,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"分离后\""
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 72,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"理由二：独立测试\""
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 75,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"测试格式转换——不需要 mock HTTP\""
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 80,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"测试 API 调用——不需要构造 Msg\""
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 85,
+        "type": "heading_skip",
+        "detail": "H1 -> H3: \"理由三：独立替换\""
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 88,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"运行时切换格式——不影响 Model\""
+      },
+      {
+        "file": "volume-4-why/ch35-formatter-separate.md",
+        "line": 90,
+        "type": "multiple_h1",
+        "detail": "Multiple H1: \"Model 不变，还是同一个 HTTP 客户端\""
+      }
+    ],
+    "forward_refs": [
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "await",
+        "used_in_ch": 1,
+        "introduced_in_ch": 3,
+        "line": 321,
+        "context": "result = await agent(Msg(\"user\", \"北京今天天气怎么样？\", \"user\"))"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "await",
+        "used_in_ch": 1,
+        "introduced_in_ch": 3,
+        "line": 333,
+        "context": "| `await agent(...)` | 启动整个流程 |"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 304,
+        "context": "from agentscope.memory import InMemoryMemory"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 318,
+        "context": "memory=InMemoryMemory(),"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 330,
+        "context": "| `InMemoryMemory()` | 保存对话历史（`messages` 列表） |"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 372,
+        "context": "MEMORY[Memory<br/>对话记忆]"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 433,
+        "context": "from agentscope.memory import InMemoryMemory"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 441,
+        "context": "memory = InMemoryMemory()"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 447,
+        "context": "print(f\"  Memory: {type(memory).__name__}\")"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 372,
+        "context": "MEMORY[Memory<br/>对话记忆]"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 471,
+        "context": "下一步：第 2 章\"什么是 Agent\"，我们会详细拆解 Agent 的内部结构——记忆、工具、循环——让你完全理解贯穿示例的每一行代码。"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 304,
+        "context": "from agentscope.memory import InMemoryMemory"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 318,
+        "context": "memory=InMemoryMemory(),"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 330,
+        "context": "| `InMemoryMemory()` | 保存对话历史（`messages` 列表） |"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 433,
+        "context": "from agentscope.memory import InMemoryMemory"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 1,
+        "introduced_in_ch": 6,
+        "line": 441,
+        "context": "memory = InMemoryMemory()"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 1,
+        "introduced_in_ch": 8,
+        "line": 302,
+        "context": "from agentscope.formatter import OpenAIChatFormatter"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 1,
+        "introduced_in_ch": 8,
+        "line": 316,
+        "context": "formatter=OpenAIChatFormatter(),"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 1,
+        "introduced_in_ch": 8,
+        "line": 431,
+        "context": "from agentscope.formatter import OpenAIChatFormatter"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 1,
+        "introduced_in_ch": 8,
+        "line": 440,
+        "context": "formatter = OpenAIChatFormatter()"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 1,
+        "introduced_in_ch": 8,
+        "line": 446,
+        "context": "print(f\"  Formatter: {type(formatter).__name__}\")"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "流式",
+        "used_in_ch": 1,
+        "introduced_in_ch": 9,
+        "line": 204,
+        "context": "> **流式响应是什么？**"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "流式",
+        "used_in_ch": 1,
+        "introduced_in_ch": 9,
+        "line": 207,
+        "context": "> 流式响应（Streaming）则是模型**每生成几个 Token 就立刻返回**，用户看到\"打字机效果\"。"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "流式",
+        "used_in_ch": 1,
+        "introduced_in_ch": 9,
+        "line": 208,
+        "context": "> 本书 ch09 会详细讲解流式响应在源码中的实现。"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 1,
+        "introduced_in_ch": 10,
+        "line": 303,
+        "context": "from agentscope.tool import Toolkit"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 1,
+        "introduced_in_ch": 10,
+        "line": 309,
+        "context": "toolkit = Toolkit()"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 1,
+        "introduced_in_ch": 10,
+        "line": 432,
+        "context": "from agentscope.tool import Toolkit"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 1,
+        "introduced_in_ch": 10,
+        "line": 439,
+        "context": "toolkit = Toolkit()"
+      },
+      {
+        "file": "volume-0-basics/ch01-what-is-llm.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 1,
+        "introduced_in_ch": 10,
+        "line": 445,
+        "context": "print(f\"  Toolkit: {type(toolkit).__name__}\")"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "await",
+        "used_in_ch": 2,
+        "introduced_in_ch": 3,
+        "line": 97,
+        "context": "result = await agent(Msg(\"user\", \"北京今天天气怎么样？\", \"user\"))"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "await",
+        "used_in_ch": 2,
+        "introduced_in_ch": 3,
+        "line": 102,
+        "context": "当你运行 `await agent(...)` 这一行时，Agent 内部经历了这样的过程："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "await",
+        "used_in_ch": 2,
+        "introduced_in_ch": 3,
+        "line": 330,
+        "context": "- **运行对话**：调用 `await agent(msg)` 启动 ReAct 循环，观察\"思考→调用工具→生成回复\"的完整过程"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 34,
+        "context": "Agent = LLM + 记忆(Memory) + 工具(Tool) + 循环(Loop)"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 38,
+        "context": "- **Memory**：笔记本，记住对话历史"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 78,
+        "context": "from agentscope.memory import InMemoryMemory"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 94,
+        "context": "memory=InMemoryMemory(),"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 141,
+        "context": "Memory[\"Memory<br/>（记忆：存储对话历史）\"]"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 150,
+        "context": "LLM -->|\"存储对话\"| Memory"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 151,
+        "context": "Memory -->|\"提供上下文\"| LLM"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 162,
+        "context": "style Memory fill:#f3e5f5"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 169,
+        "context": "### 2.3.2 Memory（记忆）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 171,
+        "context": "Memory 的作用是记住对话历史。为什么需要它？"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 182,
+        "context": "没有记忆的 Agent 每次都像第一次见面。有了 Memory，Agent 才能维持连贯的对话："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 191,
+        "context": "在 AgentScope 中，我们用 `InMemoryMemory()` 作为记忆："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 194,
+        "context": "memory = InMemoryMemory()"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 197,
+        "context": "`InMemoryMemory` 把消息存在一个 Python 列表里。每次 Agent 收到新消息，它会："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 204,
+        "context": "除了 `InMemoryMemory`，AgentScope 还提供了其他记忆实现——比如用 Redis 存储的 `RedisMemory`，用数据库存储的 `"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 275,
+        "context": "participant Mem as Memory（记忆）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 315,
+        "context": "memory=InMemoryMemory(),             # Memory（记忆）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 460,
+        "context": "| Memory | `memory = []` | 存储对话历史 |"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 481,
+        "context": "> Agent = LLM + Memory + Tool + Loop。它是一个能记住上下文、使用工具、通过 ReAct 循环反复推理直到完成任务的系统。"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 487,
+        "context": "**什么是 Memory？**"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 27,
+        "context": "- 他把这次对话记在笔记本上（存入记忆）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 34,
+        "context": "Agent = LLM + 记忆(Memory) + 工具(Tool) + 循环(Loop)"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 141,
+        "context": "Memory[\"Memory<br/>（记忆：存储对话历史）\"]"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 169,
+        "context": "### 2.3.2 Memory（记忆）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 173,
+        "context": "想象你在和一个完全没有记忆的人对话："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 182,
+        "context": "没有记忆的 Agent 每次都像第一次见面。有了 Memory，Agent 才能维持连贯的对话："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 191,
+        "context": "在 AgentScope 中，我们用 `InMemoryMemory()` 作为记忆："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 204,
+        "context": "除了 `InMemoryMemory`，AgentScope 还提供了其他记忆实现——比如用 Redis 存储的 `RedisMemory`，用数据库存储的 `"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 275,
+        "context": "participant Mem as Memory（记忆）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 315,
+        "context": "memory=InMemoryMemory(),             # Memory（记忆）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 328,
+        "context": "- **创建 Agent**：使用 `ReActAgent` 配置模型、工具和记忆，指定 `sys_prompt` 定义 Agent 角色"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 398,
+        "context": "memory = []  # 对话记忆"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 408,
+        "context": "# 2. 存入记忆"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 428,
+        "context": "# 5. 存入记忆并返回"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 489,
+        "context": "> 记忆，用来存储对话历史，让 Agent 能理解上下文。"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 78,
+        "context": "from agentscope.memory import InMemoryMemory"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 94,
+        "context": "memory=InMemoryMemory(),"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 191,
+        "context": "在 AgentScope 中，我们用 `InMemoryMemory()` 作为记忆："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 194,
+        "context": "memory = InMemoryMemory()"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 197,
+        "context": "`InMemoryMemory` 把消息存在一个 Python 列表里。每次 Agent 收到新消息，它会："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 204,
+        "context": "除了 `InMemoryMemory`，AgentScope 还提供了其他记忆实现——比如用 Redis 存储的 `RedisMemory`，用数据库存储的 `"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 2,
+        "introduced_in_ch": 6,
+        "line": 315,
+        "context": "memory=InMemoryMemory(),             # Memory（记忆）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "RAG",
+        "used_in_ch": 2,
+        "introduced_in_ch": 7,
+        "line": 231,
+        "context": "### 2.3.4 RAG（检索增强生成，Retrieval-Augmented Generation）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "RAG",
+        "used_in_ch": 2,
+        "introduced_in_ch": 7,
+        "line": 233,
+        "context": "还有一种重要的知识来源：RAG。它解决的问题是——LLM 的知识有截止日期，而且不包含你的私有数据。"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "RAG",
+        "used_in_ch": 2,
+        "introduced_in_ch": 7,
+        "line": 235,
+        "context": "RAG 的工作方式像一个图书管理员："
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "RAG",
+        "used_in_ch": 2,
+        "introduced_in_ch": 7,
+        "line": 250,
+        "context": "在天气 Agent 的例子中，我们没有使用 RAG。但如果你想让 Agent 回答\"公司内部制度\"这类问题，就需要把公司文档建成知识库，让 Agent 先检索再"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "RAG",
+        "used_in_ch": 2,
+        "introduced_in_ch": 7,
+        "line": 252,
+        "context": "AgentScope 中，RAG 通过 `KnowledgeBase` 实现。我们在卷一第 7 章会详细看它的源码。"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "RAG",
+        "used_in_ch": 2,
+        "introduced_in_ch": 7,
+        "line": 495,
+        "context": "**什么是 RAG？**"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "检索增强",
+        "used_in_ch": 2,
+        "introduced_in_ch": 7,
+        "line": 231,
+        "context": "### 2.3.4 RAG（检索增强生成，Retrieval-Augmented Generation）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "检索增强",
+        "used_in_ch": 2,
+        "introduced_in_ch": 7,
+        "line": 497,
+        "context": "> 检索增强生成（Retrieval-Augmented Generation），让 Agent 先从知识库中检索相关文档，再基于检索结果生成回答。解决 LLM"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 2,
+        "introduced_in_ch": 8,
+        "line": 76,
+        "context": "from agentscope.formatter import OpenAIChatFormatter"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 2,
+        "introduced_in_ch": 8,
+        "line": 92,
+        "context": "formatter=OpenAIChatFormatter(),"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 2,
+        "introduced_in_ch": 8,
+        "line": 313,
+        "context": "formatter=OpenAIChatFormatter(),     # 消息格式转换器"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "格式转换",
+        "used_in_ch": 2,
+        "introduced_in_ch": 8,
+        "line": 313,
+        "context": "formatter=OpenAIChatFormatter(),     # 消息格式转换器"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "格式转换",
+        "used_in_ch": 2,
+        "introduced_in_ch": 8,
+        "line": 319,
+        "context": "`ReActAgent` 这个名字本身就说明了它是一个使用 ReAct 模式的 Agent。`formatter` 是一个辅助组件——不同 LLM 提供商（Op"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 2,
+        "introduced_in_ch": 10,
+        "line": 77,
+        "context": "from agentscope.tool import Toolkit"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 2,
+        "introduced_in_ch": 10,
+        "line": 85,
+        "context": "toolkit = Toolkit()"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 2,
+        "introduced_in_ch": 10,
+        "line": 218,
+        "context": "toolkit = Toolkit()"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 2,
+        "introduced_in_ch": 10,
+        "line": 227,
+        "context": "LLM 并不直接执行代码。它只是输出一段 JSON，说\"我想调用 `get_weather`，参数是 `city='北京'`\"。然后 Toolkit 解析这段 "
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 2,
+        "introduced_in_ch": 10,
+        "line": 274,
+        "context": "participant Tool as Toolkit（工具）"
+      },
+      {
+        "file": "volume-0-basics/ch02-what-is-agent.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 2,
+        "introduced_in_ch": 10,
+        "line": 329,
+        "context": "- **注册工具**：通过 `Toolkit.register_tool_function()` 将 Python 函数注册为工具，自动生成参数描述"
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "type": "forward_ref",
+        "concept": "Hook",
+        "used_in_ch": 3,
+        "introduced_in_ch": 5,
+        "line": 264,
+        "context": "# 注册 Studio 相关的 Hook"
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 3,
+        "introduced_in_ch": 6,
+        "line": 394,
+        "context": "四大基础模块（Message、Model、Memory、Tool）的设计目标就是 `agentscope.init()` 所初始化的这些组件。"
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 3,
+        "introduced_in_ch": 6,
+        "line": 23,
+        "context": "C --> D[\"工作记忆\"]"
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "type": "forward_ref",
+        "concept": "格式转换",
+        "used_in_ch": 3,
+        "introduced_in_ch": 8,
+        "line": 25,
+        "context": "E --> F[\"格式转换\"]"
+      },
+      {
+        "file": "volume-1-journey/ch03-toolbox.md",
+        "type": "forward_ref",
+        "concept": "Toolkit",
+        "used_in_ch": 3,
+        "introduced_in_ch": 10,
+        "line": 121,
+        "context": "toolkit = Toolkit()"
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 4,
+        "introduced_in_ch": 6,
+        "line": 23,
+        "context": "E --> F[\"Memory 存储记忆\"]"
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 4,
+        "introduced_in_ch": 6,
+        "line": 70,
+        "context": "普通 dict 缺少类型约束。在多 Agent 系统中，消息会被序列化为 JSON、在模型 API 之间传递、存入 Memory 再读出来。如果 content"
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 4,
+        "introduced_in_ch": 6,
+        "line": 617,
+        "context": "但 Agent 不是孤军奋战。它需要 Formatter 把消息翻译成 LLM API 能理解的格式，需要 Model 把翻译后的请求发送给大模型，需要 Mem"
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 4,
+        "introduced_in_ch": 6,
+        "line": 23,
+        "context": "E --> F[\"Memory 存储记忆\"]"
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "type": "forward_ref",
+        "concept": "Embedding",
+        "used_in_ch": 4,
+        "introduced_in_ch": 7,
+        "line": 411,
+        "context": "`ChatResponse`、`ChatUsage`、`EmbeddingUsage` 等类继承了 DictMixin，这意味着你可以这样写："
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 4,
+        "introduced_in_ch": 8,
+        "line": 20,
+        "context": "B --> C[\"Formatter 格式化\"]"
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "type": "forward_ref",
+        "concept": "Formatter",
+        "used_in_ch": 4,
+        "introduced_in_ch": 8,
+        "line": 617,
+        "context": "但 Agent 不是孤军奋战。它需要 Formatter 把消息翻译成 LLM API 能理解的格式，需要 Model 把翻译后的请求发送给大模型，需要 Mem"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 5,
+        "introduced_in_ch": 6,
+        "line": 425,
+        "context": "from agentscope.memory import InMemoryMemory"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 5,
+        "introduced_in_ch": 6,
+        "line": 431,
+        "context": "memory=InMemoryMemory(),"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "Memory",
+        "used_in_ch": 5,
+        "introduced_in_ch": 6,
+        "line": 539,
+        "context": "> **下一站**：第 3 站——工作记忆（Working Memory）。"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 5,
+        "introduced_in_ch": 6,
+        "line": 18,
+        "context": "B -->|\"第 2 站<br/>ch05（这里）\"| C[\"存入记忆\"]"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 5,
+        "introduced_in_ch": 6,
+        "line": 537,
+        "context": "为什么？因为 LLM 需要看到完整的对话历史才能做出正确的回复。下一章，我们进入\"工作记忆\"的仓库，看看消息是如何被存储和检索的。"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "记忆",
+        "used_in_ch": 5,
+        "introduced_in_ch": 6,
+        "line": 539,
+        "context": "> **下一站**：第 3 站——工作记忆（Working Memory）。"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 5,
+        "introduced_in_ch": 6,
+        "line": 425,
+        "context": "from agentscope.memory import InMemoryMemory"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "InMemoryMemory",
+        "used_in_ch": 5,
+        "introduced_in_ch": 6,
+        "line": 431,
+        "context": "memory=InMemoryMemory(),"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "格式转换",
+        "used_in_ch": 5,
+        "introduced_in_ch": 8,
+        "line": 19,
+        "context": "C --> D[\"格式转换\"]"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "流式",
+        "used_in_ch": 5,
+        "introduced_in_ch": 9,
+        "line": 135,
+        "context": "每次调用生成一个唯一 ID。这个 ID 在流式输出和中断处理中用来标识\"这是哪一次回复\"。"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "MsgHub",
+        "used_in_ch": 5,
+        "introduced_in_ch": 19,
+        "line": 364,
+        "context": "**细节二：订阅者按 MsgHub 分组**"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "MsgHub",
+        "used_in_ch": 5,
+        "introduced_in_ch": 19,
+        "line": 366,
+        "context": "`_subscribers` 是一个字典，key 是 MsgHub 的名称，value 是 Agent 列表："
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "MsgHub",
+        "used_in_ch": 5,
+        "introduced_in_ch": 19,
+        "line": 374,
+        "context": "MsgHub 是 AgentScope 中多 Agent 通信的核心组件。当一个 Agent 在 MsgHub 中发言时，Hub 中的其他 Agent 会自动收"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "MsgHub",
+        "used_in_ch": 5,
+        "introduced_in_ch": 19,
+        "line": 525,
+        "context": "> `reply` 完成后，Agent 把回复消息（去掉 thinking blocks）发送给所有在 MsgHub 中注册的订阅者，调用它们的 `observ"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "MsgHub",
+        "used_in_ch": 5,
+        "introduced_in_ch": 19,
+        "line": 527,
+        "context": "**自检练习**：如果两个 Agent A 和 B 都在同一个 MsgHub 中，当 A 回复了一条消息，B 的哪个方法会被调用？"
+      },
+      {
+        "file": "volume-1-journey/ch05-agent-receives.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 5,
+        "introduced_in_ch": 14,
+        "line": 234,
+        "context": "class AgentBase(StateModule, metaclass=_AgentMeta):"
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "type": "forward_ref",
+        "concept": "RAG",
+        "used_in_ch": 6,
+        "introduced_in_ch": 7,
+        "line": 425,
+        "context": "工作记忆之外，还有**长期记忆**和**知识库**。下一站我们将看到长期记忆如何通过 `static_control` 和 `agent_control` 两种"
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 6,
+        "introduced_in_ch": 14,
+        "line": 36,
+        "context": "AgentScope 用 Python 的 `abc.ABC` 体系定义接口。`MemoryBase` 继承自 `StateModule`（一个支持序列化/反序"
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 6,
+        "introduced_in_ch": 14,
+        "line": 74,
+        "context": "from ...module import StateModule"
+      },
+      {
+        "file": "volume-1-journey/ch06-memory-store.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 6,
+        "introduced_in_ch": 14,
+        "line": 77,
+        "context": "`MemoryBase` 继承 `StateModule`（第 11 行），获得 `register_state()`、`state_dict()` 等序列化能"
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 7,
+        "introduced_in_ch": 14,
+        "line": 104,
+        "context": "class LongTermMemoryBase(StateModule):"
+      },
+      {
+        "file": "volume-1-journey/ch07-retrieval-knowledge.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 7,
+        "introduced_in_ch": 14,
+        "line": 107,
+        "context": "它继承自 `StateModule`——还记得吗？这意味着它也有 `state_dict()` / `load_state_dict()` 序列化能力。"
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "type": "forward_ref",
+        "concept": "洋葱模型",
+        "used_in_ch": 10,
+        "introduced_in_ch": 18,
+        "line": 28,
+        "context": "- 中间件（Middleware）的洋葱模型"
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "type": "forward_ref",
+        "concept": "洋葱模型",
+        "used_in_ch": 10,
+        "introduced_in_ch": 18,
+        "line": 221,
+        "context": "AgentScope 官方文档的 Building Blocks > Tool Capabilities 页面展示了工具注册、分组、中间件的使用方法。本章解释了"
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "type": "forward_ref",
+        "concept": "洋葱模型",
+        "used_in_ch": 10,
+        "introduced_in_ch": 18,
+        "line": 231,
+        "context": "## 中间件：洋葱模型"
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "type": "forward_ref",
+        "concept": "洋葱模型",
+        "used_in_ch": 10,
+        "introduced_in_ch": 18,
+        "line": 389,
+        "context": "- **中间件**是洋葱模型，可以在工具执行前后插入自定义逻辑"
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 10,
+        "introduced_in_ch": 14,
+        "line": 62,
+        "context": "class Toolkit(StateModule):"
+      },
+      {
+        "file": "volume-1-journey/ch10-toolkit.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 10,
+        "introduced_in_ch": 14,
+        "line": 66,
+        "context": "`Toolkit` 也继承自 `StateModule`——可以被序列化。"
+      },
+      {
+        "file": "volume-1-journey/ch11-loop-return.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 11,
+        "introduced_in_ch": 14,
+        "line": 341,
+        "context": "class PlanNotebook(StateModule):"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "洋葱模型",
+        "used_in_ch": 12,
+        "introduced_in_ch": 18,
+        "line": 89,
+        "context": "| ch10: Toolkit 中间件 | ch18: 中间件与洋葱模型 |"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "洋葱模型",
+        "used_in_ch": 12,
+        "introduced_in_ch": 18,
+        "line": 184,
+        "context": "但在进入\"为什么\"之前，卷二还有一件事要做：**拆开每个齿轮看设计模式**。如果你能看懂继承体系、元类 Hook、策略模式、中间件洋葱模型的实现——那就真正理解"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "洋葱模型",
+        "used_in_ch": 12,
+        "introduced_in_ch": 18,
+        "line": 208,
+        "context": "9. 中间件的\"洋葱模型\"中，最后注册的中间件是最内层还是最外层？（提示：看 `_apply_middlewares` 中 `reversed(middlewa"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "MsgHub",
+        "used_in_ch": 12,
+        "introduced_in_ch": 19,
+        "line": 106,
+        "context": "AgentScope 1.0 论文的 Figure 1 展示了框架的完整架构图——从 Foundational Components（Message、Model"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "MsgHub",
+        "used_in_ch": 12,
+        "introduced_in_ch": 19,
+        "line": 246,
+        "context": "- **ch19 发布-订阅**：多 Agent 场景下，`MsgHub` 如何实现广播和路由？"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 12,
+        "introduced_in_ch": 14,
+        "line": 84,
+        "context": "| ch05: AgentBase 和 Hook | ch14: 继承体系（StateModule → AgentBase） |"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 12,
+        "introduced_in_ch": 14,
+        "line": 91,
+        "context": "| ch05/ch06: `StateModule` 与序列化 | ch14: 继承体系（StateModule → AgentBase → MemoryBas"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 12,
+        "introduced_in_ch": 14,
+        "line": 98,
+        "context": "- **ch05 → ch14**：我们在 ch05 看到 `AgentBase(StateModule)` 和 `MemoryBase(StateModule"
+      },
+      {
+        "file": "volume-1-journey/ch12-journey-review.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 12,
+        "introduced_in_ch": 14,
+        "line": 241,
+        "context": "- **ch14 继承体系**：`StateModule → AgentBase → ReActAgent` 和 `StateModule → MemoryBa"
+      },
+      {
+        "file": "volume-2-patterns/ch13-module-system.md",
+        "type": "forward_ref",
+        "concept": "StateModule",
+        "used_in_ch": 13,
+        "introduced_in_ch": 14,
+        "line": 93,
+        "context": "└── StateModule"
+      }
+    ],
+    "source_compare": [
+      {
+        "file": "appendix/python-primer.md",
+        "line": 143,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class UserProfile not found in source"
+      },
+      {
+        "file": "volume-1-journey/ch04-message-born.md",
+        "line": 55,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class UserInfo not found in source"
+      },
+      {
+        "file": "volume-1-journey/ch08-formatter.md",
+        "line": 304,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class SimpleCounter not found in source"
+      },
+      {
+        "file": "volume-2-patterns/ch14-inheritance.md",
+        "line": 11,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class Dog not found in source"
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 188,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class ConfigTest not found in source"
+      },
+      {
+        "file": "volume-3-building/ch21-dev-setup.md",
+        "line": 384,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class EnvSetupTest not found in source"
+      },
+      {
+        "file": "volume-3-building/ch23-new-model.md",
+        "line": 123,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class FastLLMFormatter not found in source"
+      },
+      {
+        "file": "volume-3-building/ch23-new-model.md",
+        "line": 168,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class FastLLMModel not found in source"
+      },
+      {
+        "file": "volume-3-building/ch23-new-model.md",
+        "line": 256,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class FastLLMModel not found in source"
+      },
+      {
+        "file": "volume-3-building/ch23-new-model.md",
+        "line": 346,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class UserInfo not found in source"
+      },
+      {
+        "file": "volume-3-building/ch24-new-memory.md",
+        "line": 144,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class SQLiteMemory not found in source"
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 94,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class PlanExecuteAgent not found in source"
+      },
+      {
+        "file": "volume-3-building/ch25-new-agent.md",
+        "line": 111,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class PlanExecuteAgent not found in source"
+      },
+      {
+        "file": "volume-4-why/ch33-typedict-union.md",
+        "line": 44,
+        "type": "nonexistent_class_in_snippet",
+        "detail": "class ContentBlockBase not found in source"
+      }
+    ],
+    "overlaps": [
+      {
+        "hash": 1248963171096354434,
+        "files": [
+          [
+            "volume-1-journey/ch03-toolbox.md",
+            "> \"we abstract foundational components essential for agentic applications and provide unified interf"
+          ],
+          [
+            "volume-2-patterns/ch13-module-system.md",
+            "> \"we abstract foundational components essential for agentic applications and provide unified interf"
+          ],
+          [
+            "volume-4-why/ch29-msg-interface.md",
+            "> \"we abstract foundational components essential for agentic applications and provide unified interf"
+          ]
+        ]
+      },
+      {
+        "hash": 2645129805109433072,
+        "files": [
+          [
+            "volume-1-journey/ch05-agent-receives.md",
+            "> \"we ground agent behaviors in the ReAct paradigm and offer advanced agent-level infrastructure bas"
+          ],
+          [
+            "volume-1-journey/ch11-loop-return.md",
+            "> \"we ground agent behaviors in the ReAct paradigm and offer advanced agent-level infrastructure bas"
+          ],
+          [
+            "volume-2-patterns/ch15-metaclass-hooks.md",
+            "> \"we ground agent behaviors in the ReAct paradigm and offer advanced agent-level infrastructure bas"
+          ]
+        ]
+      },
+      {
+        "hash": 6581725558904284596,
+        "files": [
+          [
+            "volume-1-journey/ch07-retrieval-knowledge.md",
+            "> \"we abstract foundational components essential for agentic applications and provide unified interf"
+          ],
+          [
+            "volume-1-journey/ch08-formatter.md",
+            "> \"we abstract foundational components essential for agentic applications and provide unified interf"
+          ]
+        ]
+      }
+    ]
+  }
+}

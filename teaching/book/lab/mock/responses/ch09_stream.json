@@ -1,0 +1,16 @@
+{
+  "id": "mock-ch09-001",
+  "object": "chat.completion",
+  "created": 1715472000,
+  "model": "mock",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "北京今天天气晴朗，气温25°C，适合出行。"
+      },
+      "finish_reason": "stop"
+    }
+  ]
+}
