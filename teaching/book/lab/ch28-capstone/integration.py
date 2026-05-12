@@ -33,7 +33,7 @@ class TaggedMemory(InMemoryMemory):
     """带标签过滤的记忆。"""
 
     async def get_by_tag(self, tag: str) -> list[Msg]:
-        return [m for m in self.memory if m.metadata.get("tag") == tag]
+        return [msg for msg, _marks in self.content if msg.metadata.get("tag") == tag]
 
 
 async def main() -> None:
@@ -66,9 +66,9 @@ async def main() -> None:
 
     # 5. 记忆操作
     msg = Msg("user", "测试消息", "user", metadata={"tag": "test"})
-    await memory.observe(msg)
+    await memory.add(msg)
     tagged = await memory.get_by_tag("test")
-    print(f"[记忆] 存储 {len(memory.memory)} 条, tag='test' 匹配 {len(tagged)} 条")
+    print(f"[记忆] 存储 {len(memory.content)} 条, tag='test' 匹配 {len(tagged)} 条")
 
     print("\n" + "=" * 55)
     print("集成完成! 已走完「使用框架 → 扩展框架」的完整路径。")

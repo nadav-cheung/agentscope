@@ -62,13 +62,22 @@ def get_model_and_formatter():
         formatter = OpenAIChatFormatter()
 
     elif provider == "anthropic":
-        # DeepSeek Anthropic endpoint also works via ANTHROPIC_BASE_URL
-        from agentscope.model import OpenAIChatModel
+        # Supports both native Anthropic API and DeepSeek Anthropic endpoint.
+        # For DeepSeek: set ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+        # → src/agentscope/model/_anthropic_model.py
+        # → src/agentscope/formatter/_anthropic_formatter.py
+        from agentscope.model import AnthropicChatModel
         from agentscope.formatter import AnthropicChatFormatter
 
-        model = OpenAIChatModel(
+        api_key = os.getenv("ANTHROPIC_AUTH_TOKEN") or os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "Set ANTHROPIC_AUTH_TOKEN or ANTHROPIC_API_KEY in .env"
+            )
+
+        model = AnthropicChatModel(
             model_name=os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
-            api_key=os.getenv("ANTHROPIC_API_KEY"),
+            api_key=api_key,
             client_kwargs={
                 "base_url": os.getenv(
                     "ANTHROPIC_BASE_URL",
@@ -76,7 +85,6 @@ def get_model_and_formatter():
                 ),
             },
         )
-        # → src/agentscope/formatter/_anthropic_formatter.py
         formatter = AnthropicChatFormatter()
 
     else:

@@ -15,24 +15,26 @@ async def main():
         {"role": "user", "content": "用一句话介绍 Python 语言。"},
     ]
 
-    # ── 同步调用：一次性返回完整结果 ──
-    # → src/agentscope/model/_model_base.py  (ChatModelBase, __call__)
-    # → src/agentscope/model/_openai_model.py  (stream handling)
+    # ── 收集模式：等所有 chunk 到齐后一次打印 ──
+    # → src/agentscope/model/_anthropic_model.py  (AnthropicChatModel)
+    # 追踪中间件包裹后，需先 await 再 async for
     print("=" * 50)
-    print("【同步调用】stream=False — 等待完整回复")
+    print("【收集模式】收集所有流式 chunk 后一次打印")
     print("=" * 50)
-    response = await model(messages, stream=False)
-    for block in response.content:
-        if block.get("type") == "text":
-            print(block["text"])
-    print(f"\nUsage: {response.usage}")
+    full_text = ""
+    stream = await model(messages)
+    async for chunk in stream:
+        for block in chunk.content:
+            if block.get("type") == "text":
+                full_text += block["text"]
+    print(full_text)
 
-    # ── 流式调用：逐 token 返回 ──
-    # → src/agentscope/model/_openai_model.py  (_parse_openai_stream_response)
+    # ── 流式模式：逐 token 即时打印 ──
     print("\n" + "=" * 50)
-    print("【流式调用】stream=True — 逐 token 逐字打印")
+    print("【流式模式】逐 token 即时打印")
     print("=" * 50)
-    async for chunk in model(messages, stream=True):
+    stream = await model(messages)
+    async for chunk in stream:
         for block in chunk.content:
             if block.get("type") == "text":
                 print(block["text"], end="", flush=True)

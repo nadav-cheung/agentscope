@@ -9,14 +9,15 @@ import agentscope
 from agentscope.agent import ReActAgent
 from agentscope.memory import InMemoryMemory
 from agentscope.message import Msg
-from agentscope.tool import Toolkit
+from agentscope.tool import Toolkit, ToolResponse
+from agentscope.message import TextBlock
 
 from config import get_model_and_formatter
 
 
-def echo(text: str) -> str:
+def echo(text: str) -> ToolResponse:
     """最简单的工具：回显文本。"""
-    return f"echo: {text}"
+    return ToolResponse(content=[TextBlock(type="text", text=f"echo: {text}")])
 
 
 async def main():

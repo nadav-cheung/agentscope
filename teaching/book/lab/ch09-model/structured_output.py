@@ -29,16 +29,22 @@ async def main():
     # → src/agentscope/model/_model_base.py  (structured_output support)
     print("【结构化输出】传入 structured_model=UserInfo")
     print("-" * 40)
-    response = await model(messages, structured_model=UserInfo, stream=False)
-
-    if response.metadata:
-        print(f"name: {response.metadata['name']}")
-        print(f"age:  {response.metadata['age']}")
-    else:
-        # 部分 provider 可能不返回 metadata，兜底打印文本
-        for block in response.content:
+    # 收集所有 chunk（追踪中间件包裹后需先 await）
+    full_text = ""
+    last_metadata = None
+    stream = await model(messages, structured_model=UserInfo)
+    async for chunk in stream:
+        for block in chunk.content:
             if block.get("type") == "text":
-                print(block["text"])
+                full_text += block["text"]
+        if chunk.metadata:
+            last_metadata = chunk.metadata
+
+    if last_metadata:
+        print(f"name: {last_metadata.get('name', 'N/A')}")
+        print(f"age:  {last_metadata.get('age', 'N/A')}")
+    else:
+        print(full_text)
 
 
 if __name__ == "__main__":

@@ -43,9 +43,10 @@ async def main() -> None:
     )
     print(f"\n调用工具: {tool_call['name']}({tool_call['input']})")
 
-    # 执行工具，异步迭代结果
-    tool_res = toolkit.call_tool_function(tool_call)
-    async for chunk in tool_res:
+    # 执行工具（中间件包裹后需先 await 再 async for）
+    # → src/agentscope/tool/_toolkit.py:853 (call_tool_function)
+    gen = await toolkit.call_tool_function(tool_call)
+    async for chunk in gen:
         for block in chunk.content:
             print(f"工具结果: {block.get('text', '')}")
 

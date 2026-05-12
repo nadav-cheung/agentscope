@@ -1,27 +1,34 @@
 """第 1 章：什么是大模型（LLM）
 
 跑通第一行代码——用 AgentScope 调用 LLM。
-切换 provider 只需改 .env 中的 LLM_PROVIDER。
+使用 config.py 的三 provider 切换机制。
 """
-from agentscope.model import OpenAIChatModel
+import asyncio
 
-# 最简单的 LLM 调用：构造 model，发消息，收回复
+from config import get_model_and_formatter
+
 # → src/agentscope/model/_openai_model.py  (OpenAIChatModel 实现)
 # → src/agentscope/model/_model_base.py    (ChatModelBase 基类)
 
-model = OpenAIChatModel(
-    model_name="deepseek-chat",
-    api_key="your-api-key",  # 替换为你的 API key
-    base_url="https://api.deepseek.com/v1",
-)
 
-# 消息格式：role + content
-messages = [
-    {"role": "system", "content": "你是一个有帮助的助手。"},
-    {"role": "user", "content": "什么是大语言模型？用一句话回答。"},
-]
+async def main():
+    model, _formatter = get_model_and_formatter()
 
-response = model(messages)
-print("模型回复:")
-print(response.text)
-print(f"\nToken 用量: {response.usage}")
+    messages = [
+        {"role": "system", "content": "你是一个有帮助的助手。"},
+        {"role": "user", "content": "什么是大语言模型？用一句话回答。"},
+    ]
+
+    # 调用模型（追踪中间件包裹后需 await → async for）
+    stream = await model(messages)
+    full_text = ""
+    async for chunk in stream:
+        for block in chunk.content:
+            if block.get("type") == "text":
+                full_text += block["text"]
+    print("模型回复:")
+    print(full_text)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

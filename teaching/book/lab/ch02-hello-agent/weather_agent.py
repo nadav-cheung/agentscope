@@ -10,19 +10,21 @@ import agentscope
 from agentscope.agent import ReActAgent
 from agentscope.memory import InMemoryMemory
 from agentscope.message import Msg
-from agentscope.tool import Toolkit
+from agentscope.tool import Toolkit, ToolResponse
+from agentscope.message import TextBlock
 
 from config import get_model_and_formatter
 
 
-def get_weather(city: str) -> str:
+def get_weather(city: str) -> ToolResponse:
     """查询城市天气。→ src/agentscope/tool/_types.py (ToolFunction 类型)"""
     weather_db = {
         "北京": "晴，25°C，湿度30%",
         "上海": "多云，28°C，湿度65%",
         "深圳": "阵雨，30°C，湿度80%",
     }
-    return weather_db.get(city, f"未找到 {city} 的天气数据")
+    result = weather_db.get(city, f"未找到 {city} 的天气数据")
+    return ToolResponse(content=[TextBlock(type="text", text=result)])
 
 
 async def main():

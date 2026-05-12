@@ -2,6 +2,7 @@
 
 演示基于 SQLite 的持久化 Memory 实现,展示 MemoryBase 的 5 个抽象方法。
 """
+import json
 import sqlite3
 from typing import Any
 
@@ -50,7 +51,7 @@ class SQLiteMemory(MemoryBase):
         for msg in memories:
             self._conn.execute(
                 "INSERT OR REPLACE INTO messages VALUES (?, ?, ?)",
-                (msg.id, msg.to_dict_str(), marks_str),
+                (msg.id, json.dumps(msg.to_dict()), marks_str),
             )
         self._conn.commit()
 
@@ -66,7 +67,7 @@ class SQLiteMemory(MemoryBase):
             ).fetchall()
         else:
             rows = self._conn.execute("SELECT msg_json FROM messages").fetchall()
-        return [Msg.from_dict_str(row[0]) for row in rows]
+        return [Msg.from_dict(json.loads(row[0])) for row in rows]
 
     async def delete(self, msg_ids: list[str], **kwargs: Any) -> int:
         placeholders = ",".join("?" * len(msg_ids))

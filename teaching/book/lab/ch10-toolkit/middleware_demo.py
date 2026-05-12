@@ -49,7 +49,8 @@ async def main() -> None:
     )
 
     print("洋葱调用链: log → timing → echo → timing → log")
-    async for chunk in toolkit.call_tool_function(tool_call):
+    gen = await toolkit.call_tool_function(tool_call)
+    async for chunk in gen:
         for block in chunk.content:
             print(f"  [OUT] {block.get('text', '')}")
 
