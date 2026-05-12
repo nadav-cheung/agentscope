@@ -4,6 +4,8 @@
 >
 > LangChain 用 `@tool` 装饰器注册工具函数。AgentScope 用 `toolkit.register_tool_function(func)`。显式注册有什么好处？
 
+> **上一章：[第 29 章 消息为什么是唯一接口](./ch29-msg-interface.md)**
+
 ## 决策回顾
 
 AgentScope 的工具注册（`_toolkit.py:274`）：
@@ -216,3 +218,5 @@ print(f"B 的 Schema: {toolkit_b.tools['greet_formal'].json_schema}")
 ## 下一章预告
 
 注册方式决定了"工具怎么来"。但工具相关的代码都塞在一个文件里——`_toolkit.py` 有 1500+ 行。这是上帝类还是合理的设计？下一章我们看模块拆分的权衡。
+
+> **下一章：[第 31 章 上帝类 vs 模块拆分](./ch31-god-class.md)**

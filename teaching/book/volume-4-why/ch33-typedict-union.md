@@ -4,6 +4,8 @@
 >
 > `TextBlock`、`ToolUseBlock`、`ImageBlock`……这些 ContentBlock 都是 `TypedDict`，没有共同基类，没有方法。为什么不用 OOP 继承？为什么不用 dataclass？
 
+> **上一章：[第 32 章 编译期 Hook vs 运行时 Hook](./ch32-compile-time-hooks.md)**
+
 ## 决策回顾
 
 打开 `src/agentscope/message/_message_block.py`：
@@ -195,3 +197,5 @@ TypedDict 直接对应 JSON dict 结构，与 OpenAI 等 API 的消息格式天�
 ## 下一章预告
 
 ContentBlock 的选择是"数据优先 vs 行为优先"。接下来我们看另一个数据相关的选择——配置为什么用 `ContextVar` 而不是全局变量或线程局部存储？
+
+> **下一章：[第 34 章 为什么用 ContextVar](./ch34-contextvar.md)**

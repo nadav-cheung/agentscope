@@ -2,6 +2,8 @@
 
 全书涉及的中英文术语对照。
 
+> **上一章：[附录 A：Python 进阶速查](./python-primer.md)**
+
 ---
 
 ## 核心概念
@@ -103,3 +105,5 @@
 | 追踪 | Trace | 记录请求从开始到结束的完整调用链 |
 | 跨度 | Span | 追踪中的一个操作单元 |
 | OpenTelemetry | OpenTelemetry | 云原生可观测性标准 |
+
+> **下一章：[附录 C：源码地图](./source-map.md)**

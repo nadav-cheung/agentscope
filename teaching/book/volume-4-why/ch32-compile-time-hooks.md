@@ -4,6 +4,8 @@
 >
 > AgentScope 用元类在**类定义时**注入 Hook 包装。为什么不在每次调用时动态包装？这个选择有什么后果？
 
+> **上一章：[第 31 章 上帝类 vs 模块拆分](./ch31-god-class.md)**
+
 ## 决策回顾
 
 在第 15 章我们看了 `_AgentMeta` 的实现：
@@ -211,3 +213,5 @@ git checkout src/agentscope/agent/_agent_meta.py
 ## 下一章预告
 
 Hook 的注入时机是一个设计选择。接下来我们看另一个选择——ContentBlock 为什么用 `TypedDict`（Union 类型）而不是 OOP 类继承？
+
+> **下一章：[第 33 章 为什么 ContentBlock 是 TypedDict Union](./ch33-typedict-union.md)**

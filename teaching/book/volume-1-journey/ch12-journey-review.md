@@ -2,6 +2,8 @@
 
 > 恭喜你走完了卷一的全部 8 个站点！现在我们拉远视角，画一张全景图。
 
+> **上一章：[第 11 站：循环与返回](./ch11-loop-return.md)**
+
 ## 全景图
 
 ```mermaid
@@ -247,3 +249,5 @@ grep -n "    def " src/agentscope/tool/_toolkit.py
 - **ch20 可观测性**：`@trace_llm`、`@trace_format` 等装饰器如何实现无侵入的 OpenTelemetry 追踪？
 
 每个问题都是一个设计模式的实战案例。准备好了吗？让我们开始卷二。
+
+> **下一章：[第 13 章 模块系统](../volume-2-patterns/ch13-module-system.md)**

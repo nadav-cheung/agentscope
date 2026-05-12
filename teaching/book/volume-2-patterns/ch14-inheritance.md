@@ -4,6 +4,8 @@
 >
 > 你收到一个 bug：Agent 序列化后恢复，但记忆丢失了。要修这个 bug，你需要理解 Agent 的四层继承链——每一层都做了什么。
 
+> **上一章：[第 13 章 模块系统](./ch13-module-system.md)**
+
 ## 知识补全：继承与多态
 
 **继承**是面向对象编程中"代码复用"的方式。子类继承父类，自动获得父类的所有方法，还可以覆盖（override）或扩展。
@@ -304,3 +306,5 @@ class MyAgent(AgentBase):
 ## 下一章预告
 
 我们提到了 `AgentBase` 使用 `metaclass=_AgentMeta`。元类是什么？它如何实现 Hook 系统？下一章我们深入 Hook 的实现。
+
+> **下一章：[第 15 章 元类与 Hook](./ch15-metaclass-hooks.md)**

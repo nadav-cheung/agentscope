@@ -2,6 +2,8 @@
 
 > 模型返回了 `ToolUseBlock(name="get_weather", input={"city": "北京"})`。但这只是一个 JSON 对象——怎么从它变成真正执行 `get_weather("北京")` 的函数调用？
 
+> **上一章：[第 9 站：调用模型](./ch09-model.md)**
+
 ## 路线图
 
 上一站，模型通过 API 返回了工具调用请求。现在我们需要：
@@ -454,3 +456,5 @@ git checkout src/agentscope/tool/
 ```
 
 工具执行完毕，结果已经返回。但 ReAct Agent 不会只做一轮——它要**循环**，直到得出最终答案。下一站是全卷最长的一章，我们打开 `ReActAgent.reply()`，追踪推理-行动-总结的完整循环。
+
+> **下一章：[第 11 站：循环与返回](./ch11-loop-return.md)**

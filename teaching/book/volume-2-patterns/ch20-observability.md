@@ -4,6 +4,8 @@
 >
 > 生产环境中的 Agent 可能运行几十分钟，调用几十次工具。出了问题怎么排查？AgentScope 用 OpenTelemetry 追踪每次调用，用 StateModule 持久化状态。这两种机制是怎么工作的？
 
+> **上一章：[第 19 章 发布-订阅](./ch19-pubsub.md)**
+
 ## 知识补全：OpenTelemetry
 
 **OpenTelemetry** 是云原生领域的可观测性标准。它提供三个核心能力：
@@ -289,3 +291,5 @@ git checkout src/agentscope/tracing/
 ## 第三卷预告
 
 第二卷我们**读懂**了框架的设计模式。第三卷我们**动手**——构建新的 Memory 实现、新的 Formatter、新的中间件，把学到的模式付诸实践。
+
+> **下一章：[第 21 章 扩展准备](../volume-3-building/ch21-dev-setup.md)**

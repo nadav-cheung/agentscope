@@ -2,6 +2,8 @@
 
 > 消息在 Agent 内部用的是 `Msg` 对象，但 OpenAI API 要的是 `[{"role": "user", "content": "..."}]` 这样的 JSON——谁来负责翻译？
 
+> **上一章：[第 7 站：检索与知识](./ch07-retrieval-knowledge.md)**
+
 ## 路线图
 
 前几站我们追踪了消息从诞生到存储的路径。现在消息即将被发送给大模型，但有一个问题：**大模型 API 有自己要求的格式**。
@@ -436,3 +438,5 @@ git checkout src/agentscope/formatter/
 ## 下一站预告
 
 消息已经被格式化成 OpenAI API 需要的 JSON 了。下一站，我们追踪最核心的一步——**调用大模型**。看看 `ChatModelBase` 如何发送请求、接收响应、处理流式返回。
+
+> **下一章：[第 9 站：调用模型](./ch09-model.md)**

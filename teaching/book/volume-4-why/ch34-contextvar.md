@@ -4,6 +4,8 @@
 >
 > `agentscope.init()` 设置的全局配置（模型名、日志级别、追踪开关等）在异步环境中怎么保证安全？为什么用 `ContextVar` 而不是全局变量？
 
+> **上一章：[第 33 章 为什么 ContentBlock 是 TypedDict Union](./ch33-typedict-union.md)**
+
 ## 决策回顾
 
 打开 `src/agentscope/_run_config.py`：
@@ -232,3 +234,5 @@ Python 的 `contextvars` 模块对 ContextVar 的核心 API 说明是：
 ## 下一章预告
 
 配置传递是跨层的问题。接下来我们看另一个跨层的设计选择——Formatter 为什么要独立于 Model 存在？
+
+> **下一章：[第 35 章 为什么 Formatter 独立于 Model](./ch35-formatter-separate.md)**

@@ -2,6 +2,8 @@
 
 本附录汇总全书涉及的 Python 进阶概念，供查阅。
 
+> **上一章：[第 36 章 架构全景与边界](../volume-4-why/ch36-panorama.md)**
+
 ---
 
 ## async/await
@@ -192,3 +194,5 @@ from copy import deepcopy
 original = {"msgs": [Msg("user", "hello", "user")]}
 copied = deepcopy(original)  # 完全独立的副本
 ```
+
+> **下一章：[附录 B：术语表](./glossary.md)**

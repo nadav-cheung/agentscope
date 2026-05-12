@@ -4,6 +4,8 @@
 >
 > `InMemoryMemory` 把消息存在内存里，Agent 重启就忘了。你想要一个持久化的 Memory——用 SQLite 存储对话历史，重启后还能恢复。
 
+> **上一章：[第 23 章 造一个新 Model Provider](./ch23-new-model.md)**
+
 ## 任务目标
 
 实现一个基于 SQLite 的 `MemoryBackend`，满足以下要求：
@@ -577,3 +579,5 @@ async def test_search():
 ## 下一章预告
 
 我们造了 Tool、Model、Memory 三个齿轮。下一章，我们造最复杂的一个——**新的 Agent 类型**。实现一个 Plan-Execute Agent，让模型先做计划再执行。
+
+> **下一章：[第 25 章 造一个新 Agent 类型](./ch25-new-agent.md)**

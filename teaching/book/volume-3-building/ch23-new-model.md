@@ -4,6 +4,8 @@
 >
 > 你想接入一个新的大模型服务 "FastLLM"。它的 API 格式和 OpenAI 不一样——你需要同时写 Model 和 Formatter。本章分三步走：非流式 → 流式 → 结构化输出。
 
+> **上一章：[第 22 章 造一个新 Tool](./ch22-new-tool.md)**
+
 ## 任务目标
 
 接入一个假想的 "FastLLM" API（教学用，读者可以用 mock 替代真实 API），完整实现 Model Provider 的三个层次。
@@ -492,3 +494,5 @@ grep -n "_truncate" src/agentscope/formatter/_truncated_formatter_base.py
 ## 下一章预告
 
 我们造了 Tool 和 Model。下一章，我们造一个 **Memory Backend**——用 SQLite 实现持久化记忆，让 Agent 重启后还能记住之前的对话。
+
+> **下一章：[第 24 章 造一个新 Memory Backend](./ch24-new-memory.md)**

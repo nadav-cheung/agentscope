@@ -4,6 +4,8 @@
 >
 > 你写了一个 Python 函数 `get_weather(city: str)`，加了 docstring。AgentScope 怎么从这个函数自动生成 OpenAI 需要的 JSON Schema？这个过程涉及哪些文件？
 
+> **上一章：[第 16 章 策略模式](./ch16-formatter-strategy.md)**
+
 ## 知识补全：JSON Schema 与 Pydantic
 
 **JSON Schema** 是一种描述 JSON 数据格式的规范。OpenAI 的工具调用 API 要求每个工具用 JSON Schema 描述参数：
@@ -278,3 +280,5 @@ git checkout src/agentscope/_utils/
 ## 下一章预告
 
 Schema 生成是静态的——定义时确定，运行时不变。但工具执行时可能需要插入额外逻辑：日志记录、权限检查、缓存命中。这些逻辑不能写进工具函数本身（否则每个工具都要重复写），也不能写进 `call_tool_function`（否则每加一种逻辑就要改源码）。下一章我们看**中间件的洋葱模型**如何优雅地解决这个问题。
+
+> **下一章：[第 18 章 中间件与洋葱模型](./ch18-middleware.md)**

@@ -4,6 +4,8 @@
 >
 > ReAct Agent 是"边想边做"。但有些复杂任务需要"先想清楚再动手"——先制定计划，再逐步执行。这就是 Plan-Execute 模式。
 
+> **上一章：[第 24 章 造一个新 Memory Backend](./ch24-new-memory.md)**
+
 ## 任务目标
 
 实现一个 Plan-Execute Agent，工作流程为：
@@ -460,3 +462,5 @@ if review.get("needs_revision"):
 ## 下一章预告
 
 我们造了 Tool、Model、Memory、Agent 四个齿轮。下一章，我们接入一个**外部工具协议**——MCP Server，让 Agent 可以调用本地 MCP 服务提供的工具。
+
+> **下一章：[第 26 章 集成 MCP Server](./ch26-mcp-server.md)**

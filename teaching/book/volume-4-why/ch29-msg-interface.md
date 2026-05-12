@@ -4,6 +4,8 @@
 >
 > AgentScope 中，Agent、Model、Tool、Memory 全部通过 `Msg` 对象通信。为什么不让 Agent 直接返回字符串？为什么不定义多种消息类型？
 
+> **上一章：[第 28 章 终章——集成实战](../volume-3-building/ch28-integration-capstone.md)**
+
 ## 决策回顾
 
 打开 `src/agentscope/message/_message_base.py:21`：
@@ -203,3 +205,5 @@ msg2 = Msg.from_dict(d)
 ## 下一章预告
 
 `Msg` 是统一接口。但工具函数的注册方式——为什么是 `toolkit.register_tool_function(func)` 而不是在函数上加 `@tool` 装饰器？下一章我们看注册方式的选择。
+
+> **下一章：[第 30 章 为什么不用装饰器注册工具](./ch30-no-decorator.md)**

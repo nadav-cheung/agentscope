@@ -2,6 +2,8 @@
 
 消息从外部世界涌入 Agent，第一步不是"思考"，而是"记住"。AgentScope 把这条消息存入一个叫**工作记忆（Working Memory）** 的容器，后续所有推理都从这里取数据。本章我们打开这个容器，看看它的内部结构。
 
+> **上一章：[第 5 章 第 2 站：Agent 收信](./ch05-agent-receives.md)**
+
 ---
 
 ## 6.1 路线图
@@ -423,3 +425,5 @@ planning 消息 (2 条):
 `InMemoryMemory` 把所有消息存在一个列表里。只要进程活着，记忆就在；进程结束，记忆消失。这对单次对话够用，但如果 Agent 需要跨会话记住用户偏好，或者多个 Agent 共享记忆呢？
 
 工作记忆之外，还有**长期记忆**和**知识库**。下一站我们将看到长期记忆如何通过 `static_control` 和 `agent_control` 两种模式管理持久知识，以及 RAG（Retrieval-Augmented Generation）如何从海量文档中检索相关内容。
+
+> **下一章：[第 7 站：检索与知识](./ch07-retrieval-knowledge.md)**

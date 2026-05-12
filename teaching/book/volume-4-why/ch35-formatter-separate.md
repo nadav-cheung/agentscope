@@ -4,6 +4,8 @@
 >
 > 其他框架把消息格式转换和 API 调用放在同一个类里。AgentScope 把它们分成 `Formatter` 和 `Model` 两个独立的类。为什么？
 
+> **上一章：[第 34 章 为什么用 ContextVar](./ch34-contextvar.md)**
+
 ## 决策回顾
 
 ```
@@ -195,3 +197,5 @@ grep -n "self.model" src/agentscope/agent/_react_agent.py | head -5
 ## 下一章预告
 
 我们看了 7 个具体的设计决策。最后一章，我们拉远视角，看整个架构的全景图和边界。
+
+> **下一章：[第 36 章 架构全景与边界](./ch36-panorama.md)**

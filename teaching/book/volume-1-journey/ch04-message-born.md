@@ -2,6 +2,8 @@
 
 > 万物皆有起点。在 AgentScope 的世界里，一切从一条消息开始。
 
+> **上一章：[第 3 章 准备工具箱](./ch03-toolbox.md)**
+
 ---
 
 ## 4.1 路线图
@@ -617,3 +619,5 @@ for block in msg.get_content_blocks("image"):
 但 Agent 不是孤军奋战。它需要 Formatter 把消息翻译成 LLM API 能理解的格式，需要 Model 把翻译后的请求发送给大模型，需要 Memory 记住这次对话。
 
 下一站，我们去看消息的第一个目的地：**Agent 是如何接收消息、发起推理的**。
+
+> **下一章：[第 5 章 第 2 站：Agent 收信](./ch05-agent-receives.md)**

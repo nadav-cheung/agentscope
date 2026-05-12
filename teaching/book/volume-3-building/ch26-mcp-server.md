@@ -4,6 +4,8 @@
 >
 > 你的 Agent 需要调用本地的一个文件搜索服务。这个服务实现了 MCP（Model Context Protocol）协议——怎么让 AgentScope 的 Toolkit 能调用它？
 
+> **上一章：[第 25 章 造一个新 Agent 类型](./ch25-new-agent.md)**
+
 ## 任务目标
 
 理解 MCP 协议，将一个 MCP Server 提供的工具注册到 AgentScope 的 Toolkit 中，让 ReActAgent 可以像调用普通 Python 函数一样调用 MCP 工具。
@@ -374,3 +376,5 @@ grep -n "_convert_mcp_content_to_as_blocks" src/agentscope/mcp/_client_base.py
 ## 下一章预告
 
 MCP 工具已经集成好了。下一章，我们进入**高级扩展**——给工具加限流中间件、创建场景分组、注册 Agent Skill，让工具管理更上一层楼。
+
+> **下一章：[第 27 章 高级扩展](./ch27-advanced-extension.md)**

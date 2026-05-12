@@ -4,6 +4,8 @@
 >
 > 你 clone 了仓库，打开 `src/agentscope/` 看到一堆 `_` 开头的文件——`_agent_base.py`、`_react_agent.py`、`_model_base.py`……为什么有些文件有下划线前缀？导入路径又是怎么组织的？
 
+> **上一章：[旅程复盘](../volume-1-journey/ch12-journey-review.md)**
+
 ## 知识补全：Python 模块与包
 
 Python 用文件和目录组织代码：
@@ -296,3 +298,5 @@ ls src/agentscope/agent/_.py 2>/dev/null | wc -l
 ## 下一章预告
 
 下一章我们打开继承体系，从 `StateModule` → `AgentBase` → `ReActAgentBase` → `ReActAgent` 的四层继承链，看每一层提供了什么能力。
+
+> **下一章：[第 14 章 继承体系](./ch14-inheritance.md)**

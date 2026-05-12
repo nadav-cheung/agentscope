@@ -2,6 +2,8 @@
 
 > 天气 Agent 收到"北京今天天气怎么样？"后，不仅要查天气工具，还可能需要记住用户之前说过"我经常去北京出差"——这种跨对话的信息，存在哪里？
 
+> **上一章：[第 6 章 第 3 站：工作记忆](./ch06-memory-store.md)**
+
 ## 路线图
 
 上一站，我们看到 Agent 把消息存进了**工作记忆**（`InMemoryMemory`）。但工作记忆只在一次对话中有效——对话结束就消失了。
@@ -428,3 +430,5 @@ git checkout src/agentscope/agent/_react_agent.py
 > 这是一种"可选实现"模式。`record` 和 `retrieve` 是给开发者用的，`record_to_memory` 和 `retrieve_from_memory` 是给 Agent 用的工具函数。
 > 不是每个长期记忆实现都需要支持所有四种用法。比如你可能只想让开发者控制检索，不想让 Agent 自己调用——那就只实现 `record`/`retrieve`，让工具函数保持未实现。
 > 详见卷四第 36 章。
+
+> **下一章：[第 8 站：格式转换](./ch08-formatter.md)**

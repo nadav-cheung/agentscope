@@ -4,6 +4,8 @@
 >
 > 你需要给 Agent 加一个数据库查询工具，让它能回答"我们有多少活跃用户？"这类问题。本章从零构建一个完整的 Tool，包括同步和流式两个版本。
 
+> **上一章：[第 21 章 扩展准备](./ch21-dev-setup.md)**
+
 ## 任务目标
 
 构建一个 SQLite 数据库查询工具，让 ReActAgent 能查询数据库并回答用户问题。
@@ -520,3 +522,5 @@ async for r in toolkit.call_tool_function(ToolUseBlock(
 ## 下一章预告
 
 我们造了一个新 Tool。下一章，我们造一个更复杂的组件——**新的 Model Provider**。接入一个虚构的 "FastLLM" API，从非流式到流式到结构化输出，三步走。
+
+> **下一章：[第 23 章 造一个新 Model Provider](./ch23-new-model.md)**

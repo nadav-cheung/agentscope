@@ -4,6 +4,8 @@
 >
 > `src/agentscope/tool/_toolkit.py` 有 1684 行。注册、调用、中间件、分组、异步任务、Schema 管理——全在一个文件里。这是上帝类，还是合理的聚合？
 
+> **上一章：[第 30 章 为什么不用装饰器注册工具](./ch30-no-decorator.md)**
+
 ## 决策回顾
 
 打开 `_toolkit.py` 看看它包含了多少职责：
@@ -197,3 +199,5 @@ Refactoring Guru 的 Extract Class 原则建议：当一部分方法使用独立
 ## 下一章预告
 
 `Toolkit` 的"大"是空间维度的问题。接下来我们看时间维度的设计选择——Hook 为什么在类定义时注入（编译期），而不是在调用时添加（运行时）？
+
+> **下一章：[第 32 章 编译期 Hook vs 运行时 Hook](./ch32-compile-time-hooks.md)**

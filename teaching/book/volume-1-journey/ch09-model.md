@@ -2,6 +2,8 @@
 
 > Formatter 把消息翻译好了，现在终于要发送给大模型了。我们追踪 HTTP 请求从发出到响应的全过程。
 
+> **上一章：[第 8 站：格式转换](./ch08-formatter.md)**
+
 ## 路线图
 
 上一站，Formatter 把 `Msg` 列表翻译成了 `[{"role": "user", "content": "..."}]` 这样的字典列表。现在这些字典被传给 `Model`（模型适配器），由它负责和 API 通信。
@@ -502,3 +504,5 @@ git checkout src/agentscope/model/
 ## 下一站预告
 
 模型返回了 `ToolUseBlock`——"请调用 `get_weather` 工具，参数是 `city: 北京`"。但怎么从 JSON Schema 描述的工具变成真正执行 Python 函数？下一站，我们打开 **Toolkit（工具箱）**，追踪工具注册和调用的全过程。
+
+> **下一章：[第 10 站：执行工具](./ch10-toolkit.md)**

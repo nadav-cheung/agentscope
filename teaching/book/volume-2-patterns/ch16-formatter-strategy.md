@@ -4,6 +4,8 @@
 >
 > 你把 Formatter 从 `OpenAIChatFormatter` 换成 `AnthropicChatFormatter`，Agent 的行为完全不变——只是发送给 API 的 JSON 格式变了。这是怎么做到的？
 
+> **上一章：[第 15 章 元类与 Hook](./ch15-metaclass-hooks.md)**
+
 ## 知识补全：策略模式
 
 **策略模式（Strategy Pattern）** 的核心思想：定义一个统一接口，不同的实现提供不同的策略，使用者在运行时选择策略。
@@ -284,3 +286,5 @@ grep -n "class.*Formatter.*TruncatedFormatterBase" src/agentscope/formatter/*.py
 ## 下一章预告
 
 Formatter 把 `Msg` 转成 API 需要的 JSON。但工具的 JSON Schema 是怎么从 Python 函数的 docstring 和类型标注自动生成的？那个"自动生成"的过程涉及 `inspect` 模块、docstring 解析和 Pydantic 模型转换。下一章我们看工厂与 Schema。
+
+> **下一章：[第 17 章 工厂与 Schema](./ch17-schema-factory.md)**
