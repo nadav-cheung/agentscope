@@ -2,9 +2,9 @@
 
 演示：定义工具函数 → register_tool_function 注册 → 查看 LLM 看到的 JSON Schema
 """
-# → src/agentscope/tool/_toolkit.py     (Toolkit 实现, register_tool_function)
-# → src/agentscope/tool/_response.py    (ToolResponse 类型)
-# → src/agentscope/tool/_types.py       (RegisteredToolFunction, ToolFunction 类型签名)
+# → src/agentscope/tool/_toolkit.py:274    (Toolkit.register_tool_function)
+# → src/agentscope/tool/_response.py:12     (ToolResponse 类型)
+# → src/agentscope/tool/_types.py:16        (RegisteredToolFunction 类型签名)
 
 from agentscope.tool import Toolkit, ToolResponse
 from agentscope.message import TextBlock

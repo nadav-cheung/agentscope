@@ -3,8 +3,8 @@
 
 import asyncio
 
-# → src/agentscope/memory/_working_memory/_base.py (MemoryBase abstract class)
-# → src/agentscope/memory/_working_memory/_in_memory_memory.py (InMemoryMemory impl)
+# → src/agentscope/memory/_working_memory/_base.py:11              (MemoryBase 抽象类)
+# → src/agentscope/memory/_working_memory/_in_memory_memory.py:10  (InMemoryMemory 实现)
 from agentscope.memory._working_memory._in_memory_memory import InMemoryMemory
 from agentscope.message import Msg
 

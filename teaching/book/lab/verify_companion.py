@@ -5,13 +5,13 @@ Scans `# → src/agentscope/xxx.py:123` comments in all .py files,
 then verifies each referenced file exists and line number is in range.
 
 Usage:
-    python scripts/verify_companion.py
+    python verify_companion.py
 """
 import re
 import sys
 from pathlib import Path
 
-COMPANION_ROOT = Path(__file__).resolve().parent.parent
+COMPANION_ROOT = Path(__file__).resolve().parent
 # COMPANION_ROOT = teaching/book/lab/
 # REPO_ROOT     = agentscope/ (3 levels up)
 REPO_ROOT = COMPANION_ROOT.parent.parent.parent
@@ -61,7 +61,7 @@ def main():
     print(f"AgentScope source: {src_root}\n")
 
     total, ok, fail = 0, 0, 0
-    for py_file in sorted(COMPANION_ROOT.glob("ch*/*.py")):
+    for py_file in sorted(COMPANION_ROOT.glob("ch*.py")):
         for match in POINTER_RE.finditer(py_file.read_text()):
             total += 1
             pointer_path = match.group(1)
@@ -71,7 +71,7 @@ def main():
                 ok += 1
             else:
                 fail += 1
-                print(f"  FAIL [{py_file.parent.name}/{py_file.name}] {msg}")
+                print(f"  FAIL [{py_file.name}] {msg}")
 
     print(f"\n{'='*50}")
     print(f"  Total pointers: {total}")

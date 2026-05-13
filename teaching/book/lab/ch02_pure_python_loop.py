@@ -2,7 +2,7 @@
 
 不需要 AgentScope、不需要 LLM、不需要 API key。
 用 if/else 展示 ReAct（推理-行动）的核心逻辑。
-运行: python ch02-hello-agent/pure_python_loop.py
+运行: python ch02_pure_python_loop.py
 """
 
 
@@ -11,10 +11,9 @@ def get_weather(city):
 
 
 def simulate_react(user_input, max_steps=5):
-    """纯 Python 的 ReAct 循环模拟。
-    → src/agentscope/agent/_react_agent.py:408 (_react_loop 真实实现)
-    """
-    messages = []  # → src/agentscope/memory/_working_memory/_in_memory_memory.py
+    """纯 Python 的 ReAct 循环模拟。"""
+    # → src/agentscope/agent/_react_agent.py:408 (_react_loop 真实实现)
+    messages = []  # → src/agentscope/memory/_working_memory/_in_memory_memory.py:10
     for step in range(1, max_steps + 1):
         print(f"\n--- 第 {step} 轮 ---")
 

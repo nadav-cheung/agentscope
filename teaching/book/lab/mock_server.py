@@ -4,15 +4,15 @@ Returns pre-recorded responses so readers can run all examples
 without any API key.
 
 Usage:
-    python mock/mock_server.py          # starts on localhost:9999
-    MOCK=1 python ch02-hello-agent/weather_agent.py
+    python mock_server.py          # starts on localhost:9999
+    MOCK=1 python ch02_weather_agent.py
 """
 import json
 import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 
-RESPONSES_DIR = Path(__file__).parent / "responses"
+RESPONSES_DIR = Path(__file__).parent / "mock_responses"
 
 # Route: request content keyword → response file
 # Matched in order; first match wins

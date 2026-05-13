@@ -1,8 +1,8 @@
 """第 8 章附录：Anthropic vs OpenAI 格式对比
 
 并列展示同一组 Msg 经两个 formatter 转换后的结构差异。
-→ src/agentscope/formatter/_anthropic_formatter.py     (AnthropicChatFormatter)
-→ src/agentscope/formatter/_truncated_formatter_base.py (TruncatedFormatterBase)
+→ src/agentscope/formatter/_anthropic_formatter.py:98       (AnthropicChatFormatter)
+→ src/agentscope/formatter/_truncated_formatter_base.py:19  (TruncatedFormatterBase)
 """
 import asyncio
 import json

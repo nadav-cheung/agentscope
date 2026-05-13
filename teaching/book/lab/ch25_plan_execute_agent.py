@@ -9,9 +9,9 @@ import asyncio
 from agentscope.agent import AgentBase
 from agentscope.message import Msg
 
-# → src/agentscope/agent/_agent_base.py     (AgentBase 基类)
-# → src/agentscope/agent/_react_agent.py    (ReActAgent 参考)
-# → src/agentscope/agent/_react_agent_base.py (ReActAgentBase)
+# → src/agentscope/agent/_agent_base.py:30       (AgentBase 基类)
+# → src/agentscope/agent/_react_agent.py:98      (ReActAgent 参考)
+# → src/agentscope/agent/_react_agent_base.py:12 (ReActAgentBase)
 
 
 class PlanExecuteAgent(AgentBase):

@@ -7,8 +7,8 @@ import asyncio
 
 from config import get_model_and_formatter
 
-# → src/agentscope/model/_openai_model.py  (OpenAIChatModel 实现)
-# → src/agentscope/model/_model_base.py    (ChatModelBase 基类)
+# → src/agentscope/model/_openai_model.py:176  (OpenAIChatModel.__call__)
+# → src/agentscope/model/_model_base.py:38      (ChatModelBase 抽象方法)
 
 
 async def main():
@@ -25,7 +25,7 @@ async def main():
     async for chunk in stream:
         for block in chunk.content:
             if block.get("type") == "text":
-                full_text += block["text"]
+                full_text = block["text"]
     print("模型回复:")
     print(full_text)
 

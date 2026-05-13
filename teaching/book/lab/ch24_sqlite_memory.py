@@ -6,9 +6,9 @@ import json
 import sqlite3
 from typing import Any
 
-# → src/agentscope/memory/_working_memory/_base.py            (MemoryBase 抽象类)
-# → src/agentscope/memory/_working_memory/_in_memory_memory.py (参考实现)
-# → src/agentscope/module/_state_module.py                    (StateModule, state_dict)
+# → src/agentscope/memory/_working_memory/_base.py:11             (MemoryBase 抽象类)
+# → src/agentscope/memory/_working_memory/_in_memory_memory.py:10  (InMemoryMemory 参考)
+# → src/agentscope/module/_state_module.py:20                     (StateModule 序列化)
 
 from agentscope.memory._working_memory._base import MemoryBase
 from agentscope.message import Msg

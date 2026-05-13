@@ -1,8 +1,8 @@
 """第 4 章：消息诞生 — Msg 和七种 ContentBlock
 
 演示 AgentScope 消息（Msg）类型和内容块系统。
-→ src/agentscope/message/_message_base.py  (Msg 类)
-→ src/agentscope/message/_message_block.py (ContentBlock 类型)
+→ src/agentscope/message/_message_base.py:21   (Msg 类)
+→ src/agentscope/message/_message_block.py:9    (ContentBlock 类型)
 """
 from agentscope.message import (
     Msg, TextBlock, ImageBlock, AudioBlock, ThinkingBlock,
@@ -10,7 +10,7 @@ from agentscope.message import (
 )
 
 # 1. TextBlock — 纯文本消息
-# → src/agentscope/message/_message_block.py (TextBlock 定义)
+# → src/agentscope/message/_message_block.py:9  (TextBlock 定义)
 msg_text = Msg("user", "你好，世界！", "user")
 print("=== TextBlock ===")
 print(msg_text, "\n")

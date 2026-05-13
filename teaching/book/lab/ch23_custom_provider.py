@@ -3,9 +3,9 @@
 演示 ChatModelBase 抽象接口 → OpenAIChatModel 参考实现 → 自定义 Provider 模式
 不实际发起 API 调用，专注于架构层次和扩展点。
 """
-# → src/agentscope/model/_model_base.py     (ChatModelBase 抽象接口)
-# → src/agentscope/model/_openai_model.py   (OpenAI 参考实现)
-# → src/agentscope/formatter/_formatter_base.py (Formatter 配对关系)
+# → src/agentscope/model/_model_base.py:38       (ChatModelBase 抽象接口)
+# → src/agentscope/model/_openai_model.py:176    (OpenAIChatModel 参考实现)
+# → src/agentscope/formatter/_formatter_base.py:11  (FormatterBase 基类)
 
 from agentscope.model import OpenAIChatModel
 

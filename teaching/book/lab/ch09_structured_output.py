@@ -25,8 +25,8 @@ async def main():
     ]
 
     # ── 结构化输出 ──
-    # → src/agentscope/model/_openai_model.py  (_structured_via_tool_call)
-    # → src/agentscope/model/_model_base.py  (structured_output support)
+    # → src/agentscope/model/_openai_model.py:730  (_structured_via_tool_call)
+    # → src/agentscope/model/_model_base.py:38      (ChatModelBase 抽象方法)
     print("【结构化输出】传入 structured_model=UserInfo")
     print("-" * 40)
     # 收集所有 chunk（追踪中间件包裹后需先 await）
@@ -36,7 +36,7 @@ async def main():
     async for chunk in stream:
         for block in chunk.content:
             if block.get("type") == "text":
-                full_text += block["text"]
+                full_text = block["text"]
         if chunk.metadata:
             last_metadata = chunk.metadata
 

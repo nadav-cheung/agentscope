@@ -10,13 +10,11 @@ from agentscope.memory import InMemoryMemory
 from agentscope.message import Msg, TextBlock
 from agentscope.tool import Toolkit, ToolResponse
 
-# → src/agentscope/tool/       (ch22: 自定义工具)
-# → src/agentscope/memory/     (ch24: 自定义记忆)
-# → src/agentscope/agent/      (ch25: 自定义 Agent)
-# → src/agentscope/model/      (ch23: 自定义模型)
-# → src/agentscope/formatter/  (消息格式化)
-# → src/agentscope/mcp/        (ch26: MCP 集成)
-# → src/agentscope/tool/_toolkit.py (ch27: 中间件 & Skill)
+# → src/agentscope/tool/_toolkit.py:274        (ch22: register_tool_function)
+# → src/agentscope/model/_model_base.py:38      (ch23: ChatModelBase 抽象)
+# → src/agentscope/memory/_working_memory/_base.py:11  (ch24: MemoryBase 抽象)
+# → src/agentscope/agent/_agent_base.py:197     (ch25: AgentBase.reply)
+# → src/agentscope/tool/_toolkit.py:1328        (ch27: 中间件洋葱模型)
 
 
 # ── 组件 1: 日志工具 (ch22 模式) ──

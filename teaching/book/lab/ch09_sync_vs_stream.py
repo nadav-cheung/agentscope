@@ -16,7 +16,7 @@ async def main():
     ]
 
     # ── 收集模式：等所有 chunk 到齐后一次打印 ──
-    # → src/agentscope/model/_anthropic_model.py  (AnthropicChatModel)
+    # → src/agentscope/model/_openai_model.py:176  (OpenAIChatModel.__call__)
     # 追踪中间件包裹后，需先 await 再 async for
     print("=" * 50)
     print("【收集模式】收集所有流式 chunk 后一次打印")
@@ -26,7 +26,7 @@ async def main():
     async for chunk in stream:
         for block in chunk.content:
             if block.get("type") == "text":
-                full_text += block["text"]
+                full_text = block["text"]
     print(full_text)
 
     # ── 流式模式：逐 token 即时打印 ──
@@ -34,10 +34,14 @@ async def main():
     print("【流式模式】逐 token 即时打印")
     print("=" * 50)
     stream = await model(messages)
+    prev_text = ""
     async for chunk in stream:
         for block in chunk.content:
             if block.get("type") == "text":
-                print(block["text"], end="", flush=True)
+                # 提取增量（兼容累积式流式返回）
+                delta = block["text"][len(prev_text):]
+                print(delta, end="", flush=True)
+                prev_text = block["text"]
     print()  # 换行收尾
 
 
