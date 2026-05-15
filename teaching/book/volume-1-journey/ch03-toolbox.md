@@ -126,6 +126,22 @@ toolkit = Toolkit()
 
 但在 `init()` 被调用之前，`import agentscope` 这一行已经触发了 `__init__.py` 的模块级代码。也就是说，在 `init()` 之前，有些事情已经发生了。
 
+> **Python 知识卡片：import 时发生了什么？**
+>
+> 当 Python 执行 `import agentscope` 时，它会找到对应的 `__init__.py` 文件，然后**从上到下执行其中所有模块级代码**。"模块级代码"指的是不在函数或类定义内部的代码——包括 import 语句、变量赋值、函数/类定义本身。
+>
+> ```python
+> # __init__.py
+> print("import 时就会执行")        # ← 模块级代码，import 时立刻执行
+>
+> SOME_CONFIG = load_default()       # ← 模块级代码，import 时立刻执行
+>
+> def init():                        # ← 函数定义本身在 import 时执行（注册函数对象）
+>     print("调用时才执行")           # ← 函数体内的代码，调用时才执行
+> ```
+>
+> 所以 `import agentscope` 和 `agentscope.init()` 是两个不同的时刻：前者加载模块并执行模块级代码，后者调用一个函数。理解这个区别，是读懂任何 Python 库 `__init__.py` 的前提。
+
 ### 3.4.2 模块导入时发生了什么
 
 打开 `src/agentscope/__init__.py`，文件顶部（第 1-41 行）：
@@ -196,6 +212,21 @@ from ._version import __version__
 warnings.filterwarnings("once", category=DeprecationWarning)
 ```
 
+> **Python 知识卡片：warnings.filterwarnings**
+>
+> `warnings` 是 Python 标准库中控制警告输出的模块。`filterwarnings("once", category=DeprecationWarning)` 的意思是：对于 `DeprecationWarning`（"已废弃功能"警告），同一条警告只显示一次，不再重复。
+>
+> 为什么需要这行？框架在演进中会废弃旧 API，用 `DeprecationWarning` 提示用户迁移。但如果用户代码反复调用废弃函数，不加过滤就会刷屏。`"once"` 既提醒了用户，又不干扰正常日志。
+>
+> 你也可以在自己的代码中用这个模式：
+>
+> ```python
+> import warnings
+> warnings.filterwarnings("ignore")           # 屏蔽所有警告
+> warnings.filterwarnings("error")            # 把警告当作异常抛出
+> warnings.filterwarnings("once", category=FutureWarning)  # 只对 FutureWarning 显示一次
+> ```
+
 到这里，`import agentscope` 完成。所有模块已加载，`_config` 已创建，日志系统已初始化（`_logging.py` 末尾有一行 `setup_logger("INFO")`，在导入时就会执行）。
 
 ### 3.4.3 init() 函数逐行读
@@ -224,7 +255,7 @@ def init(
 | `run_id` | `None` | 运行实例的唯一 ID |
 | `logging_path` | `None` | 日志文件保存路径 |
 | `logging_level` | `"INFO"` | 日志级别 |
-| `studio_url` | `None` | AgentScope Studio 的 URL |
+| `studio_url` | `None` | AgentScope Studio 的地址（一个 Web 可视化调试平台，用来在浏览器中观察和交互 Agent 的运行） |
 | `tracing_url` | `None` | OpenTelemetry 追踪端点 |
 
 函数体分为三段：
@@ -257,7 +288,7 @@ setup_logger(logging_level, logging_path)
 **第三段：Studio 和 Tracing（第 117-156 行）**
 
 ```python
-# __init__.py 第 117-146 行（简化）
+# __init__.py 第 117-156 行（简化）
 if studio_url:
     # 向 Studio 注册本次运行
     response = requests.post(url=f"{studio_url}/trpc/registerRun", json=data)
@@ -520,6 +551,12 @@ if level not in ["INFO", "DEBUG", "WARNING", "ERROR", "CRITICAL"]:
 
 1. 如果在 `init()` 之后再次调用 `init(project="another")`，`_config.project` 会变成什么？为什么？
 2. `_ConfigCls` 为什么把 `ContextVar` 作为构造函数参数传入，而不是在自己内部创建？
+
+**参考答案：**
+
+1. **会变成 `"another"`。** 因为 `init()` 中用的是 `if project: _config.project = project`——这是一个直接覆盖，不检查是否已有值。每次调用 `init()` 都会无条件覆盖你传入的参数。这也意味着如果你第二次调用 `init()` 时没有传 `project`，原来的值不会被清空（因为 `if None:` 不成立，赋值不会执行）。所以 `init()` 的行为是"传什么覆盖什么，没传的保持不变"。
+
+2. **因为 `_config` 是模块级全局单例，而 `ContextVar` 需要在模块导入时就创建。** 如果 `_ConfigCls` 在自己内部创建 `ContextVar`，那么每次实例化一个新的 `_ConfigCls` 就会产生一组新的 `ContextVar`——但全局只需要一份。把 `ContextVar` 的创建放在 `__init__.py` 的模块级代码中，然后注入到 `_ConfigCls`，可以确保整个进程共享同一组 `ContextVar`。这是一种**依赖注入**的模式：`_ConfigCls` 只负责封装读写逻辑，不负责创建底层数据。
 
 ---
 
