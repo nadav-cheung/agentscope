@@ -151,6 +151,24 @@ Formatter 与 Model 的分离正是"可扩展模块"思想的体现——新增�
 
 ---
 
+---
+
+## 验证性实验：测量 Formatter-Model 耦合度
+
+**目标**：验证分离设计的组合自由度。
+
+**步骤**：
+
+1. 列出 `src/agentscope/formatter/` 下所有 Formatter 子类（5 个）。
+
+2. 列出 `src/agentscope/model/` 下所有 Model 子类（5 个）。
+
+3. 理论上可能的组合数：5 × 5 = 25 种。实际可行的有多少种？
+
+4. 尝试用 `OllamaChatModel` + `AnthropicChatFormatter` 组合——它能工作吗？为什么能/不能？
+
+---
+
 ## 你的判断
 
 1. LiteLLM 的"统一接口"方案是否比 AgentScope 的"分离方案"更简单？在什么场景下？

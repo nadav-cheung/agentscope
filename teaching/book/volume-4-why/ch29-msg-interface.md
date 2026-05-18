@@ -135,6 +135,24 @@ AgentScope 1.0 论文对这一设计的说明是：
 
 ---
 
+## 验证性实验：测试 Msg 作为唯一接口
+
+这个实验不需要 API key。
+
+**目标**：验证所有组件确实通过 Msg 通信。
+
+**步骤**：
+
+1. 在 `src/agentscope/agent/_agent_base.py` 的 `__call__` 中加一行 `print(f"[接口] Agent 收到: {type(msg).__name__}")`。
+
+2. 用同样的方法在 Model、Memory、Toolkit 的入口打印接收参数的类型。
+
+3. 运行天气 Agent，观察所有组件是否都接收 `Msg` 类型。
+
+**思考**：如果将来要添加一个新组件（如 `Planner`），它是否也应该用 `Msg` 做接口？用 `Msg` 的好处和限制分别是什么？
+
+---
+
 ## 你的判断
 
 开放性问题：

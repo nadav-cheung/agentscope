@@ -258,6 +258,36 @@ git checkout src/agentscope/agent/_agent_base.py
 
 ---
 
+## 调试实践：追踪消息广播
+
+**目标**：观察 Agent 消息如何通过 MsgHub 广播到多个订阅者。
+
+**步骤**：
+
+1. 在 `src/agentscope/agent/_agent_base.py` 的 `_broadcast_to_subscribers` 方法中加 print：
+
+```python
+async def _broadcast_to_subscribers(self, msg):
+    for hub_name, subscribers in self._subscribers.items():
+        print(f"[DEBUG] MsgHub '{hub_name}': 广播到 {len(subscribers)} 个订阅者")
+        for sub in subscribers:
+            if sub is not self:
+                print(f"[DEBUG]   → {sub.name}")
+                await sub.observe(msg)
+```
+
+2. 创建 2-3 个 Agent 加入同一个 MsgHub，让一个 Agent 处理消息，观察广播过程。
+
+3. 在 `observe` 方法中也加 print，追踪消息到达订阅者的完整路径。
+
+**完成后清理：**
+
+```bash
+git checkout src/agentscope/agent/_agent_base.py
+```
+
+---
+
 ## 检查点
 
 - **发布-订阅模式**：发布者不直接知道接收者，通过调度中心（MsgHub）广播

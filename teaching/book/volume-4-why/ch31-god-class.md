@@ -145,6 +145,24 @@ Toolkit 目前 1684 行，如果继续增长，可以考虑将 Middleware 管理
 
 ---
 
+---
+
+## 验证性实验：测量 Toolkit 的职责边界
+
+**目标**：定量分析 Toolkit 单文件的职责分布。
+
+**步骤**：
+
+1. 运行 `grep -c "    def \|    async def " src/agentscope/tool/_toolkit.py` 统计 Toolkit 的方法数。
+
+2. 用 `wc -l src/agentscope/tool/_toolkit.py` 获取总行数。
+
+3. 对你认为的 9 种职责（注册、调用、Schema、中间件、分组、序列化、Agent Skill、MCP 集成、工具响应）各分配一个方法计数。
+
+4. **挑战**：尝试设计一个提取方案——把"中间件"职责拆到独立文件 `_toolkit_middleware.py` 需要改哪些 import？
+
+---
+
 ## 你的判断
 
 1. 如果你是 AgentScope 的维护者，会把 `Toolkit` 拆分吗？如果会，按什么边界？

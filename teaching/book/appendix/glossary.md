@@ -42,6 +42,9 @@
 | 工具箱 | Toolkit | 管理工具函数的注册和调用 |
 | 中间件 | Middleware | 包裹工具执行的拦截器 |
 | Hook | Hook | 在方法前后自动执行的回调函数 |
+| 防重入保护 | Reentrancy Guard | 通过 `hook_guard_attr` 标记确保 Hook 在继承链中只执行一次 |
+| 参数归一化 | Normalize to Kwargs | `_normalize_to_kwargs` 将不同调用方式统一转为 kwargs 字典 |
+| 标记系统 | Mark System | 记忆模块中用于过滤和分类消息的字符串标记机制 |
 
 ---
 

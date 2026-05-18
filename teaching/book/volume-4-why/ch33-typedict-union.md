@@ -187,6 +187,22 @@ TypedDict 直接对应 JSON dict 结构，与 OpenAI 等 API 的消息格式天�
 
 ---
 
+---
+
+## 验证性实验：体验 TypedDict Union vs OOP
+
+**目标**：亲手感受两种设计的不同。
+
+**步骤**：
+
+1. 用 `TypedDict` Union 写一个消息处理器：给定 `ContentBlock`，用 `match/case` 分发处理逻辑。
+
+2. 用 OOP 子类（每个 ContentBlock 类型一个子类）写同样的消息处理器。
+
+3. 对比：添加一个新的 Block 类型（如 `ReflectionBlock`），在两种方案中各需要改多少行？
+
+---
+
 ## 你的判断
 
 1. 如果要给 ContentBlock 添加验证逻辑（如 "ToolUseBlock 必须有 id"），TypedDict 还合适吗？

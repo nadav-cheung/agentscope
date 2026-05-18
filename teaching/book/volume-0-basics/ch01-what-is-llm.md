@@ -345,6 +345,8 @@ result = await agent(Msg("user", "北京今天天气怎么样？", "user"))
 | `Msg("user", "北京今天天气怎么样？", "user")` | 构造一条用户消息 |
 | `await agent(...)` | 启动整个流程 |
 
+> **关于 `await`**：`await` 是 Python 异步编程的关键字，表示"等待这个操作完成，但在等待期间程序可以去做别的事"。ch03 会详细解释 async/await 的工作原理。现在只需要知道它表示"等待 Agent 完成处理"。
+
 其中 ReActAgent 内部的循环逻辑是这样的：
 
 ```mermaid

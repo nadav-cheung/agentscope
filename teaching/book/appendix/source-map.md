@@ -11,7 +11,7 @@
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
 | `src/agentscope/__init__.py` | ~180 | 包初始化、子模块导入、`__all__` | ch13 |
-| `src/agentscope/_run_config.py` | ~73 | `_ConfigCls`（ContextVar 配置） | ch34 |
+| `src/agentscope/_run_config.py` | ~73 | `_ConfigCls`（ContextVar 配置） | ch03 |
 | `src/agentscope/_logging.py` | ~47 | 日志配置 | ch13 |
 | `src/agentscope/_version.py` | ~4 | 版本号 | — |
 

@@ -269,6 +269,37 @@ git checkout src/agentscope/module/_state_module.py
 
 ---
 
+## 调试实践：追踪继承链的序列化调用
+
+**目标**：亲眼看到四层继承链中 `state_dict()` 的递归调用过程。
+
+**步骤**：
+
+1. 在 `src/agentscope/module/_state_module.py` 的 `state_dict` 方法中加 print：
+
+```python
+def state_dict(self):
+    print(f"[DEBUG] state_dict() called on {self.__class__.__name__}")
+    result = {}
+    for name, module in self._module_dict.items():
+        print(f"[DEBUG]   └─ recursing into {name} ({module.__class__.__name__})")
+        result[name] = module.state_dict()  # 递归调用
+    print(f"[DEBUG]   result keys: {list(result.keys())}")
+    return result
+```
+
+2. 创建 ReActAgent，调用 `agent.state_dict()`，观察输出中 `StateModule → AgentBase → ReActAgentBase → ReActAgent` 的递归链。
+
+3. 故意制造"记忆丢失"bug：不调用 `register_state("memory", self.memory)`，观察 `_module_dict` 中是否缺少 memory 键。然后修复它。
+
+**完成后清理：**
+
+```bash
+git checkout src/agentscope/module/_state_module.py
+```
+
+---
+
 ## 检查点
 
 你现在理解了：

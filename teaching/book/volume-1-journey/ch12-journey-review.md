@@ -243,7 +243,7 @@ grep -n "    def " src/agentscope/tool/_toolkit.py
 - **ch14 继承体系**：`StateModule → AgentBase → ReActAgent` 和 `StateModule → MemoryBase → InMemoryMemory` 这两棵继承树是怎么设计的？
 - **ch15 元类与 Hook**：`_AgentMeta` 元类如何在不写任何注册代码的情况下自动收集 Hook？
 - **ch16 策略模式**：Formatter 的多态设计——为什么不同的模型 API 可以共享同一个调用逻辑？
-- **ch17 工厂与 Schema**：KnowledgeBase 和 VDBStore 的工厂模式——新增一个向量数据库需要写几行代码？
+- **ch17 工厂与 Schema**：`_parse_tool_function` 如何从 Python 函数签名和 docstring 自动生成 JSON Schema——新增一个工具需要写几行描述？
 - **ch18 中间件**：`_apply_middlewares` 如何用 `functools.partial` 构建洋葱链？
 - **ch19 发布-订阅**：多 Agent 场景下，`MsgHub` 如何实现广播和路由？
 - **ch20 可观测性**：`@trace_llm`、`@trace_format` 等装饰器如何实现无侵入的 OpenTelemetry 追踪？

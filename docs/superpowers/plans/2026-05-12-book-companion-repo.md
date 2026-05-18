@@ -16,77 +16,63 @@
 
 ```
 teaching/book/lab/
-├── .env.example                     # Template, readers copy to .env
-├── .gitignore                       # *.pyc, .env, __pycache__, .venv
-├── README.md                        # Global nav + provider setup guide
-├── config.py                        # Shared: multi-provider model/formatter factory
-├── mock/
-│   ├── __init__.py                  # Empty
-│   ├── mock_server.py               # Flask server, returns pre-recorded LLM responses
-│   └── responses/
-│       ├── ch02_weather.json        # Pre-recorded: "北京今天天气怎么样？"
-│       └── ch09_stream.json         # Pre-recorded: streaming response
-├── scripts/
-│   └── verify_companion.py          # Scan source pointers, verify file+line validity
-├── ch01-hello-llm/
-│   ├── README.md
-│   └── hello_llm.py
-├── ch02-hello-agent/
-│   ├── README.md
-│   ├── weather_agent.py             # Full agent, 3 providers all work
-│   └── pure_python_loop.py          # if/else ReAct, zero dependencies
-├── ch04-message/
-│   ├── README.md
-│   ├── msg_create.py                # 7 ContentBlock types
-│   └── msg_serialize.py             # to_dict / from_dict
-├── ch05-agent-receives/
-│   ├── README.md
-│   ├── agent_call_flow.py           # await agent(msg) trace
-│   └── hook_demo.py                 # register_instance_hook
-├── ch06-memory/
-│   ├── README.md
-│   ├── memory_store.py              # InMemoryMemory CRUD
-│   └── memory_compress.py           # Compression + summary
-├── ch08-formatter/
-│   ├── README.md
-│   ├── openai_format.py             # OpenAI message format
-│   └── anthropic_format.py          # Anthropic format, side-by-side diff
-├── ch09-model/
-│   ├── README.md
-│   ├── sync_vs_stream.py            # Sync vs streaming call comparison
-│   └── structured_output.py         # Structured output via tool calling
-├── ch10-toolkit/
-│   ├── README.md
-│   ├── register_tool.py             # register_tool_function demo
-│   └── middleware_demo.py           # _apply_middlewares onion model
-├── ch11-loop/
-│   ├── README.md
-│   └── react_loop.py                # Full ReAct loop with step logging
-├── ch22-new-tool/
-│   ├── README.md
-│   └── custom_tool.py               # Build + register a custom tool
-├── ch23-new-model/
-│   ├── README.md
-│   └── custom_provider.py           # Wire a new model provider
-├── ch24-new-memory/
-│   ├── README.md
-│   └── sqlite_memory.py             # SQLite-backed Memory implementation
-├── ch25-new-agent/
-│   ├── README.md
-│   └── plan_execute_agent.py        # Plan-Execute agent subclass
-├── ch26-mcp-server/
-│   ├── README.md
-│   └── mcp_integration.py           # Connect an MCP server
-├── ch27-advanced-extension/
-│   ├── README.md
-│   ├── rate_limit_middleware.py     # Custom tool middleware
-│   └── agent_skill.py               # register_agent_skill demo
-└── ch28-capstone/
-    ├── README.md
-    └── integration.py               # All custom pieces wired together
+├── .env.example                        # Template, readers copy to .env
+├── .gitignore                          # *.pyc, .env, __pycache__, .venv
+├── README.md                           # Global nav + provider setup guide
+├── config.py                           # Shared: multi-provider model/formatter factory
+├── mock_server.py                      # stdlib server, returns pre-recorded LLM responses
+├── verify_companion.py                 # Scan source pointers, verify file+line validity
+├── mock_responses/
+│   ├── ch01_general.json               # Pre-recorded: general completion
+│   ├── ch02_weather_answer.json        # Pre-recorded: weather text answer
+│   ├── ch02_weather_tool.json          # Pre-recorded: weather tool call
+│   ├── ch09_stream.json                # Pre-recorded: streaming response
+│   └── ch09_structured.json            # Pre-recorded: structured output
+├── ch01_hello_llm.py                   # First LLM call
+├── ch01_hello_llm_README.md            # Chapter 1 README
+├── ch02_weather_agent.py               # Full agent, 3 providers all work
+├── ch02_pure_python_loop.py            # if/else ReAct, zero dependencies
+├── ch02_hello_agent_README.md          # Chapter 2 README
+├── ch04_msg_create.py                  # 7 ContentBlock types
+├── ch04_msg_serialize.py               # to_dict / from_dict
+├── ch04_message_README.md              # Chapter 4 README
+├── ch05_agent_call_flow.py             # await agent(msg) trace
+├── ch05_hook_demo.py                   # register_instance_hook
+├── ch05_agent_receives_README.md       # Chapter 5 README
+├── ch06_memory_store.py                # InMemoryMemory CRUD
+├── ch06_memory_compress.py             # Compression + summary
+├── ch06_memory_README.md               # Chapter 6 README
+├── ch08_openai_format.py               # OpenAI message format
+├── ch08_anthropic_format.py            # Anthropic format, side-by-side diff
+├── ch08_formatter_README.md            # Chapter 8 README
+├── ch09_sync_vs_stream.py              # Sync vs streaming call comparison
+├── ch09_structured_output.py           # Structured output via tool calling
+├── ch09_model_README.md                # Chapter 9 README
+├── ch10_register_tool.py               # register_tool_function demo
+├── ch10_middleware_demo.py             # _apply_middlewares onion model
+├── ch10_toolkit_README.md              # Chapter 10 README
+├── ch11_react_loop.py                  # Full ReAct loop with step logging
+├── ch11_loop_README.md                 # Chapter 11 README
+├── ch22_custom_tool.py                 # Build + register a custom tool
+├── ch22_new_tool_README.md             # Chapter 22 README
+├── ch23_custom_provider.py             # Wire a new model provider
+├── ch23_new_model_README.md            # Chapter 23 README
+├── ch24_sqlite_memory.py               # SQLite-backed Memory implementation
+├── ch24_new_memory_README.md           # Chapter 24 README
+├── ch25_plan_execute_agent.py          # Plan-Execute agent subclass
+├── ch25_new_agent_README.md            # Chapter 25 README
+├── ch26_mcp_integration.py             # Connect an MCP server
+├── ch26_mcp_server_README.md           # Chapter 26 README
+├── ch27_rate_limit_middleware.py       # Custom tool middleware
+├── ch27_agent_skill.py                 # register_agent_skill demo
+├── ch27_advanced_extension_README.md   # Chapter 27 README
+├── ch28_integration.py                 # All custom pieces wired together
+└── ch28_capstone_README.md             # Chapter 28 README
 ```
 
 **Total: ~25 Python files, 17 READMEs, 5 infrastructure files**
+
+Files use flat naming (`ch02_weather_agent.py`) rather than subdirectories. Each `.py` file's companion README uses the pattern `chXX_topic_README.md`. This keeps the lab flat and easy to navigate — readers see all files at a glance without traversing directory trees.
 
 ---
 
@@ -586,10 +572,10 @@ git commit -m "feat: add source pointer verification script"
 ### Task 5: Chapter 01 — Hello LLM
 
 **Files:**
-- Create: `ch01-hello-llm/README.md`
-- Create: `ch01-hello-llm/hello_llm.py`
+- Create: `ch01_hello_llm.py`
+- Create: `ch01_hello_llm_README.md`
 
-- [ ] **Step 1: Write `ch01-hello-llm/hello_llm.py`**
+- [ ] **Step 1: Write `ch01_hello_llm.py`**
 
 ```python
 """第 1 章：什么是大模型（LLM）
@@ -666,9 +652,9 @@ git commit -m "feat: add ch01 - hello LLM"
 ### Task 6: Chapter 02 — Hello Agent (Weather Agent)
 
 **Files:**
-- Create: `ch02-hello-agent/README.md`
-- Create: `ch02-hello-agent/weather_agent.py`
-- Create: `ch02-hello-agent/pure_python_loop.py`
+- Create: `ch02_weather_agent.py`
+- Create: `ch02_pure_python_loop.py`
+- Create: `ch02_hello_agent_README.md`
 
 - [ ] **Step 1: Write `ch02-hello-agent/weather_agent.py`**
 
@@ -846,77 +832,27 @@ feat: add ch28 - integration capstone
 ### Task 21: Pre-record Mock Responses
 
 **Files:**
-- Create: additional JSON files in `mock/responses/`
+- Create: additional JSON files in `mock_responses/`
 
 - [ ] **Step 1: Run each chapter with a real API key, capture responses**
 
-For each chapter that makes LLM calls, run once with `DEEPSEEK_API_KEY=...` and save the response JSON to `mock/responses/chXX_topic.json`. Update `ROUTES` in `mock/mock_server.py`.
+For each chapter that makes LLM calls, run once with `DEEPSEEK_API_KEY=...` and save the response JSON to `mock_responses/chXX_topic.json`. Update `ROUTES` in `mock_server.py`.
 
 - [ ] **Step 2: Commit**
 
 ```bash
-git add mock/responses/
+git add mock_responses/
 git commit -m "feat: add pre-recorded mock responses for all chapters"
 ```
 
 ---
 
-### Task 22: Git Branches Per Chapter
-
-- [ ] **Step 1: Create branches**
-
-```bash
-# From main (complete), create chapter start-point branches
-git checkout -b ch01-hello-llm
-# (ch01 is already on main as first chapter)
-git checkout main
-
-git checkout -b ch02-hello-agent
-git checkout main
-
-git checkout -b ch04-message
-# ... one branch per chapter
-
-# Push all branches
-git push --all origin
-```
-
-Each branch contains the cumulative code up to and including that chapter. This way a reader who wants to start at chapter 6 can `git checkout ch06-memory` and get ch01-ch06 code.
-
-- [ ] **Step 2: Add branch navigation to README.md**
-
-```markdown
-## 按章节跳转
-
-| 章节 | 分支 | 内容 |
-|------|------|------|
-| ch01 | `ch01-hello-llm` | Hello LLM |
-| ch02 | `ch02-hello-agent` | 天气 Agent + 纯 Python ReAct |
-| ch04 | `ch04-message` | + 消息创建与序列化 |
-| ... | ... | ... |
-| ch28 | `ch28-capstone` | 全部章节代码 |
-
-```bash
-git checkout ch06-memory  # 获得第 6 章起点的所有代码
-```
-```
-
-- [ ] **Step 3: Commit**
-
-```bash
-git checkout main
-git add README.md
-git commit -m "docs: add branch navigation guide"
-```
-
----
-
-### Task 23: Final Verification
+### Task 22: Final Verification
 
 - [ ] **Step 1: Run verify_companion.py**
 
 ```bash
-python scripts/verify_companion.py
+python verify_companion.py
 ```
 
 Expected: all source pointers resolve. Fix any that don't.

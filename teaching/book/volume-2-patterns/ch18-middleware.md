@@ -293,6 +293,43 @@ git checkout src/agentscope/tool/_toolkit.py
 
 ---
 
+## 调试实践：追踪中间件洋葱链
+
+**目标**：观察洋葱模型中各层中间件的执行顺序。
+
+**步骤**：
+
+1. 在 `src/agentscope/tool/_toolkit.py` 的 `_apply_middlewares` 方法中添加执行追踪：
+
+```python
+async def _apply_middlewares(self, func, tool_call):
+    chain = func
+    i = 0
+    for mw in reversed(self._middlewares):
+        i += 1
+        prev = chain
+        async def middleware_wrapper(tc, _mw=mw, _prev=prev, _i=i):
+            print(f"[DEBUG] 进入中间件 #{_i}: {_mw.__class__.__name__}")
+            result = await _mw(tc, _prev)
+            print(f"[DEBUG] 退出中间件 #{_i}: {_mw.__class__.__name__}")
+            return result
+        chain = functools.partial(middleware_wrapper)
+    print(f"[DEBUG] 中间件链深度: {i}")
+    return await chain(tool_call)
+```
+
+2. 注册 2-3 个中间件到 Toolkit，调用一个工具函数。
+
+3. 观察输出：中间件执行顺序应该是 `#1 → #2 → #3 → tool → #3 → #2 → #1`（洋葱模型）。
+
+**完成后清理：**
+
+```bash
+git checkout src/agentscope/tool/_toolkit.py
+```
+
+---
+
 ## 检查点
 
 - **洋葱模型**：请求从外到内，响应从内到外，每层中间件可以 pre/post 处理

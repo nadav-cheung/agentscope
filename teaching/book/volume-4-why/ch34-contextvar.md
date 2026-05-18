@@ -224,6 +224,22 @@ Python 的 `contextvars` 模块对 ContextVar 的核心 API 说明是：
 
 ---
 
+---
+
+## 验证性实验：验证 ContextVar 的异步隔离
+
+**目标**：亲眼看到 ContextVar 如何在并发场景中隔离数据。
+
+**步骤**：
+
+1. 创建两个并发的 asyncio Task，各设置不同的 `project` 值。
+
+2. 在两个 Task 中分别打印 `agentscope._config.project`。
+
+3. 对比：把 ContextVar 替换为普通全局变量（`_project = None`），重新运行——两个 Task 的 project 是否互相覆盖？
+
+---
+
 ## 你的判断
 
 1. 如果 AgentScope 未来要支持多线程（不仅 asyncio），ContextVar 还够用吗？

@@ -195,4 +195,30 @@ original = {"msgs": [Msg("user", "hello", "user")]}
 copied = deepcopy(original)  # 完全独立的副本
 ```
 
+---
+
+## match/case（Python 3.10+）
+
+结构化模式匹配，对 Union 类型做类型分发：
+
+```python
+def handle_block(block: ContentBlock):
+    match block:
+        case {"type": "text", "text": str(t)}:
+            return f"文本: {t}"
+        case {"type": "tool_use", "name": str(n), "input": dict(i)}:
+            return f"工具调用: {n}({i})"
+        case {"type": "image"}:
+            return "图片"
+        case _:
+            return "未知类型"
+```
+
+**要点**：
+- `match/case` 比 `if/elif` 链更清晰，特别是对嵌套结构
+- 对 TypedDict Union（如 `ContentBlock`），match 可以按 `type` 字段分发
+- 在 ch33（ContentBlock Union 设计）中使用
+
+---
+
 > **下一章：[附录 B：术语表](./glossary.md)**
