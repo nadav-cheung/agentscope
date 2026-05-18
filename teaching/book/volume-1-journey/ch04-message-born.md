@@ -397,7 +397,7 @@ def from_dict(cls, json_data: dict) -> "Msg":
 
 ### 4.4.5 DictMixin 的角色
 
-`DictMixin` 定义在 `src/agentscope/_utils/_mixin.py`：
+`DictMixin`（Dictionary Mixin，字典混入；Mixin 读作 /ˈmɪksɪn/，意为"混入"）是一种面向对象设计模式——把一小块可复用的功能"混入"到其他类中。DictMixin 就是把 dict 的访问能力混入到 dataclass 里，定义在 `src/agentscope/_utils/_mixin.py`：
 
 ```python
 # src/agentscope/_utils/_mixin.py:5-9
@@ -408,22 +408,38 @@ class DictMixin(dict):
     __getattr__ = dict.__getitem__
 ```
 
-只有两行有效代码，却解决了一个实际问题：让对象可以用方括号语法访问属性。
-
-`ChatResponse`、`ChatUsage`、`EmbeddingUsage` 等类继承了 DictMixin，这意味着你可以这样写：
+两行代码，效果是让对象**同时支持两种访问方式**——点号语法和方括号语法：
 
 ```python
-# ChatResponse 继承了 DictMixin
-response = ChatResponse(...)
-print(response["content"])   # 方括号访问，像 dict 一样
-response["custom_field"] = "value"  # 动态添加字段
+# 不用 DictMixin 的普通 dataclass
+response = ChatResponse(content=[...])
+print(response.content)       # OK，点号访问
+print(response["content"])    # ❌ TypeError! dataclass 不支持方括号
+
+# 用了 DictMixin 之后
+response = ChatResponse(content=[...])
+print(response.content)       # OK，点号访问
+print(response["content"])    # OK，方括号也行
+response["custom_field"] = 42 # 还能动态添加字段
 ```
 
-Msg 类本身**没有继承 DictMixin**。Msg 选择用普通属性访问（`msg.content`、`msg.role`），因为消息的字段是固定的、已知的。DictMixin 主要用于字段可能动态扩展的场景——比如模型 API 的响应，不同模型返回的字段不一样。
+**原理**：Python 中 `obj.x = 5` 实际调用 `obj.__setattr__("x", 5)`，`obj.x` 实际调用 `obj.__getattr__("x")`。DictMixin 把这两个方法替换成 dict 自身的 `__setitem__` / `__getitem__`——也就是 `obj["x"] = 5` 和 `obj["x"]`。因为 DictMixin 继承了 `dict`，数据存在 dict 内部，所以点号和方括号访问的是同一份数据。
 
-这个区分是设计上的刻意选择：**固定结构用属性，动态结构用 DictMixin**。
+`ChatResponse` 和 `ChatUsage` 同时用了 `@dataclass` 和 `DictMixin`：
 
-AgentScope 官方文档的 Basic Concepts > Message 页面展示了 `Msg` 的创建方法和 7 种 `ContentBlock` 类型（TextBlock、ThinkingBlock、ImageBlock、AudioBlock、VideoBlock、ToolUseBlock、ToolResultBlock）。本章解释了为什么用 `TypedDict` 而不是 dataclass（详见卷四第 33 章）。
+```python
+# src/agentscope/model/_model_response.py:19-20
+@dataclass
+class ChatResponse(DictMixin):
+    content: Sequence[TextBlock | ToolUseBlock | ...]
+    id: str = ...
+```
+
+这是 dataclass（定义固定字段）+ DictMixin（额外支持方括号访问）的组合。
+
+Msg 类本身**没有继承 DictMixin**。Msg 的字段是固定的（`name`、`content`、`role`），用点号就够了。DictMixin 主要用于字段可能动态扩展的场景——比如模型 API 的响应，不同模型返回的字段不一样，用方括号访问更灵活。
+
+**设计区分**：固定结构用属性（Msg），动态结构用 DictMixin（ChatResponse）。
 
 AgentScope 1.0 论文对统一消息格式的设计说明是：
 
@@ -574,6 +590,26 @@ for block in msg.get_content_blocks("image"):
 ```
 
 **思考题**：如果把第 2 步的 `image_source` 改成 Base64 编码的图片数据，该怎么构造？（提示：看 `Base64Source` 的定义——需要 `type`、`media_type`、`data` 三个字段。）
+
+```python
+# 答案：把 URLSource 换成 Base64Source
+import base64
+
+# 假设你已经有一张图片的二进制数据
+with open("weather-map.jpg", "rb") as f:
+    raw_bytes = f.read()
+
+image_source = {
+    "type": "base64",                          # 固定值，标识这是 Base64 数据
+    "media_type": "image/jpeg",                # MIME 类型，告诉 API 这是什么格式
+    "data": base64.b64encode(raw_bytes).decode(),  # 把二进制编码成 Base64 字符串
+}
+
+# 对比原来的 URLSource：
+# image_source = {"type": "url", "url": "https://example.com/weather-map.jpg"}
+#
+# 结构类似——都是 dict，都有 type 字段，只是数据来源不同
+```
 
 ---
 
