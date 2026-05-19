@@ -410,6 +410,12 @@ async def timing_middleware(kwargs, next_handler):
 toolkit.register_middleware(timing_middleware)
 ```
 
+> **参考答案**：
+>
+> 1. **抛出异常**。`namesake_strategy` 的默认值是 `"raise"`，注册同名函数会直接报错。其他选项：`"override"`（覆盖旧函数）、`"skip"`（跳过新函数）、`"rename"`（自动给新函数改名）。
+> 2. **`tool_call["input"]` 优先**。合并代码是 `{**preset_kwargs, **(tool_call["input"])}`——后面的字典覆盖前面的同名键。这意味着模型传入的参数可以覆盖预设值。
+> 3. 上面的代码已经是一个完整的计时中间件实现。它记录开始时间，调用 `next_handler` 向下传递，最后打印总耗时。
+
 ---
 
 ## 调试实践：追踪工具注册和调用

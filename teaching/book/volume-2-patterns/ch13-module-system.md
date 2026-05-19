@@ -293,6 +293,11 @@ ls src/agentscope/agent/_.py 2>/dev/null | wc -l
 1. 如果你添加了一个新的 Agent 类型 `_my_agent.py`，需要修改哪个文件才能让用户用 `from agentscope.agent import MyAgent` 导入它？
 2. `_utils/` 下的工具函数为什么不对外暴露？
 
+> **参考答案**：
+>
+> 1. 需要修改 `src/agentscope/agent/__init__.py`：添加 `from ._my_agent import MyAgent` 导入语句，然后把 `"MyAgent"` 加入 `__all__` 列表。
+> 2. `_utils/` 是内部工具集，仅供框架内部模块使用。不对外暴露是为了保持公共 API 的简洁性和稳定性——内部工具函数的签名和行为可以随时调整，不会破坏用户代码。
+
 ---
 
 ## 下一章预告

@@ -314,6 +314,11 @@ git checkout src/agentscope/module/_state_module.py
 1. `InMemoryMemory` 继承自什么类？它会被自动追踪吗？
 2. 如果你给 Agent 添加了一个非 `StateModule` 类型的属性（比如一个普通字典），它会被 `state_dict()` 收集吗？（提示：看 `register_state`）
 
+> **参考答案**：
+>
+> 1. `InMemoryMemory` 继承自 `MemoryBase`，而 `MemoryBase` 继承自 `StateModule`。所以**会被自动追踪**——当 Agent 设置 `self.memory = InMemoryMemory(...)` 时，`StateModule.__setattr__` 检测到它是 `StateModule` 实例，自动加入 `_module_dict`。
+> 2. **不会**。`StateModule.__setattr__` 只自动追踪 `StateModule` 类型的值。普通字典、整数、字符串等类型会正常设置为属性，但不进入 `_module_dict`，`state_dict()` 也不会包含它们。需要手动调用 `register_state("attr_name")` 才能让 `state_dict()` 收集它。
+
 ---
 
 ## register_state 的使用场景

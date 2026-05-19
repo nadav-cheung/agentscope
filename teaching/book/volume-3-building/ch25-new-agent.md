@@ -457,6 +457,11 @@ if review.get("needs_revision"):
 1. 如果模型在 Plan 阶段返回的不是合法 JSON，代码会怎么处理？（提示：看 `_plan_phase` 的 try/except）
 2. `PlanExecuteAgent` 的 `reply` 方法中，哪些阶段会调用工具？（提示：只有 Execute 阶段）
 
+> **参考答案**：
+>
+> 1. `_plan_phase` 的 `try/except` 捕获 JSON 解析错误（`json.JSONDecodeError`）。解析失败时，通常会把错误信息反馈给模型，让它重新生成合法 JSON，或者回退到纯文本模式。具体的回退策略取决于实现——可以是重试、返回空计划、或直接把原始文本当作计划。
+> 2. **只有 Execute 阶段**调用工具。Plan 阶段只让模型制定计划（不执行），Review 阶段只让模型评估执行结果（不执行）。这是 Plan-Execute 模式的核心设计：规划和执行解耦，避免模型在规划时误执行不成熟的操作。
+
 ---
 
 ## 下一章预告

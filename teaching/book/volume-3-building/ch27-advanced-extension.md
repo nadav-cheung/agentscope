@@ -437,6 +437,11 @@ print_stats()
 1. 如果把 `create_rate_limiter` 和 `create_concurrency_limiter` 的注册顺序反过来，行为会有什么变化？（提示：中间件从外到内执行）
 2. `"basic"` 分组能被 `create_tool_group` 创建吗？（提示：看 `_toolkit.py:187` 的参数验证）
 
+> **参考答案**：
+>
+> 1. 注册顺序决定了洋葱层的内外关系。如果把 `create_concurrency_limiter` 先注册、`create_rate_limiter` 后注册，那么限流器变成**外层**，并发控制器变成**内层**。效果是：请求先被限流（等待时间窗口），然后才进入并发控制（获取信号量）。这和原来的行为**语义上有差异**——原来的顺序是先控制并发数，再在并发许可内做速率限制；反过来则是先等速率窗口，再争抢并发槽位。对大多数场景影响不大，但在高并发下可能有不同的排队行为。
+> 2. **不能**。`create_tool_group` 的验证逻辑会检查 `group_name == "basic"`，如果是则抛出 `ValueError`。`"basic"` 是内置的默认分组，始终处于激活状态——注册到 `"basic"` 分组的工具总是包含在发给模型的 Schema 中，无法被禁用。`update_tool_groups` 也会跳过对 `"basic"` 的操作。
+
 ---
 
 ## 下一章预告

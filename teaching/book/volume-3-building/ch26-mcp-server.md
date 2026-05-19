@@ -371,6 +371,11 @@ grep -n "_convert_mcp_content_to_as_blocks" src/agentscope/mcp/_client_base.py
 1. MCP 工具的 JSON Schema 从哪里来？和普通 Python 工具有什么区别？（提示：普通工具从 docstring 自动生成，MCP 工具从 `inputSchema` 直接获取）
 2. 如果 MCP Server 在调用过程中崩溃了，`call_tool_function` 会怎么处理？（提示：`get_callable_function` 返回的包装函数内部应该有 try/except）
 
+> **参考答案**：
+>
+> 1. MCP 工具的 JSON Schema 来自 MCP Server 提供的 `inputSchema` 字段——Server 在 `tools/list` 响应中直接给出完整的 Schema。而普通 Python 工具是通过 `_parse_tool_function()` 从函数签名和 docstring 自动生成的。区别在于：MCP 工具的 Schema 是外部提供的现成数据，Python 工具的 Schema 是框架从代码推断出来的。
+> 2. `call_tool_function` 内部有 `try/except` 捕获 MCP 相关异常。如果 MCP Server 崩溃，会捕获 `McpError` 或通用 `Exception`，把它们转换成包含错误信息的 `ToolResponse`（如 `"Error occurred when calling MCP tool: ..."`）。Agent 收到的是文本形式的错误响应，而不是未处理的异常。这样 Agent 可以在下一轮循环中处理错误（比如重试或告知用户）。
+
 ---
 
 ## 下一章预告

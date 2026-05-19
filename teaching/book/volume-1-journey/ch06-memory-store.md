@@ -404,6 +404,8 @@ planning 消息 (2 条):
 
 **思考题**：如果一条消息同时有 `mark="planning"` 和 `exclude_mark="planning"`，`get_memory` 会怎么处理？阅读源码第 67-79 行，验证你的猜想。
 
+> **参考答案**：结果是**空列表**。`get_memory` 先用 `mark` 正向过滤，保留所有带 `"planning"` 标记的消息；再用 `exclude_mark` 反向过滤，把它们全部排除。两次过滤是串行执行的（先 `mark` 再 `exclude_mark`），没有任何冲突检测或报错。源码注释也写明了："mark 和 exclude_mark should not overlap"——这是调用者的责任。
+
 ---
 
 ## 6.8 检查点

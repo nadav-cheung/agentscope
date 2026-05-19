@@ -499,6 +499,11 @@ git checkout src/agentscope/model/
 1. 模型返回了 `ToolUseBlock`，下一步 Agent 应该做什么？（提示：回忆贯穿示例的 ReAct 循环）
 2. 流式解析中，`text += chunk_text` 的累积发生在哪个方法中？它在什么时候 yield 一个 ChatResponse？
 
+> **参考答案**：
+>
+> 1. Agent 应该**执行工具调用**。在 ReAct 循环的 `_acting` 阶段，Agent 从 `ToolUseBlock` 中提取工具名和参数，调用 `toolkit.call_tool_function`，然后把工具结果（`ToolResponse`）作为新消息存入记忆，进入下一轮循环。
+> 2. 累积发生在 `_parse_openai_stream_response` 方法中（`_openai_model.py:376` 附近）。每个 stream chunk 到达时执行 `text += getattr(choice.delta, "content", None) or ""`，把增量文本拼接到 `text` 上。每当 `contents` 非空时（即有新的文本/工具调用/思考内容累积），就 `yield ChatResponse(...)`——所以每次 yield 都包含**累积后的完整文本**，不是增量。
+
 ---
 
 ## 下一站预告

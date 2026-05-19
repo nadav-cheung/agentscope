@@ -418,6 +418,11 @@ git checkout src/agentscope/agent/_react_agent.py
 1. 如果你想让 Agent 自动记住"用户喜欢用英文交流"，应该用 `static_control` 还是 `agent_control`？
 2. RAG 的 `retrieve` 方法的输入是什么？输出是什么？（提示：看 `_knowledge_base.py:38`）
 
+> **参考答案**：
+>
+> 1. **`agent_control`**。"自动记住"意味着需要由 Agent（LLM）主动判断何时记录——比如在对话中识别出用户的语言偏好后，调用 `record_to_memory` 工具保存。`static_control` 是开发者控制的，在每次 `reply` 开始/结束时自动检索和记录，不适合需要 Agent 自主判断的场景。
+> 2. 输入：`query: str`（查询字符串），加上可选的 `limit: int = 5` 和 `score_threshold: float | None`。输出：`list[Document]`（匹配的文档列表）。
+
 ---
 
 ## 下一站预告

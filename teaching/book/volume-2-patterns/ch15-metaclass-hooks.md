@@ -313,6 +313,11 @@ git checkout src/agentscope/agent/
 1. 如果你在 `AgentBase` 的子类中定义了 `reply` 方法但没有使用 `_AgentMeta` 元类，Hook 还会生效吗？
 2. `_normalize_to_kwargs` 的作用是什么？为什么 pre-hook 接收的是 `kwargs` 字典而不是原始参数？
 
+> **参考答案**：
+>
+> 1. **不会生效**。`_AgentMeta.__new__` 在类定义时自动用 `_wrap_with_hooks` 包装 `reply`、`observe`、`print` 方法。如果子类不使用这个元类，方法不会被包装，Hook 链（`pre_reply`、`post_reply` 等）完全不存在。不过 `AgentBase` 已经声明了 `metaclass=_AgentMeta`，所以它的子类默认也会继承这个元类——除非你显式覆盖 `metaclass`。
+> 2. `_normalize_to_kwargs` 把所有位置参数和关键字参数归一化为一个字典。pre-hook 需要检查和修改参数——用统一的字典表示最方便：hook 函数可以读取任意参数、修改任意参数、甚至注入新参数，然后返回修改后的字典传给下一个环节。如果用原始的 `*args, **kwargs`，hook 就需要处理各种参数组合，编程复杂得多。
+
 ---
 
 ## 下一章预告

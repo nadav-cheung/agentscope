@@ -517,6 +517,11 @@ async for r in toolkit.call_tool_function(ToolUseBlock(
 1. 如果你的工具函数返回的是 `str` 而不是 `ToolResponse`，`call_tool_function` 会怎么处理？（提示：读 `_toolkit.py:970` 附近的返回类型判断逻辑）
 2. `preset_kwargs={"db_path": "/prod.db"}` 和模型传入 `input={"db_path": "/dev.db", "sql": "..."}`，最终 `db_path` 的值是什么？（提示：看合并顺序 `{**preset, **input}`）
 
+> **参考答案**：
+>
+> 1. **抛出 `TypeError`**。`call_tool_function` 检查返回值类型，只接受 `ToolResponse`、`AsyncGenerator[ToolResponse]` 或 `Generator[ToolResponse]`。返回 `str` 会触发 `"The tool function must return a ToolResponse object, or an AsyncGenerator/Generator of ToolResponse objects, but got <class 'str'>"` 错误。工具函数必须显式构造 `ToolResponse`。
+> 2. **`"/dev.db"`**。合并顺序是 `{**tool_func.preset_kwargs, **(tool_call["input"])}`，后面的字典覆盖前面的同名键。模型传入的参数优先于预设参数——这是刻意设计的：预设值是开发者提供的默认值，模型可以在运行时覆盖。
+
 ---
 
 ## 下一章预告

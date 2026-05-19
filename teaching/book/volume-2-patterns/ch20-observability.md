@@ -267,6 +267,11 @@ git checkout src/agentscope/tracing/
 1. 为什么 `@trace_toolkit` 在 `@_apply_middlewares` 的外层？
 2. 如果追踪未启用，trace 装饰器会增加多少开销？
 
+> **参考答案**：
+>
+> 1. Python 装饰器从下往上应用：先 `_apply_middlewares` 包装原始函数，再 `trace_toolkit` 包装整个中间件链。这样 trace 装饰器在最外层，能**捕获完整的调用过程**（包括所有中间件的执行时间）。如果顺序反了，trace 只追踪到原始函数，中间件的耗时不会出现在追踪数据中。
+> 2. **几乎为零**。每个 trace 装饰器开头都调用 `_check_tracing_enabled()`，它只是读取一个 `ContextVar`（默认 `False`）。未启用时直接调用原始函数，不创建 span、不导入 OpenTelemetry、不做属性提取——开销仅是一次 `ContextVar.get()` 加一个布尔判断。
+
 ---
 
 ## 第二卷总结

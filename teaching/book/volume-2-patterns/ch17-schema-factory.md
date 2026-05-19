@@ -275,6 +275,12 @@ git checkout src/agentscope/_utils/
 2. `_remove_title_field` 为什么需要被调用？如果不去掉 title 字段会怎样？
 3. `create_model("_StructuredOutputDynamicClass", **fields)` 中的类名为什么用下划线开头？
 
+> **参考答案**：
+>
+> 1. 类型会是 `Any`。当 `param.annotation == inspect.Parameter.empty` 时，字段类型被设为 `Any`，Pydantic 生成的 JSON Schema 中不会包含 `"type"` 约束——参数接受任意 JSON 值。这意味着模型不知道该传什么类型的值，可能导致调用不准确。
+> 2. Pydantic 的 `model_json_schema()` 会自动在每个节点加上 `"title"` 字段（如 `"title": "_StructuredOutputDynamicClass"` 或 `"title": "MyParameter"`）。这些是内部标识，对 LLM 没有意义甚至会误导——模型可能把 title 当作指令或约束。`_remove_title_field` 递归清理所有 title，确保传给模型的 Schema 干净且只包含有用信息。
+> 3. 下划线开头表示这是**内部动态创建的临时类**，不是用户应直接引用的公共 API。`create_model` 需要一个类名来创建 Pydantic 模型，但这个类只用于生成 JSON Schema，不需要被外部代码访问。下划线前缀符合项目"内部实现用 `_` 前缀"的命名约定。
+
 ---
 
 ## 下一章预告

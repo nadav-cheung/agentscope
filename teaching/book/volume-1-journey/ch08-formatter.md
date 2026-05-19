@@ -433,6 +433,11 @@ git checkout src/agentscope/formatter/
 1. 如果不传 `token_counter` 和 `max_tokens`，`TruncatedFormatterBase.format()` 的 `while True` 循环会执行几次？（提示：看 `n_tokens` 为 `None` 时的判断）
 2. AgentScope 提供了多少种 Formatter 实现？（提示：`ls src/agentscope/formatter/`）
 
+> **参考答案**：
+>
+> 1. **恰好 1 次**。循环体内先调用 `_format` 格式化，再调用 `_count` 计数。当没有 `token_counter` 时，`_count` 返回 `None`，循环条件 `if n_tokens is None or ...` 立即满足，直接 `return formatted_msgs`，不会进入第二轮。
+> 2. 可用 `ls src/agentscope/formatter/` 查看，当前有：`_openai_chat_formatter.py`、`_anthropic_formatter.py`、`_dashscope_chat_formatter.py`、`_gemini_chat_formatter.py`、`_ollama_chat_formatter.py`（它们都继承 `_truncated_formatter_base.py`）。
+
 ---
 
 ## 下一站预告

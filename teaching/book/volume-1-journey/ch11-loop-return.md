@@ -591,6 +591,12 @@ git checkout src/agentscope/agent/_react_agent.py
 2. 如果 `max_iters=1`，Agent 还能完成"查天气"任务吗？为什么？（提示：回忆 `_summarizing` 在什么时候被调用）
 3. 记忆压缩的"滑动窗口"策略保留了哪些消息不压缩？
 
+> **参考答案**：
+>
+> 1. **恰好 1 轮**。第一轮 `_reasoning` 调用模型，模型返回文本回复（没有 `ToolUseBlock`，不需要结构化输出）。循环检测到 `not msg_reasoning.has_content_blocks("tool_use")` 为 True，直接 `break` 退出。
+> 2. **可以**。"查天气"只需要 1 轮（模型直接返回文本），所以 `max_iters=1` 完全够用。`_summarizing` 只在循环跑完所有轮次仍未产生回复消息时才被调用——简单查询在第 1 轮就产生了回复，根本不会走到 `_summarizing`。
+> 3. 滑动窗口保留**最近 N 条消息**不压缩（N 由配置决定），以及**系统提示消息**。只有超出窗口范围的旧消息才会被压缩成摘要。
+
 ---
 
 ## 下一站预告

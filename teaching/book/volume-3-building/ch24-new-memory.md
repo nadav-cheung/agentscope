@@ -574,6 +574,11 @@ async def test_search():
 1. 如果 `SQLiteMemory` 不实现 `state_dict` / `load_state_dict`，`agent.state_dict()` 会怎样？（提示：看 `StateModule.state_dict` 如何处理未注册的属性）
 2. 为什么 `delete_by_mark` 不是抽象方法？（提示：看 `_base.py:66` 的默认实现方式）
 
+> **参考答案**：
+>
+> 1. `agent.state_dict()` 仍然能正常工作，但 `SQLiteMemory` 的数据**不会被包含在序列化结果中**。`StateModule.state_dict()` 只序列化 `_module_dict` 中的嵌套 `StateModule` 和 `_attribute_dict` 中手动注册的属性。如果 `SQLiteMemory` 不覆盖 `state_dict`，基类实现会尝试序列化它——但 SQLite 的数据在数据库文件中，不在内存属性里，所以 `state_dict()` 返回的字典会缺少 SQLite 的持久化数据。恢复时数据库内容就丢了。这就是为什么 `SQLiteMemory` 需要覆盖这两个方法，只保存数据库路径。
+> 2. `delete_by_mark` 是**可选能力**。它的默认实现是 `raise NotImplementedError`，而不是 `@abstractmethod`。区别在于：`@abstractmethod` 强制子类必须实现，否则无法实例化；而 `NotImplementedError` 允许子类不实现——调用时才报错。这样，不需要按 mark 删除的 Memory 实现（比如简单的键值存储）可以安全地忽略它。
+
 ---
 
 ## 下一章预告
