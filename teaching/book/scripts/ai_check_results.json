@@ -65,7 +65,7 @@
         "h3": 0
       },
       "try_it_sections": 0,
-      "chinese_chars": 309,
+      "chinese_chars": 315,
       "code_ratio": 0.0
     },
     {
@@ -1000,7 +1000,7 @@
         "h3": 10
       },
       "try_it_sections": 5,
-      "chinese_chars": 2530,
+      "chinese_chars": 2540,
       "code_ratio": 49.8
     },
     {
@@ -1017,7 +1017,7 @@
         "h3": 6
       },
       "try_it_sections": 0,
-      "chinese_chars": 2196,
+      "chinese_chars": 2202,
       "code_ratio": 24.5
     },
     {
@@ -1159,19 +1159,19 @@
     {
       "file": "volume-3-building/ch21-dev-setup.md",
       "chapter": 21,
-      "total_lines": 472,
+      "total_lines": 476,
       "code_lines": 195,
       "code_blocks": 19,
       "mermaid_diagrams": 1,
-      "table_rows": 24,
+      "table_rows": 28,
       "headings": {
         "h1": 17,
         "h2": 8,
         "h3": 16
       },
       "try_it_sections": 10,
-      "chinese_chars": 2117,
-      "code_ratio": 41.3
+      "chinese_chars": 2128,
+      "code_ratio": 41.0
     },
     {
       "file": "volume-3-building/ch22-new-tool.md",
@@ -1414,7 +1414,7 @@
     {
       "file": "volume-4-why/ch36-panorama.md",
       "chapter": 36,
-      "total_lines": 265,
+      "total_lines": 267,
       "code_lines": 85,
       "code_blocks": 2,
       "mermaid_diagrams": 2,
@@ -1425,8 +1425,8 @@
         "h3": 10
       },
       "try_it_sections": 0,
-      "chinese_chars": 1339,
-      "code_ratio": 32.1
+      "chinese_chars": 1419,
+      "code_ratio": 31.8
     }
   ],
   "issues": {
@@ -1876,14 +1876,14 @@
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 174,
+        "line": 178,
         "type": "no_lang_marker",
         "guessed_lang": "unknown",
         "snippet": "tests/⏎├── toolkit_basic_test.py            # Toolkit 基础功能⏎├── toolkit_async_exe"
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 292,
+        "line": 296,
         "type": "no_lang_marker",
         "guessed_lang": "unknown",
         "snippet": "tests/config_test.py::ConfigTest::test_config_attributes PASSED⏎================"
@@ -3909,91 +3909,91 @@
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 170,
+        "line": 174,
         "type": "heading_skip",
         "detail": "H1 -> H3: \"第三步：了解测试目录结构\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 198,
+        "line": 202,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"tests/config_test.py:1\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 232,
+        "line": 236,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"tests/toolkit_basic_test.py:335\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 249,
+        "line": 253,
         "type": "heading_skip",
         "detail": "H1 -> H3: \"第五步：运行测试\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 252,
+        "line": 256,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"运行全部测试\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 255,
+        "line": 259,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"运行单个测试文件\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 258,
+        "line": 262,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"按关键字筛选（运行所有包含 \"toolkit\" 的测试）\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 261,
+        "line": 265,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"运行单个测试方法\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 264,
+        "line": 268,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"进程隔离模式（每个测试独立进程，避免状态泄漏）\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 267,
+        "line": 271,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"显示详细输出\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 351,
+        "line": 355,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"正确：懒加载\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 356,
+        "line": 360,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"错误：顶部导入\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 360,
+        "line": 364,
         "type": "heading_skip",
         "detail": "H1 -> H3: \"pre-commit 跳过规则\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 394,
+        "line": 398,
         "type": "multiple_h1",
         "detail": "Multiple H1: \"tests/test_env_setup.py\""
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 426,
+        "line": 430,
         "type": "heading_skip",
         "detail": "H1 -> H3: \"练习三：理解测试模式（无 API Key）\""
       },
@@ -4121,7 +4121,7 @@
         "file": "volume-3-building/ch24-new-memory.md",
         "line": 69,
         "type": "multiple_h1",
-        "detail": "Multiple H1: \"_in_memory_memory.py:26\""
+        "detail": "Multiple H1: \"_in_memory_memory.py:17\""
       },
       {
         "file": "volume-3-building/ch24-new-memory.md",
@@ -6232,13 +6232,13 @@
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 197,
+        "line": 201,
         "type": "nonexistent_class_in_snippet",
         "detail": "class ConfigTest not found in source"
       },
       {
         "file": "volume-3-building/ch21-dev-setup.md",
-        "line": 393,
+        "line": 397,
         "type": "nonexistent_class_in_snippet",
         "detail": "class EnvSetupTest not found in source"
       },
@@ -6293,7 +6293,7 @@
     ],
     "overlaps": [
       {
-        "hash": 6300271055827859596,
+        "hash": 4090674468460964959,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/docstring_parser-0.18.0.dist-info/licenses/LICENSE.md",
@@ -6318,7 +6318,7 @@
         ]
       },
       {
-        "hash": -6051588655564996919,
+        "hash": 4890546280485849917,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/docstring_parser-0.18.0.dist-info/licenses/LICENSE.md",
@@ -6343,7 +6343,7 @@
         ]
       },
       {
-        "hash": -1258279988308386721,
+        "hash": 1320843625294630707,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/httpcore-1.0.9.dist-info/licenses/LICENSE.md",
@@ -6368,7 +6368,7 @@
         ]
       },
       {
-        "hash": 3259870963225348127,
+        "hash": 52666972605283040,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/httpcore-1.0.9.dist-info/licenses/LICENSE.md",
@@ -6409,7 +6409,7 @@
         ]
       },
       {
-        "hash": -6718359104014094252,
+        "hash": 3522763873155154869,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/idna-3.14.dist-info/licenses/LICENSE.md",
@@ -6442,7 +6442,7 @@
         ]
       },
       {
-        "hash": -5570957665690371960,
+        "hash": 9030162152328879030,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/numpy/random/LICENSE.md",
@@ -6455,7 +6455,7 @@
         ]
       },
       {
-        "hash": 4946294552212661739,
+        "hash": 6726973469202646427,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/numpy/random/LICENSE.md",
@@ -6468,7 +6468,7 @@
         ]
       },
       {
-        "hash": -3998241000428418030,
+        "hash": 2794985888963483487,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/numpy/random/LICENSE.md",
@@ -6481,7 +6481,7 @@
         ]
       },
       {
-        "hash": -6166698976917858351,
+        "hash": 4305186206989098372,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/numpy/random/LICENSE.md",
@@ -6494,7 +6494,7 @@
         ]
       },
       {
-        "hash": 3947659568212439642,
+        "hash": -7737002645175432220,
         "files": [
           [
             "lab/.venv/lib/python3.12/site-packages/numpy-2.4.4.dist-info/licenses/numpy/random/src/distributions/LICENSE.md",
@@ -6511,7 +6511,7 @@
         ]
       },
       {
-        "hash": 1764962020463671463,
+        "hash": -5159847631574384997,
         "files": [
           [
             "volume-1-journey/ch03-toolbox.md",
@@ -6528,7 +6528,7 @@
         ]
       },
       {
-        "hash": 7771101074743474161,
+        "hash": 4594580997295101488,
         "files": [
           [
             "volume-1-journey/ch05-agent-receives.md",
@@ -6545,7 +6545,7 @@
         ]
       },
       {
-        "hash": -1798806123915444103,
+        "hash": 8021113989884652827,
         "files": [
           [
             "volume-1-journey/ch07-retrieval-knowledge.md",
