@@ -113,7 +113,7 @@ class ToolUseBlock(TypedDict, total=False):
     id: Required[str]       # 必填（覆盖了 total=False）
     name: Required[str]     # 必填
     input: Required[dict]   # 必填
-    raw_input: str | None   # 可选
+    raw_input: str          # 可选——可选项是 total=False 带来的（键可以不存在），跟类型里写不写 | None 无关
 
 # id、name、input 必填，raw_input 可选
 block: ToolUseBlock = {"id": "1", "name": "search", "input": {"q": "hi"}}  # OK
@@ -247,7 +247,7 @@ def greet(name: str, greeting: str = "Hello"):
 sig = inspect.signature(greet)
 for param_name, param in sig.parameters.items():
     print(f"{param_name}: {param.annotation}, default={param.default}")
-# name: <class 'str'>, default=<Parameter.empty>
+# name: <class 'str'>, default=<class 'inspect._empty'>   # 没有默认值时，param.default 就是 inspect.Parameter.empty 这个哨兵
 # greeting: <class 'str'>, default=Hello
 ```
 
