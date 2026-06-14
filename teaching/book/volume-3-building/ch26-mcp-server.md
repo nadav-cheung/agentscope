@@ -117,7 +117,7 @@ MCP Server 启动后，Client 可以获取它提供的所有工具。每个工�
 
 ```python
 # 简化的 MCP 工具注册流程
-client = StdioStatefulClient(name="filesystem", command="npx", args=["-y", "@modelcontextprotocol/server-filesystem", "/tmp"])
+client = StdIOStatefulClient(name="filesystem", command="npx", args=["-y", "@modelcontextprotocol/server-filesystem", "/tmp"])
 
 # 获取工具列表
 mcp_tools = await client.list_tools()
@@ -136,17 +136,19 @@ for tool in mcp_tools:
     )
 ```
 
+> 实际使用时不需要手写这个循环——框架提供了 `Toolkit.register_mcp_client(client, group_name=...)`（`_toolkit.py:1035`），它在内部完成上面的转换（把 MCP 的 `inputSchema` 包装成 `{"type": "function", "function": {...}}` 再注册）。上面的代码只是拆开给你看内部机制。
+
 ---
 
 ## Step 2：三种 MCP 传输方式
 
 ### 2.1 stdio 传输
 
-`StdioStatefulClient`（`_stdio_stateful_client.py`）通过子进程的 stdin/stdout 通信：
+`StdIOStatefulClient`（`_stdio_stateful_client.py`）通过子进程的 stdin/stdout 通信：
 
 ```python
 # 用法示意（非真实 API）
-client = StdioStatefulClient(
+client = StdIOStatefulClient(
     name="filesystem",
     command="npx",
     args=["-y", "@modelcontextprotocol/server-filesystem", "/tmp"],
@@ -157,16 +159,17 @@ client = StdioStatefulClient(
 
 ### 2.2 HTTP 传输
 
-`HTTPStatefulClient`（`_http_stateful_client.py`）通过 HTTP POST 通信：
+`HttpStatefulClient`（`_http_stateful_client.py`）通过 HTTP POST 通信：
 
 ```python
-client = HTTPStatefulClient(
+client = HttpStatefulClient(
     name="web-tools",
+    transport="streamable_http",  # 或 "sse"，必填参数
     url="http://localhost:8080/mcp",
 )
 ```
 
-`HTTPStatelessClient`（`_http_stateless_client.py`）是无状态版本，每次调用独立。
+`HttpStatelessClient`（`_http_stateless_client.py`）是无状态版本，每次调用独立。
 
 适用场景：远程服务、需要独立部署的工具服务。
 
@@ -216,7 +219,7 @@ async def integrate_mcp():
 
     # 连接 MCP Server（假设已启动）
     # 实际代码：
-    # client = StdioStatefulClient(
+    # client = StdIOStatefulClient(
     #     name="demo",
     #     command="python",
     #     args=["simple_mcp_server.py"],
@@ -283,9 +286,7 @@ toolkit.create_tool_group("mcp_filesystem", description="文件系统 MCP 工具
 ## 设计一瞥
 
 > **设计一瞥**：MCP 工具 vs 普通 Python 工具——有什么区别？
-> 对 Toolkit 来说，两者都是 `RegisteredToolFunction`。区别在于 `source` 字段（`_types.py:18`）：
-> - `"function"`：普通 Python 函数
-> - `"mcp_server"`：MCP 远程工具
+> 对 Toolkit 来说，两者都是 `RegisteredToolFunction`。注意 `source` 字段（`_types.py:23`）虽然类型上允许 `"function"` / `"mcp_server"` / `"function_group"`，但**运行时所有工具的 `source` 都被设为 `"function"`**（见 `_toolkit.py:463`，连 MCP 工具也不例外）。真正区分 MCP 工具的是 `mcp_name` 字段（`_types.py:39`）：MCP 工具的 `mcp_name` 是它所属的 MCP 客户端名，普通函数则是 `None`。
 >
 > 调用方式也不同：MCP 工具通过 `get_callable_function` 获得的包装函数内部走网络通信（HTTP 或 stdio），而不是直接调用 Python 函数。但 `call_tool_function` 不关心这些——它只看到 `RegisteredToolFunction`，调用 `original_func`，拿到结果包装为 `ToolResponse`。
 >

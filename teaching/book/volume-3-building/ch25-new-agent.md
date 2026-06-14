@@ -39,8 +39,8 @@ async def reply(self, *args, **kwargs) -> Msg:
     raise NotImplementedError(...)
 
 # _agent_base.py:448
-async def __call__(self, msg=None, **kwargs) -> Msg:
-    """入口方法：Hook 前置 → reply() → Hook 后置 → 广播"""
+async def __call__(self, *args, **kwargs) -> Msg:
+    """入口方法：调用 reply()（reply 本身被元类包裹了 pre/post-reply Hook）→ 处理中断 → 广播给订阅者"""
 ```
 
 `reply` 不是 `@abstractmethod`——它直接 `raise NotImplementedError`。子类**必须覆盖**它。
@@ -48,7 +48,7 @@ async def __call__(self, msg=None, **kwargs) -> Msg:
 ### ReActAgentBase 中间层
 
 `ReActAgentBase`（`_react_agent_base.py`）在 `AgentBase` 和 `ReActAgent` 之间提供了：
-- `_reasoning`、`_acting`、`_summarizing` 的骨架方法
+- `_reasoning`、`_acting` 的抽象骨架方法（`_summarizing` 是 `ReActAgent` 自己的兜底方法，不在这层）
 - `memory`、`model`、`formatter`、`toolkit` 的统一管理
 - `max_iters` 参数
 

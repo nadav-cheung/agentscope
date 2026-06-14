@@ -315,11 +315,15 @@ toolkit.register_agent_skill("/path/to/skill_dir")
 
 ```python
 skill_prompt = toolkit.get_agent_skill_prompt()
-# 返回类似：
-# "你拥有以下技能：
-# 1. data_analysis: 分析 CSV 和 Excel 数据，生成统计报告
-# 2. web_search: 搜索互联网获取最新信息
-# ..."
+# 返回类似（默认模板，英文；见 _toolkit.py:139-150 的两个常量）：
+# # Agent Skills
+# The agent skills are a collection of folds of instructions ...
+# ## data_analysis
+# 分析 CSV 和 Excel 数据，生成统计报告
+# Check "/path/to/skills/data_analysis/SKILL.md" for how to use this skill
+# ## web_search
+# 搜索互联网获取最新信息
+# Check "/path/to/skills/web_search/SKILL.md" for how to use this skill
 ```
 
 模型看到这些技能描述后，能更好地决定调用哪些工具。
@@ -439,7 +443,7 @@ print_stats()
 
 > **参考答案**：
 >
-> 1. 注册顺序决定了洋葱层的内外关系。如果把 `create_concurrency_limiter` 先注册、`create_rate_limiter` 后注册，那么限流器变成**外层**，并发控制器变成**内层**。效果是：请求先被限流（等待时间窗口），然后才进入并发控制（获取信号量）。这和原来的行为**语义上有差异**——原来的顺序是先控制并发数，再在并发许可内做速率限制；反过来则是先等速率窗口，再争抢并发槽位。对大多数场景影响不大，但在高并发下可能有不同的排队行为。
+> 1. 注册顺序决定了洋葱层的内外关系。**最先注册的中间件是最外层**（见 `_apply_middlewares` 里的 `reversed(middlewares)` 循环，`_toolkit.py:95`——最后被包裹的反而最先执行）。上一节 1.4 中先注册了 `create_rate_limiter`，所以限流器是最外层。如果把顺序反过来——先注册 `create_concurrency_limiter`、后注册 `create_rate_limiter`——那么**并发控制器变成外层，限流器变成内层**。效果是：请求先获取信号量（并发控制），然后在并发许可内才进入速率限制；原来的顺序则是先等速率窗口，再争抢并发槽位。对大多数场景影响不大，但在高并发下可能有不同的排队行为。
 > 2. **不能**。`create_tool_group` 的验证逻辑会检查 `group_name == "basic"`，如果是则抛出 `ValueError`。`"basic"` 是内置的默认分组，始终处于激活状态——注册到 `"basic"` 分组的工具总是包含在发给模型的 Schema 中，无法被禁用。`update_tool_groups` 也会跳过对 `"basic"` 的操作。
 
 ---

@@ -370,7 +370,8 @@ async def test_end_to_end_no_api():
     from agentscope.message import ToolResultBlock
     await memory.add(Msg("system", [ToolResultBlock(
         type="tool_result",
-        tool_use_id="e2e_1",
+        id="e2e_1",
+        name="query_database",
         output=tool_result,
     )], "system"))
 

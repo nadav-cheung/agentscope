@@ -63,6 +63,7 @@ class ToolResponse:
     stream: bool = False
     is_last: bool = True
     is_interrupted: bool = False
+    id: str = field(default_factory=lambda: _get_timestamp(True))
 ```
 
 关键字段：
@@ -342,7 +343,7 @@ toolkit3.register_tool_function(
 这样 JSON Schema 中不会出现 `db_path` 参数，但调用时 `preset_kwargs` 会和 `tool_call["input"]` 合并：
 
 ```python
-# _toolkit.py:937（简化）
+# _toolkit.py:912（简化）
 kwargs = {**tool_func.preset_kwargs, **(tool_call.get("input", {}) or {})}
 ```
 
@@ -402,8 +403,8 @@ asyncio.run(verify_integration())
 ## 设计一瞥
 
 > **设计一瞥**：为什么工具函数不直接返回字符串？
-> 如果工具函数只返回 `str`，Toolkit 内部需要把它包装成 `ToolResponse(content=[TextBlock(text=...)])`。AgentScope 选择让工具函数直接返回 `ToolResponse`，这样工具可以返回多模态内容（图片、音频）和流式响应，不需要框架猜测包装方式。
-> 代价：工具函数需要多写几行代码来构造 `ToolResponse`。但 `call_tool_function`（`_toolkit.py:853`）内部也处理了直接返回字符串的情况，会自动包装——所以实际上两种方式都支持。
+> 如果工具函数只返回 `str`，框架无法确定该把它放进 `TextBlock` 还是别的 block、该不该标记为流式——猜测包装方式会引入歧义。AgentScope 选择让工具函数显式返回 `ToolResponse`，这样工具可以返回多模态内容（图片、音频）和流式响应，结构完全由工具自己决定。
+> 代价：工具函数需要多写几行代码构造 `ToolResponse`。事实上 `call_tool_function`（`_toolkit.py:853`）对返回值类型是**严格检查**的——只接受 `ToolResponse` 或生成 `ToolResponse` 的 `Generator/AsyncGenerator`，返回 `str` 等其它类型会直接抛 `TypeError`（见自检练习 1）。
 
 ---
 
@@ -514,7 +515,7 @@ async for r in toolkit.call_tool_function(ToolUseBlock(
 
 **自检练习**：
 
-1. 如果你的工具函数返回的是 `str` 而不是 `ToolResponse`，`call_tool_function` 会怎么处理？（提示：读 `_toolkit.py:970` 附近的返回类型判断逻辑）
+1. 如果你的工具函数返回的是 `str` 而不是 `ToolResponse`，`call_tool_function` 会怎么处理？（提示：读 `_toolkit.py:1029` 附近的返回类型判断逻辑）
 2. `preset_kwargs={"db_path": "/prod.db"}` 和模型传入 `input={"db_path": "/dev.db", "sql": "..."}`，最终 `db_path` 的值是什么？（提示：看合并顺序 `{**preset, **input}`）
 
 > **参考答案**：

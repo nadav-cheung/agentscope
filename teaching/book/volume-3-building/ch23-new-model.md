@@ -389,11 +389,12 @@ async def structured_call(self, messages, structured_model: type[BaseModel]) -> 
 
 ### 3.2 参考 OpenAI 的实现
 
-`OpenAIChatModel` 在 `_structured_via_tool_call`（`_openai_model.py:730`）中实现了完整的结构化输出路径。核心步骤：
-1. 将 Pydantic 模型转为工具 JSON Schema
-2. 设置 `tool_choice={"type": "function", "function": {"name": "generate_response"}}`
-3. 调用模型，从响应中提取 `ToolUseBlock`
-4. 用 `structured_model.model_validate()` 验证输出格式
+AgentScope 的 `OpenAIChatModel`（`_openai_model.py`）对结构化输出有**两条路径**：
+
+- **默认路径（`response_format`）**：把 Pydantic 模型直接放进 `kwargs["response_format"]`，用 `client.chat.completions.parse()`（非流式）或 `.stream()`（流式）调用，由 OpenAI SDK 原生保证返回符合 schema 的 JSON。绝大多数兼容 OpenAI 协议的端点走这条路（`_openai_model.py:285-303`）。
+- **回退路径 `_structured_via_tool_call`（`_openai_model.py:730`）**：当端点**不支持** `json_schema` 格式的 `response_format` 时（如 DashScope、DeepSeek），或默认路径遇到 `openai.BadRequestError` 时才启用。它把 Pydantic 模型转成一个工具 schema，用 `tool_choice` 强制模型调用名为 **`generate_structured_output`** 的工具，再从工具调用结果中解析出结构化数据（解析走 `_json_loads_with_repair`，并不调用 Pydantic 的 `model_validate`）。
+
+注意工具名是 `generate_structured_output`（由 `_create_tool_from_base_model` 生成，见 `_common.py:268`），不要和 ReActAgent 结束循环用的 `generate_response`（`_react_agent.py:173`）混淆——那是另一层的机制。
 
 ---
 
@@ -487,12 +488,12 @@ grep -n "_truncate" src/agentscope/formatter/_truncated_formatter_base.py
 **自检练习**：
 
 1. 如果 FastLLM 的 API 不支持 `tools` 参数，你的 Model 还能支持工具调用吗？（提示：思考 `tool_choice` 的处理）
-2. 流式模式下，`yield ChatResponse` 的 `content` 应该是累积文本还是增量文本？（提示：看 `_openai_model.py:376` 的 `text` 变量）
+2. 流式模式下，`yield ChatResponse` 的 `content` 应该是累积文本还是增量文本？（提示：看 `_openai_model.py:433` 的 `text` 变量）
 
 > **参考答案**：
 >
 > 1. **不能直接支持，但可以变通**。如果 API 不支持 `tools` 参数，标准的工具调用流程（模型返回 `ToolUseBlock`）无法走通。变通方案是：在系统提示中描述可用的工具和 JSON Schema，让模型在文本中输出工具调用意图，然后在 Model 层解析文本提取工具名和参数。不过这需要额外的解析逻辑，且不如原生工具调用可靠。
-> 2. **累积文本**。`_openai_model.py:376` 使用 `text += getattr(choice.delta, "content", None) or ""` 累积所有 chunk 的内容。每次 yield 的 `ChatResponse` 包含从开始到当前的**完整文本**，不是增量。这是因为 AgentScope 的下游消费者（Agent、Memory）需要随时拿到完整的响应状态。
+> 2. **累积文本**。`_openai_model.py:433` 使用 `text += getattr(choice.delta, "content", None) or ""` 累积所有 chunk 的内容（`text` 变量在第 376 行初始化为空串）。每次 yield 的 `ChatResponse` 包含从开始到当前的**完整文本**，不是增量。这是因为 AgentScope 的下游消费者（Agent、Memory）需要随时拿到完整的响应状态。
 
 ---
 

@@ -77,6 +77,7 @@ self.content: list[tuple[Msg, list[str]]] = []
 ```python
 def state_dict(self) -> dict:
     return {
+        **super().state_dict(),
         "content": [[msg.to_dict(), marks] for msg, marks in self.content],
     }
 ```
@@ -86,7 +87,7 @@ def state_dict(self) -> dict:
 `StateModule`（`module/_state_module.py`）提供：
 - `state_dict()`（line 49）：遍历 `_module_dict`（子模块）和 `_attribute_dict`（注册属性）生成 dict
 - `load_state_dict(state_dict, strict=True)`（line 74）：递归恢复
-- `register_state(name, to_json=None, from_json=None)`（line 108）：注册自定义属性
+- `register_state(attr_name, custom_to_json=None, custom_from_json=None)`（line 108）：注册自定义属性
 
 ---
 
@@ -373,7 +374,7 @@ class SQLiteMemory(MemoryBase):
 
 注意：`SQLiteMemory` 不需要在 `state_dict` 中保存所有消息——消息已经在数据库里了。只需要保存数据库路径，恢复时重新连接即可。这是 SQLite 方案相比内存方案的核心优势。
 
-`_compressed_summary` 是 `MemoryBase.__init__` 中通过 `register_state` 注册的属性（`_base.py:22`），需要在序列化时保留。
+`_compressed_summary` 是 `MemoryBase.__init__` 中通过 `register_state` 注册的属性（`_base.py:20`），需要在序列化时保留。
 
 ---
 

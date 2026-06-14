@@ -67,7 +67,11 @@ agentscope/                          # 仓库根目录
 │   ├── a2a/                         # Agent-to-Agent 协议
 │   ├── realtime/                    # 实时语音交互
 │   ├── module/                      # StateModule 基类
-│   └── exception/                   # 自定义异常
+│   ├── exception/                   # 自定义异常
+│   ├── mcp/                         # MCP 协议客户端
+│   ├── evaluate/                    # 评测与基准
+│   ├── tuner/                       # 模型微调
+│   └── ...                          # 还有 plan/、tts/、types/、_utils/ 等
 ├── tests/                           # 测试文件
 ├── examples/                        # 示例代码
 ├── pyproject.toml                   # 项目配置
@@ -113,9 +117,12 @@ pip install -e ".[dev]"
 | `pytest-asyncio` | 异步测试支持 |
 | `pytest-forked` | 进程隔离测试 |
 | `pre-commit` | Git 钩子管理 |
-| `flake8`, `black`, `pylint`, `mypy` | 通过 pre-commit 运行 |
 | `fakeredis` | 模拟 Redis（测试用） |
 | `aiosqlite` | SQLite 异步支持（测试用） |
+| `sphinx-gallery`, `furo`, `myst_parser` | 文档构建 |
+| `agentscope[full]` | 把完整运行依赖一并装上 |
+
+> 注意：`flake8`、`black`、`pylint`、`mypy` 这些 lint/格式化工具**不在 `[dev]` 里**——它们由 pre-commit 在各自隔离的钩子环境中安装运行（见下一节），所以 `pip install -e ".[dev]"` 之后并不能直接 `import black`。
 
 **验证安装**：
 
@@ -135,7 +142,7 @@ pre-commit 在每次 `git commit` 前自动运行代码质量检查，防止不�
 pre-commit install
 ```
 
-`.pre-commit-config.yaml` 配置了以下检查（按执行顺序）：
+`.pre-commit-config.yaml` 配置的主要检查（按执行顺序，省略了少量同类校验如 `check-json`/`check-xml`）：
 
 | 钩子 | 来源 | 作用 |
 |------|------|------|
@@ -261,7 +268,7 @@ pytest tests/ --forked
 pytest tests/config_test.py -v
 ```
 
-CI 中的测试命令（`.github/workflows/unittest.yml:31`）使用 coverage：
+CI 中的测试命令（`.github/workflows/unittest.yml:32`）使用 coverage：
 
 ```bash
 coverage run -m pytest tests
