@@ -13,14 +13,14 @@
 | 职责 | 方法 | 大致行数 |
 |------|------|---------|
 | 注册工具 | `register_tool_function` | 274-450 |
-| 调用工具 | `call_tool_function` | 852-920 |
+| 调用工具 | `call_tool_function`（含可选的异步执行分支） | 852-1034 |
 | 中间件 | `_apply_middlewares`, `register_middleware` | 57-115, 1441-1540 |
-| 工具分组 | `create_tool_group`, `set_active_group` | 200-270 |
-| Schema 管理 | `get_json_schemas`, `set_extended_model` | 450-540 |
-| 异步任务 | `call_tool_function_async`, `view_task` | 750-850, 1541+ |
-| MCP 对接 | `register_mcp_server` | 550-700 |
-| Agent Skill | skill 相关方法 | 700-750 |
-| 序列化 | `state_dict`, `load_state_dict` | 1200-1400 |
+| 工具分组 | `create_tool_group`, `update_tool_groups`, `remove_tool_groups` | 187-272 |
+| Schema 管理 | `get_json_schemas`, `set_extended_model` | 536-650 |
+| 异步任务 | `view_task`, `cancel_task`, `wait_task`（配合上面的 async 执行分支） | 1541-1684 |
+| MCP 对接 | `register_mcp_client` | 1035-1179 |
+| Agent Skill | `register_agent_skill`, `get_agent_skill_prompt` 等 | 1328-1440 |
+| 序列化 | `state_dict`, `load_state_dict`（继承自 `StateModule`） | 1200-1400 |
 
 9 种职责，1684 行。
 
@@ -65,7 +65,7 @@ class Toolkit:                # Facade
 
 1. **内聚性高**：所有方法都围绕"工具"这个概念
 2. **调用简单**：`toolkit.register_tool_function()`, `toolkit.call_tool_function()` —— 不需要知道内部结构
-3. **状态一致**：注册、调用、分组、中间件共享同一个 `tools` 字典
+3. **状态一致**：注册、调用、分组共享同一个 `tools` 字典（中间件用独立的 `_middlewares` 列表，互不干扰）
 
 ### 判断标准
 
@@ -87,11 +87,10 @@ class Toolkit:                # Facade
 ```python
 # 注册相关
 toolkit.register_tool_function(...)
-toolkit.register_mcp_server(...)
+toolkit.register_mcp_client(...)
 
 # 调用相关
-toolkit.call_tool_function(...)
-toolkit.call_tool_function_async(...)
+toolkit.call_tool_function(...)   # 本身就是 async，可选异步执行分支
 
 # 配置相关
 toolkit.register_middleware(...)

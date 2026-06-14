@@ -8,7 +8,7 @@
 
 ## 依赖全景图
 
-AgentScope 的 24 个顶层模块，按依赖关系分为四层：
+AgentScope 的 25 个顶层模块，按依赖关系分为四层：
 
 ```mermaid
 flowchart TD
@@ -45,17 +45,19 @@ flowchart TD
         EVL["evaluate<br/>评估"]
     end
 
-    MSG --> MOD2
-    MSG --> AGT
-    MSG --> TOL
+    MSG --> TYP
+    MOD --> TYP
 
-    MOD --> MEM
-    MOD --> AGT
-    MOD --> TOL
+    MEM --> MOD
+    MEM --> MSG
+    MOD2 --> MSG
+    FMT --> MSG
+    FMT --> TOK
+    TOL --> MOD
+    TOL --> MSG
 
-    FMT --> MOD2
-    TOK --> FMT
-
+    AGT --> MSG
+    AGT --> MOD
     AGT --> MEM
     AGT --> MOD2
     AGT --> FMT
@@ -118,12 +120,12 @@ flowchart TD
 | `realtime` | 实时语音交互 | WebSocket + 流式音频 |
 | `evaluate` | 评估和基准测试 | Benchmark 工具 |
 
-### 空壳/开发中模块
+### 弃用/迁移中的模块
 
 | 模块 | 状态 |
 |------|------|
-| `tune` | 模型微调——占位，功能未完整 |
-| `tuner` | 微调工具——与 `tune` 重叠？ |
+| `tune` | 已弃用并重命名为 `tuner`——`import` 会直接 `raise ImportError` |
+| `tuner` | 正式的微调子系统（算法、工作流、模型选择、提示调优等完整实现） |
 
 ---
 
@@ -141,12 +143,14 @@ flowchart TD
 
 ### hooks/ vs agent/_agent_meta.py
 
-`hooks/` 目录有 Hook 类型定义，但 Hook 的核心逻辑在 `agent/_agent_meta.py`。为什么分开放？
+`hooks/` 目录并不放 Hook 的类型或接口——它只放框架**自带的内置 hook 函数**（如 studio 转发 hook）。Hook 的定义分散在三处，容易混淆：
 
-- `hooks/` 定义了 Hook 的**类型**和**接口**
-- `_agent_meta.py` 定义了 Hook 的**注入机制**
+- `types/_hook.py` 定义了 Hook 的**类型**（`AgentHookTypes`、`ReActAgentHookTypes`）
+- `agent/_agent_base.py` 定义了 Hook 的**接口与注册机制**（`register_instance_hook`、`register_class_hook`）
+- `agent/_agent_meta.py` 定义了 Hook 的**注入机制**（`_wrap_with_hooks`，在元类 `__new__` 里把方法包起来）
+- `hooks/` 只放框架预置的内置 hook 函数
 
-这是"接口"和"实现"的分离——合理但容易混淆。
+这是"类型/接口/注入/内置实现"的多处分离——合理但容易混淆。
 
 ### types/ 的角色
 

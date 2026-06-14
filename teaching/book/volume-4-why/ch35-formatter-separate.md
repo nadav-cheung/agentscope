@@ -66,7 +66,7 @@ class DeepSeekModel:          # 格式 = OpenAI, 调用 = DeepSeek
 # 分离后
 OpenAIChatFormatter + OllamaChatModel   # Ollama 用 OpenAI 格式
 OllamaChatFormatter + OllamaChatModel   # Ollama 用自定义格式
-OpenAIChatFormatter + DeepSeekChatModel # DeepSeek 用 OpenAI 格式
+OpenAIChatFormatter + OpenAIChatModel   # DeepSeek 走 OpenAI 兼容端点，直接复用 OpenAI 格式与模型（框架没有独立的 DeepSeekChatModel）
 ```
 
 分离前需要 N × M 个类（N 种格式 × M 种 API）。分离后只需 N + M 个类。
@@ -104,7 +104,7 @@ flowchart LR
     subgraph "分离方案 (N + M)"
         B1["OpenAIChatFormatter"] --- C1["OpenAIChatModel"]
         B1 --- C2["OllamaChatModel"]
-        B1 --- C3["DeepSeekChatModel"]
+        B3["DeepSeekChatFormatter"] --- C1
         B2["AnthropicChatFormatter"] --- C4["AnthropicChatModel"]
     end
 ```
@@ -159,11 +159,11 @@ Formatter 与 Model 的分离正是"可扩展模块"思想的体现——新增�
 
 **步骤**：
 
-1. 列出 `src/agentscope/formatter/` 下所有 Formatter 子类（5 个）。
+1. 列出 `src/agentscope/formatter/` 下所有 Formatter 子类（OpenAI/Anthropic/DashScope/Gemini/Ollama/DeepSeek 共 6 个，外加 A2A）。
 
-2. 列出 `src/agentscope/model/` 下所有 Model 子类（5 个）。
+2. 列出 `src/agentscope/model/` 下所有 Model 子类（OpenAI/Anthropic/DashScope/Gemini/Ollama 等约 5 个）。
 
-3. 理论上可能的组合数：5 × 5 = 25 种。实际可行的有多少种？
+3. 理论上可能的组合数：6 × 5 = 30 种。实际可行的有多少种？
 
 4. 尝试用 `OllamaChatModel` + `AnthropicChatFormatter` 组合——它能工作吗？为什么能/不能？
 
@@ -181,16 +181,16 @@ Formatter 与 Model 的分离正是"可扩展模块"思想的体现——新增�
 分离的前提是两个类的接口必须匹配。实际契约：
 
 ```
-Formatter.format(msgs, tools, stream) → (formatted_messages, tool_schemas, stream_flag)
-                                                              ↓
-Model.__call__(messages, tools, stream) → ChatResponse
-                                                              ↓
-Formatter.parse_response(response, msg) → Msg
+Formatter.format(msgs) → list[dict]              # 只翻译消息，不管工具/流式
+                              ↓
+Model.__call__(messages, tools, tool_choice, stream) → ChatResponse   # 工具 schema 和流式由 Model 直接处理
+                              ↓
+Agent 直接读 ChatResponse.content / .id 构造 Msg   # 没有 Formatter.parse_response 这一步
 ```
 
 关键匹配点：
-1. **tool_schemas 格式**：Formatter 的 `format()` 输出的 `tools` 参数格式必须与 Model 的 API 预期一致
-2. **stream 参数**：Formatter 和 Model 必须同时支持流式/非流式，且行为对齐
+1. **tools/tool_choice**：工具的 JSON Schema 由 `Toolkit.get_json_schemas()` 生成，**直接传给 `Model.__call__`**，不经过 Formatter（`Formatter.format` 只接收 `msgs`，返回纯消息字典列表）
+2. **stream 参数**：流式/非流式是 `Model` 的职责，Formatter 不参与
 3. **消息角色**：Formatter 把 `Msg.role` 映射为 API 的角色字段（OpenAI 的 "user"/"assistant"/"system"，Anthropic 的 "user"/"assistant"）
 
 不匹配时的典型问题：Formatter 用 OpenAI 格式输出 `tool_result` 角色为 `"tool"`，但 Anthropic API 要求 `"user"` 角色。这正是 Formatter 存在的核心价值——抹平不同 API 的语义差异。

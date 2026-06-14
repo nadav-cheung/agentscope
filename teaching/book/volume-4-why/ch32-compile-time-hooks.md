@@ -124,7 +124,7 @@ Python 的元类机制是编译期注入的基础。Python 数据模型文档对
 
 ### 防重入机制的本质
 
-继承链中，`AgentBase`、`ReActAgentBase`、`ReActAgent` 可能都定义了 `reply`。每个都被元类包装了一次。当 `ReActAgent.reply()` 被调用时：
+被元类包装的方法（`reply`/`observe`/`print`/`_reasoning`/`_acting`）每一个都带了自己的 `async_wrapper`。当 `ReActAgent.reply()` 被调用时：
 
 ```python
 # 元类包装后的实际调用链（简化）：
@@ -133,9 +133,9 @@ Python 的元类机制是编译期注入的基础。Python 数据模型文档对
 #    → 设置 hook_guard = True
 #    → 执行 pre-hooks
 #    → 调用原始 ReActAgent.reply()
-#       → 内部可能有 super().reply() 调用
-#       → ReActAgentBase.reply 的 async_wrapper（由 _AgentMeta 包装）
-#          → 检测 hook_guard，发现是 True → 跳过，直接调用原始方法
+#       → 如果原始 reply 内部又调用了另一个被包装的方法（例如 self.observe(...)），
+#          那个方法的 async_wrapper 也会先检测 hook_guard：
+#          → 发现是 True → 跳过它自己的 pre/post-hooks，直接执行原始 observe
 #    → 执行 post-hooks
 #    → 设置 hook_guard = False
 ```

@@ -31,6 +31,21 @@ class _ConfigCls:
 
 `ContextVar` 是 Python 3.7 引入的异步上下文变量。每个异步任务（`asyncio.Task`）看到自己的独立副本。
 
+注意：`_ConfigCl` 只是个"壳"——它通过构造函数**接收** `ContextVar` 对象并包成 property。真正的 `ContextVar(...)` 实例是在 `src/agentscope/__init__.py:22-41` 里创建并传进去的：
+
+```python
+# __init__.py:22-41（简化）
+_config = _ConfigCls(
+    run_id=ContextVar("run_id", default=shortuuid.uuid()),
+    project=ContextVar("project", default=...),
+    name=ContextVar("name", default=...),
+    created_at=ContextVar("created_at", default=...),
+    trace_enabled=ContextVar("trace_enabled", default=False),
+)
+```
+
+所以全书访问的 `agentscope._config.trace_enabled` 背后就是这 5 个 `ContextVar`；`tracing/_trace.py` 里的 `_check_tracing_enabled` 也是通过 `_config.trace_enabled` 读取它，自己并不持有这个 `ContextVar`。
+
 ---
 
 ## 被否方案一：全局变量
