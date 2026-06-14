@@ -142,14 +142,18 @@ pre-commit 在每次 `git commit` 前自动运行代码质量检查，防止不�
 pre-commit install
 ```
 
-`.pre-commit-config.yaml` 配置的主要检查（按执行顺序，省略了少量同类校验如 `check-json`/`check-xml`）：
+`.pre-commit-config.yaml` 配置的检查（按执行顺序）：
 
 | 钩子 | 来源 | 作用 |
 |------|------|------|
 | `check-ast` | pre-commit-hooks | 检查 Python 语法有效性 |
+| `sort-simple-yaml` | pre-commit-hooks | 简单 YAML 按键排序 |
 | `check-yaml` | pre-commit-hooks | YAML 格式校验 |
+| `check-xml` | pre-commit-hooks | XML 格式校验 |
 | `check-toml` | pre-commit-hooks | TOML 格式校验 |
 | `check-docstring-first` | pre-commit-hooks | 确保 docstring 在函数顶部 |
+| `check-json` | pre-commit-hooks | JSON 格式校验 |
+| `fix-encoding-pragma` | pre-commit-hooks | 确保 Python 文件有编码声明 |
 | `detect-private-key` | pre-commit-hooks | 防止私钥泄露 |
 | `trailing-whitespace` | pre-commit-hooks | 去除行尾空格 |
 | `add-trailing-comma` | asottile | 多行参数末尾加逗号 |

@@ -101,7 +101,7 @@
 
 | 文件 | 行数 | 主要内容 | 首次引用 |
 |------|------|---------|---------|
-| `_trace.py` | ~650 | 5 种 trace 装饰器 | ch20 |
+| `_trace.py` | ~650 | 6 个 trace 装饰器（1 个通用 `trace` + 5 个专用：toolkit/reply/embedding/format/llm） | ch20 |
 | `_setup.py` | ~50 | `setup_tracing` | ch20 |
 
 ---

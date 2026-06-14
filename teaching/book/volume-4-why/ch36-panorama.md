@@ -90,26 +90,28 @@ flowchart TD
 
 | 模块 | 行数 | 职责 | 成熟度 |
 |------|------|------|--------|
-| `message` | ~200 | 消息类型 | 稳定 |
-| `module` | ~120 | StateModule | 稳定 |
-| `memory` | ~1200 | 记忆系统 | 稳定 |
-| `model` | ~1500 | 模型适配 | 稳定 |
-| `formatter` | ~2000 | 格式转换 | 稳定 |
-| `tool` | ~1700 | 工具系统 | 稳定 |
-| `agent` | ~2000 | Agent 实现 | 稳定 |
-| `pipeline` | ~300 | Pipeline 编排 | 稳定 |
+| `message` | ~400 | 消息类型 | 稳定 |
+| `module` | ~160 | StateModule | 稳定 |
+| `memory` | ~6100 | 记忆系统 | 稳定 |
+| `model` | ~3300 | 模型适配 | 稳定 |
+| `formatter` | ~3600 | 格式转换 | 稳定 |
+| `tool` | ~3600 | 工具系统 | 稳定 |
+| `agent` | ~3500 | Agent 实现 | 稳定 |
+| `pipeline` | ~560 | Pipeline 编排 | 稳定 |
 
 ### 边缘模块（本书未深入展开的）
 
 | 模块 | 行数 | 职责 | 备注 |
 |------|------|------|------|
-| `rag` | ~800 | RAG 检索 | 依赖 embedding + vector store |
-| `embedding` | ~300 | 向量嵌入 | 为 RAG 服务 |
-| `token` | ~200 | Token 计数 | 为 Formatter 的截断服务 |
-| `tracing` | ~600 | OpenTelemetry | 生产环境可观测性 |
-| `session` | ~400 | 会话管理 | 跨请求状态持久化 |
-| `plan` | ~300 | 规划子系统 | ReActAgent 的规划功能 |
-| `tts` | ~200 | 语音合成 | RealtimeAgent 的语音输出 |
+| `rag` | ~4400 | RAG 检索 | 依赖 embedding + vector store |
+| `embedding` | ~1100 | 向量嵌入 | 为 RAG 服务 |
+| `token` | ~670 | Token 计数 | 为 Formatter 的截断服务 |
+| `tracing` | ~2000 | OpenTelemetry | 生产环境可观测性 |
+| `session` | ~670 | 会话管理 | 跨请求状态持久化 |
+| `plan` | ~1200 | 规划子系统 | ReActAgent 的规划功能 |
+| `tts` | ~1900 | 语音合成 | RealtimeAgent 的语音输出 |
+
+> 行数按「模块目录下所有 `.py` 文件（含子目录）的累计行数」统计，反映模块的真实规模；注意像 `rag`/`memory` 这类含多种后端实现的模块，绝大部分行数来自各种 adapter（如 `rag/` 下的多种向量数据库、`memory/` 下的 Redis/SQLAlchemy/Mem0/ReMe 等），核心抽象本身要小得多。
 
 ### 协议/集成模块
 

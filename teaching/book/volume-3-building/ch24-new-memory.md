@@ -66,7 +66,7 @@ async def update_messages_mark(self, new_mark, old_mark=None, msg_ids=None) -> i
 `InMemoryMemory`（`_in_memory_memory.py:10`）的内部存储结构：
 
 ```python
-# _in_memory_memory.py:26
+# _in_memory_memory.py:17
 self.content: list[tuple[Msg, list[str]]] = []
 ```
 
