@@ -593,9 +593,9 @@ git checkout src/agentscope/agent/_react_agent.py
 
 > **参考答案**：
 >
-> 1. **恰好 1 轮**。第一轮 `_reasoning` 调用模型，模型返回文本回复（没有 `ToolUseBlock`，不需要结构化输出）。循环检测到 `not msg_reasoning.has_content_blocks("tool_use")` 为 True，直接 `break` 退出。
-> 2. **可以**。"查天气"只需要 1 轮（模型直接返回文本），所以 `max_iters=1` 完全够用。`_summarizing` 只在循环跑完所有轮次仍未产生回复消息时才被调用——简单查询在第 1 轮就产生了回复，根本不会走到 `_summarizing`。
-> 3. 滑动窗口保留**最近 N 条消息**不压缩（N 由配置决定），以及**系统提示消息**。只有超出窗口范围的旧消息才会被压缩成摘要。
+> 1. **恰好 2 轮**。贯穿示例的天气 Agent 注册了 `get_weather` 工具：第 1 轮 `_reasoning` 模型决定调用工具，返回 `ToolUseBlock` → `_acting` 执行工具、把结果存入记忆（因为有 tool_use，不 `break`，继续循环）；第 2 轮 `_reasoning` 模型基于工具结果返回纯文本回复（没有 tool_use）→ `break` 退出。这与本章"试一试"里"推理 → 调用 get_weather → 推理 → 回答 = 2 轮"一致。（只有当 Agent 没注册任何工具、模型直接用自身知识作答时，才是 1 轮。）
+> 2. **不能正常完成**。"查天气"需要 2 轮（先调工具、再回答）。`max_iters=1` 时，第 1 轮模型返回 `ToolUseBlock`、执行完工具后因为还有 tool_use 而不会 `break`，循环随即到上限结束，`reply_msg` 仍为 `None`，于是走到 `_summarizing()`——Agent 得到的是"总结当前状态"的兜底回复，而不是正常的天气回答。所以需要工具的任务，`max_iters` 至少要 ≥ 2。
+> 3. 滑动窗口保留**最近 `keep_recent` 条消息**不压缩（N 由配置决定），并且**成对保留工具调用与工具结果**（避免把一对拆开导致 API 报错）。只有超出窗口范围的旧消息才会被压缩成摘要。注意系统提示并不在工作记忆里（每次 `_reasoning` 都是新拼上去的），所以它根本不参与压缩。
 
 ---
 

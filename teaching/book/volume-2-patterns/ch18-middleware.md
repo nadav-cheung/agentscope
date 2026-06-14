@@ -349,7 +349,7 @@ import time
 
 async def timing_middleware(kwargs, next_handler):
     start = time.time()
-    print(f"  [计时] 开始执行 {kwargs.get('name', '?')}")
+    print(f"  [计时] 开始执行 {kwargs['tool_call']['name']}")
     async for resp in await next_handler(**kwargs):
         yield resp
     elapsed = time.time() - start
