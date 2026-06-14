@@ -220,7 +220,7 @@ async def main():
             ToolUseBlock(type="tool_use", id="c1", name="get_weather", input={"city": "北京"}),
         ], "assistant"),
         Msg("system", [
-            ToolResultBlock(type="tool_result", tool_use_id="c1", output="北京：晴，25°C"),
+            ToolResultBlock(type="tool_result", id="c1", name="get_weather", output="北京：晴，25°C"),
         ], "system"),
     ]
 

@@ -121,8 +121,8 @@ await self._retrieve_from_knowledge(msg)
 
 两个检索操作，对应上一站学到的长期记忆和知识库：
 
-- `_retrieve_from_long_term_memory`（第 882 行）：如果 `static_control` 模式开启，用当前消息作为查询，检索长期记忆，结果注入系统提示
-- `_retrieve_from_knowledge`（第 908 行）：如果配置了知识库，用当前消息检索相关文档，结果也注入系统提示
+- `_retrieve_from_long_term_memory`（第 882 行）：如果 `static_control` 模式开启，用当前消息作为查询，检索长期记忆，结果作为 `user` 角色消息加入对话记忆
+- `_retrieve_from_knowledge`（第 908 行）：如果配置了知识库，用当前消息检索相关文档，结果也作为 `user` 消息加入对话记忆
 
 这两个检索发生在循环**之前**——每次 `reply` 只检索一次。
 
