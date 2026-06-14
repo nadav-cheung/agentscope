@@ -161,7 +161,7 @@ self._agent_control = long_term_memory and long_term_memory_mode in [
 
 | 模式 | 谁决定记录/检索什么 | 工作方式 |
 |------|-------------------|---------|
-| `static_control` | **开发者**（在代码中预设） | 每次对话开始时自动检索，结果注入系统提示 |
+| `static_control` | **开发者**（在代码中预设） | 每次对话开始时自动检索，结果作为 `user` 角色消息加入对话记忆 |
 | `agent_control` | **Agent**（大模型自己决定） | 把 `record_to_memory`/`retrieve_from_memory` 注册为工具，Agent 自主决定何时记/查 |
 
 如果设为 `"both"`，两种都启用。
@@ -307,7 +307,7 @@ if isinstance(knowledge, KnowledgeBase):
 self.knowledge: list[KnowledgeBase] = knowledge or []
 ```
 
-Agent 可以持有**多个**知识库。它们会在 `_reasoning` 阶段被检索，检索结果注入到系统提示中。
+Agent 可以持有**多个**知识库。它们会在 `reply()` 阶段（进入推理循环之前）被检索，检索结果包装成 `user` 角色消息加入对话记忆（`memory`），随后在 `_reasoning` 中与系统提示一起喂给大模型——注意检索结果**不是**写进系统提示，而是作为对话历史的一部分。
 
 ---
 
@@ -329,10 +329,10 @@ flowchart TB
     MSG -->|static_control: 自动检索| LTM
     MSG -->|检索相关文档| KB
 
-    LTM -->|检索结果| SP[注入系统提示]
-    KB -->|相关文档| SP
+    LTM -->|检索结果| MEM[作为 user 消息<br/>加入对话记忆]
+    KB -->|相关文档| MEM
 
-    SP -->|增强后的上下文| MODEL[大模型推理]
+    MEM -->|增强后的上下文| MODEL[大模型推理]
     MODEL -->|需要记笔记？| LTM
 ```
 
@@ -409,7 +409,7 @@ git checkout src/agentscope/agent/_react_agent.py
 你现在理解了：
 
 - **长期记忆**（`LongTermMemoryBase`）是跨对话的记忆，有两种控制模式
-- `static_control` 由开发者控制（自动检索 + 注入系统提示），`agent_control` 由 Agent 自己决定（注册为工具）
+- `static_control` 由开发者控制（自动检索，结果作为用户消息加入对话记忆），`agent_control` 由 Agent 自己决定（注册为工具）
 - **RAG 知识库**（`KnowledgeBase`）是外部文档检索，流程是 文档 → Embedding → 向量存储 → 搜索
 - 工作记忆、长期记忆、知识库各有分工，可以同时使用
 

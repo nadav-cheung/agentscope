@@ -281,9 +281,9 @@ def _apply_middlewares(func):
 
 ```mermaid
 flowchart TD
-    A["call_tool_function(tool_call)"] --> B["中间件 3（最外层）"]
+    A["call_tool_function(tool_call)"] --> B["中间件 1（最外层，最先注册）"]
     B --> C["中间件 2"]
-    C --> D["中间件 1（最内层）"]
+    C --> D["中间件 3（最内层，最后注册）"]
     D --> E["真正的工具函数"]
     E --> F["ToolResponse"]
     F --> D
@@ -401,7 +401,7 @@ import time
 
 async def timing_middleware(kwargs, next_handler):
     start = time.time()
-    print(f"  [计时] 开始执行 {kwargs.get('name', '?')}")
+    print(f"  [计时] 开始执行 {kwargs['tool_call']['name']}")
     async for resp in await next_handler(**kwargs):
         yield resp
     elapsed = time.time() - start

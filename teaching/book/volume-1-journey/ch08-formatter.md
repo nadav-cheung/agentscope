@@ -56,11 +56,11 @@ class FormatterBase:
 @staticmethod
 def convert_tool_result_to_string(
     output: str | list[TextBlock | ImageBlock | AudioBlock | VideoBlock],
-) -> tuple[str, ...]:
-    """把工具结果转换为文本（有些 API 不支持工具结果中的多模态数据）"""
+) -> tuple[str, list[tuple[str, Block]]]:
+    """把工具结果拆成「文本」和「多模态数据」两部分（有些 API 不支持工具结果中的多模态数据）"""
 ```
 
-当工具返回了图片或音频，但目标 API 不支持在工具结果中放多模态数据时，这个方法会把它们提取出来，转为文本描述。
+当工具返回了图片或音频，但目标 API 不支持在工具结果中放多模态数据时，这个方法会把**文本部分**单独提取出来，同时把图片/音频等拆成一个 `(路径或 URL, Block)` 列表单独返回（前者是给模型的纯文本，后者留给 Formatter 决定怎么安置这些多模态数据）。
 
 ---
 
@@ -152,12 +152,12 @@ class OpenAIChatFormatter(TruncatedFormatterBase):
 
 `OpenAIChatFormatter._format()` 方法（大约在第 210 行开始）做这些事：
 
-1. **遍历每条消息**，按消息的 `name` 和 `role` 确定 OpenAI 格式中的 `role` 字段
-2. **处理每个 ContentBlock**：
-   - `TextBlock` → `{"type": "text", "text": "..."}`
-   - `ImageBlock` → `{"type": "image_url", "image_url": {"url": "..."}}`
-   - `ToolUseBlock` → `{"type": "function", "function": {"name": "...", "arguments": "..."}}`
-   - `ToolResultBlock` → `{"type": "function", "output": "..."}`
+1. **遍历每条消息**，直接用 `msg.role` 和 `msg.name` 作为 OpenAI 消息的 `role` 和 `name` 字段
+2. **处理消息中的每个 ContentBlock**，但不同 Block 的落点不同：
+   - `TextBlock` → 进入消息的 `content` 列表：`{"type": "text", "text": "..."}`
+   - `ImageBlock` → 进入消息的 `content` 列表：`{"type": "image_url", "image_url": {"url": "..."}}`
+   - `ToolUseBlock` → 进入消息**独立的 `tool_calls` 字段**（不是 `content`）：`{"id": "...", "type": "function", "function": {"name": "...", "arguments": "..."}}`
+   - `ToolResultBlock` → 生成一条**独立的 `tool` 角色消息**（不是当前消息的 content）：`{"role": "tool", "tool_call_id": "...", "content": "...", "name": "..."}`
 3. **处理特殊的图片提升**：有些 API 不支持工具结果中带图片，`promote_tool_result_images=True` 会把图片提取到单独的用户消息中
 
 ```mermaid
@@ -168,12 +168,12 @@ flowchart LR
 
     subgraph Formatter 翻译
         MSG --> ROLE["role: 'assistant'"]
-        MSG --> TB["TextBlock → {type: 'text', text: '...'}"]
-        MSG --> TUB["ToolUseBlock → {type: 'function', ...}"]
+        MSG --> TB["TextBlock → content 列表"]
+        MSG --> TUB["ToolUseBlock → tool_calls 字段"]
     end
 
     subgraph 输出
-        ROLE --> OUT["{'role': 'assistant', 'content': [...]}"]
+        ROLE --> OUT["{'role':'assistant', 'content':[...], 'tool_calls':[...]}"]
         TB --> OUT
         TUB --> OUT
     end
@@ -228,13 +228,17 @@ if len(msgs) > 0 and msgs[0].role == "system":
 # _truncated_formatter_base.py:193-207
 tool_call_ids = set()
 for i in range(start_index, len(msgs)):
+    msg = msgs[i]
     # 遇到 ToolUseBlock → 加入待删除集合
     for block in msg.get_content_blocks("tool_use"):
         tool_call_ids.add(block["id"])
 
     # 遇到对应的 ToolResultBlock → 从集合中移除（配对完成）
     for block in msg.get_content_blocks("tool_result"):
-        tool_call_ids.remove(block["id"])
+        try:
+            tool_call_ids.remove(block["id"])
+        except KeyError:
+            pass
 
     # 所有工具调用都配对完成 → 截断到当前位置
     if len(tool_call_ids) == 0:
@@ -436,7 +440,7 @@ git checkout src/agentscope/formatter/
 > **参考答案**：
 >
 > 1. **恰好 1 次**。循环体内先调用 `_format` 格式化，再调用 `_count` 计数。当没有 `token_counter` 时，`_count` 返回 `None`，循环条件 `if n_tokens is None or ...` 立即满足，直接 `return formatted_msgs`，不会进入第二轮。
-> 2. 可用 `ls src/agentscope/formatter/` 查看，当前有：`_openai_chat_formatter.py`、`_anthropic_formatter.py`、`_dashscope_chat_formatter.py`、`_gemini_chat_formatter.py`、`_ollama_chat_formatter.py`（它们都继承 `_truncated_formatter_base.py`）。
+> 2. 可用 `ls src/agentscope/formatter/` 查看，当前有 7 个具体实现：`_openai_formatter.py`、`_anthropic_formatter.py`、`_dashscope_formatter.py`、`_gemini_formatter.py`、`_ollama_formatter.py`、`_deepseek_formatter.py`、`_a2a_formatter.py`。前 6 个都继承 `_truncated_formatter_base.py`（带 Token 截断），`_a2a_formatter.py` 直接继承 `_formatter_base.py`。
 
 ---
 

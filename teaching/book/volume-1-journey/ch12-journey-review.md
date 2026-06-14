@@ -68,8 +68,8 @@ sequenceDiagram
 | **第 2 站**：Agent 收信 | `agent/_agent_base.py` | `__call__` → Hook → `reply` + 广播 | line 448 (`__call__`) |
 | **第 3 站**：工作记忆 | `memory/_working_memory/` | `MemoryBase` 的 5 个抽象方法 | `_base.py:11`, `_in_memory:10` |
 | **第 4 站**：检索与知识 | `memory/_long_term_memory/`, `rag/` | 长期记忆两种模式 + RAG | `_base.py:11`, `_knowledge_base.py:13` |
-| **第 5 站**：格式转换 | `formatter/` | `FormatterBase` → 截断 → 具体实现 | `_base.py:11`, `_openai_formatter.py:168` |
-| **第 6 站**：调用模型 | `model/` | `ChatModelBase` + 流式解析 | `_base.py:13`, `_openai_model.py:71` |
+| **第 5 站**：格式转换 | `formatter/` | `FormatterBase` → 截断 → 具体实现 | `_formatter_base.py:11`, `_openai_formatter.py:168` |
+| **第 6 站**：调用模型 | `model/` | `ChatModelBase` + 流式解析 | `_model_base.py:13`, `_openai_model.py:71` |
 | **第 7 站**：执行工具 | `tool/_toolkit.py` | 注册 → JSON Schema → 调用 → 中间件 | line 117, 274, 853 |
 | **第 8 站**：循环与返回 | `agent/_react_agent.py` | `reply()` 的 ReAct 循环 | line 376, 540, 657, 725 |
 
@@ -98,7 +98,7 @@ sequenceDiagram
 
 - **ch03 → ch13**：我们在 ch03 看到 `agentscope.init()` 会扫描 `src/agentscope/` 下所有模块并注册。ch13 将解释为什么采用"命名约定 + 自动注册"而非手动 `import` 的模块组织方式。
 - **ch05 → ch14**：我们在 ch05 看到 `AgentBase(StateModule)` 和 `MemoryBase(StateModule)` 都继承自 `StateModule`。ch14 将展开完整的继承树，解释为什么序列化能力放在 `StateModule` 而不是每个子类单独实现。
-- **ch05 → ch15**：我们在 ch05 看到 `@_AgentMeta` 元类自动收集 Hook 方法。ch15 将解释元类的 `__init_subclass__` 机制如何实现"零代码"的 Hook 注册。
+- **ch05 → ch15**：我们在 ch05 看到 `@_AgentMeta` 元类自动收集 Hook 方法。ch15 将解释元类的 `__new__` 机制如何实现"零代码"的 Hook 注册。
 - **ch08 → ch16**：我们在 ch08 看到三个 Formatter 子类共享同一个 `format()` 接口。ch16 将解释这是策略模式（Strategy Pattern）的典型应用——格式转换算法独立于调用者。
 - **ch10 → ch18**：我们在 ch10 看到中间件像洋葱一样层层包裹。ch18 将展开 `_apply_middlewares` 的完整实现，解释 `functools.partial` 如何构建调用链。
 - **ch05 → ch19**：我们在 ch05 看到 `__call__` 中有"广播给订阅者"的步骤。ch19 将解释发布-订阅模式如何在多 Agent 场景中实现松耦合通信。
@@ -126,7 +126,7 @@ AgentScope 1.0 论文的 Figure 1 展示了框架的完整架构图——从 Fou
 | 站 | 一句话 |
 |----|-------|
 | 消息诞生（ch04） | `Msg` 是 Agent 世界的"信封"，`content` 里可以装文字、图片、工具调用等 7 种内容块 |
-| Agent 收信（ch05） | `__call__` 是入口：先走 Hook，再广播，最后调 `reply()`——子类只需关心 `reply` |
+| Agent 收信（ch05） | `__call__` 是入口：先调 `reply()`（reply 本身被元类包裹了 pre/post Hook），reply 返回后再把回复消息广播给订阅者——子类只需关心 `reply` |
 | 工作记忆（ch06） | `InMemoryMemory` 是一个 `list[tuple]`，按时间顺序存储对话，支持按标记过滤 |
 | 检索与知识（ch07） | 长期记忆存跨对话信息，知识库存外部文档，两者都通过"检索 → 注入系统提示"增强推理 |
 | 格式转换（ch08） | Formatter 把 `Msg` 翻译成 API 需要的 JSON，超出 Token 限制时自动截断旧消息 |

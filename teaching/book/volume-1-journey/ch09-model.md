@@ -329,6 +329,7 @@ def __init__(
     api_key: str | None = None,         # API key（默认读环境变量）
     stream: bool = True,                # 是否流式
     reasoning_effort: str | None = None,# 推理强度（o3/o4 系列）
+    organization: str | None = None,    # 组织 ID（默认读环境变量 OPENAI_ORGANIZATION）
     stream_tool_parsing: bool = True,   # 流式工具解析
     client_type: str = "openai",        # 客户端类型（openai/azure）
     client_kwargs: dict | None = None,  # 额外客户端参数
