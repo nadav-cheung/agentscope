@@ -39,7 +39,7 @@ Formatter 是最典型的策略模式：
 | `GeminiChatFormatter` | Google Gemini API 格式 |
 | `OllamaChatFormatter` | Ollama 本地模型 API 格式 |
 
-它们都继承自 `FormatterBase`（`_formatter_base.py:11`），实现了同一个 `format()` 方法。
+它们都（通过 `TruncatedFormatterBase`）间接继承自 `FormatterBase`（`_formatter_base.py:11`），并各自实现 `_format()` 等抽象步骤；统一的 `format()` 入口（含 Token 截断循环）由中间层 `TruncatedFormatterBase` 提供，子类不需要重写它。（只有 `A2AChatFormatter` 直接继承 `FormatterBase` 并重写 `format()`。）
 
 ### ReActAgent 如何使用 Formatter
 
@@ -80,7 +80,7 @@ flowchart LR
         M1[OpenAIChatModel] --- F1[OpenAIChatFormatter]
         M2[AnthropicChatModel] --- F2[AnthropicChatFormatter]
         M3[OllamaChatModel] --- F1
-        M4[DeepSeekChatModel] --- F1
+        M4["DeepSeek（经 OpenAIChatModel）"] --- F1
     end
 ```
 
@@ -142,15 +142,17 @@ async def _group_messages(msgs):
 {"role": "system", "content": "你是天气助手。"}
 ```
 
-**Anthropic**（`_anthropic_formatter.py:123`）：系统提示从 messages 中分离
+**Anthropic**：系统提示最终从 messages 中分离，成为请求的独立字段
 
 ```python
-# Anthropic: 系统提示是请求的独立字段
+# 最终发给 Anthropic API 的请求体：
 {
     "system": "你是天气助手。",
     "messages": [...]  # 不包含系统消息
 }
 ```
+
+注意这个分离不是 Formatter 做的——`AnthropicChatFormatter`（`_anthropic_formatter.py:98`）仍然把系统消息留在 messages 里（`{"role": "system", ...}`）。真正把它"提升"到顶层 `system` 字段的是 **Model 层**：`AnthropicChatModel.__call__`（`_anthropic_model.py:248`）在发请求前检查 `messages[0]["role"] == "system"`，把它取出来塞进 `kwargs["system"]`。这是 Model 和 Formatter 分工的一个典型例子。
 
 ### 工具结果的角色
 
@@ -283,7 +285,7 @@ grep -n "class.*Formatter.*TruncatedFormatterBase" src/agentscope/formatter/*.py
 
 > **参考答案**：
 >
-> 1. 只需修改 `src/agentscope/formatter/_openai_chat_formatter.py`（格式转换）和可能的 `src/agentscope/model/_openai_model.py`（响应解析）。**ReActAgent 不需要修改**——这正是策略模式的价值：Agent 只处理统一的 `Msg` 和 `ToolUseBlock`，API 格式差异被 Formatter 隔离。
+> 1. 只需修改 `src/agentscope/formatter/_openai_formatter.py`（格式转换）和可能的 `src/agentscope/model/_openai_model.py`（响应解析）。**ReActAgent 不需要修改**——这正是策略模式的价值：Agent 只处理统一的 `Msg` 和 `ToolUseBlock`，API 格式差异被 Formatter 隔离。
 > 2. 使用 `AsyncGenerator` 支持**惰性处理**——Formatter 可以边扫描消息列表边逐组产出格式化结果，不需要等整个列表扫描完才开始输出。对于有大量工具调用序列的长对话，这减少了内存占用和首字节延迟。
 > 3. 这是 Anthropic API 的硬性规定：工具结果必须作为 `user` 角色的消息发送，内容中包含 `type: "tool_result"` 的块。Formatter 实现需要为 Anthropic 专门处理这个差异——把工具结果包装成 `{"role": "user", "content": [{"type": "tool_result", ...}]}` 而不是 OpenAI 格式的 `{"role": "tool", ...}`。
 

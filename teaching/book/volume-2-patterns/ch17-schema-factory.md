@@ -126,7 +126,7 @@ def _create_tool_from_base_model(structured_model, tool_name="generate_structure
         "type": "function",
         "function": {
             "name": tool_name,
-            "description": "Generate the required structured output",
+            "description": "Generate the required structured output with this function",
             "parameters": schema,
         },
     }
@@ -140,24 +140,30 @@ def _create_tool_from_base_model(structured_model, tool_name="generate_structure
 
 ```python
 def register_tool_function(self, tool_func, ...):
-    # 解析函数
-    parsed = _parse_tool_function(tool_func, ...)
+    # 从函数解析出 JSON Schema（_parse_tool_function 返回的是一个 dict，不是对象）
+    json_schema = _parse_tool_function(tool_func, ...)
+    # json_schema 形如 {"type": "function",
+    #                    "function": {"name": ..., "parameters": ...}}
+
+    func_name = json_schema["function"]["name"]
 
     # 创建 RegisteredToolFunction
     registered = RegisteredToolFunction(
-        name=parsed.name,
-        json_schema=parsed.schema,
-        original_func=tool_func,
+        name=func_name,
+        group=group_name,
+        source="function",
+        json_schema=json_schema,
+        original_func=original_func,
         ...
     )
-    self.tools[parsed.name] = registered
+    self.tools[func_name] = registered
 ```
 
 ---
 
 ## 动态 Schema 扩展
 
-`RegisteredToolFunction` 有一个 `extended_model` 字段（`_types.py:45`）：
+`RegisteredToolFunction` 有一个 `extended_model` 字段（`_types.py:36`）：
 
 ```python
 extended_model: Type[BaseModel] | None = None

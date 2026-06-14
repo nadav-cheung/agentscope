@@ -122,12 +122,13 @@ supported_hook_types = [
 
 ```python
 # _agent_base.py:448
-async def __call__(self, msg=None, **kwargs) -> Msg:
-    # 1. 广播给订阅者
-    await self._broadcast_to_subscribers(msg)
+async def __call__(self, *args, **kwargs) -> Msg:
+    # 1. 调用 reply（被元类的 Hook 包装过）
+    reply_msg = await self.reply(*args, **kwargs)
 
-    # 2. 调用 reply（被 Hook 包装过）
-    return await self.reply(msg, **kwargs)
+    # 2. reply 完成后（在 finally 块中），把「回复消息」广播给订阅者
+    await self._broadcast_to_subscribers(reply_msg)
+    return reply_msg
 ```
 
 注意 `reply` 已经被元类包装了——调用 `self.reply()` 实际上先执行 pre-reply hooks，再执行真正的 `reply`，最后执行 post-reply hooks。
@@ -147,10 +148,8 @@ class ReActAgentBase(AgentBase, metaclass=_ReActAgentMeta):
 
 - `_reasoning` 的抽象定义
 - `_acting` 的抽象定义
-- `_summarizing` 的抽象定义
-- `finish_function_name` 的默认值
 
-它定义了 ReAct 模式的"结构"，但不提供具体实现。
+它定义了 ReAct 模式的"结构"，但不提供具体实现。（`_summarizing` 和 `finish_function_name` 的默认值属于下一层 `ReActAgent`，不在这层。）
 
 ### 元类 `_ReActAgentMeta`
 
@@ -205,7 +204,7 @@ flowchart TD
 ```
 
 > **设计一瞥**：为什么用四层继承而不是一层？
-> 每一层都有独立的职责。`StateModule` 被超过 10 个类复用（Agent、Memory、Toolkit、Formatter……）。`AgentBase` 被所有 Agent 类型复用。`ReActAgentBase` 被所有 ReAct 类型的 Agent 复用。
+> 每一层都有独立的职责。`StateModule` 被超过 10 个类复用（Agent、Memory、Toolkit……——注意 `FormatterBase` **不**继承 `StateModule`，因为 Formatter 是无状态的）。`AgentBase` 被所有 Agent 类型复用。`ReActAgentBase` 被所有 ReAct 类型的 Agent 复用。
 > 如果把所有功能放在一个类里，改序列化逻辑会影响 Agent，改 ReAct 逻辑会影响序列化——耦合度太高。
 > 详见卷四第 31 章（上帝类问题）和第 36 章（架构全景）。
 

@@ -141,10 +141,12 @@ Hook 分两种级别：
 **类级别**：所有实例共享。在类上直接注册：
 
 ```python
-@AgentBase.register_class_hook("post_reply", "log")
 def log_hook(self, kwargs, output):
     print(f"Agent {self.name} replied")
     return output
+
+# 注意：register_class_hook 返回 None，不能用 @ 装饰器语法，要这样调用：
+AgentBase.register_class_hook("post_reply", "log", log_hook)
 ```
 
 **实例级别**：只影响单个实例。在实例上注册：
@@ -167,7 +169,7 @@ Hook 系统是这个"高级 Agent 基础设施"的一部分——让开发者在
 
 ## _normalize_to_kwargs：参数归一化
 
-在 Hook 的执行链中，有一个容易被忽略但很重要的步骤：`_normalize_to_kwargs`（第 35 行）。
+在 Hook 的执行链中，有一个容易被忽略但很重要的步骤：`_normalize_to_kwargs`（第 21 行）。
 
 它的作用是把 `reply(self, msg, structured_model=None)` 的位置参数转成关键字参数字典：
 
@@ -202,18 +204,18 @@ await agent.reply(msg=msg)
 # _agent_meta.py:159
 class _AgentMeta(type): ...
 
-# _react_agent_base.py:12
+# _agent_meta.py:177
 class _ReActAgentMeta(_AgentMeta):  # 继承 _AgentMeta
     def __new__(mcs, name, bases, attrs):
-        # 扩展 Hook 列表：加入 reasoning 和 acting
-        attrs = super().__new__(mcs, name, bases, attrs)  # 先执行父类的包装
+        # 扩展 Hook 列表：包装 _reasoning 和 _acting
         for func_name in ["_reasoning", "_acting"]:
             if func_name in attrs:
                 attrs[func_name] = _wrap_with_hooks(attrs[func_name])
-        return super(type, mcs).__new__(mcs, name, bases, attrs)
+        # 调用父类 _AgentMeta.__new__，由它包装 reply/observe/print
+        return super().__new__(mcs, name, bases, attrs)
 ```
 
-`_ReActAgentMeta` 继承 `_AgentMeta`，先让父类包装 `reply/observe/print`，然后自己再包装 `_reasoning/_acting`。这样 ReAct Agent 自动获得全部 6 个 Hook 点。
+`_ReActAgentMeta` 继承 `_AgentMeta`：自己先在 `attrs` 里包装 `_reasoning/_acting`，再调用父类 `_AgentMeta.__new__`（父类会包装 `reply/observe/print`）。这样 ReAct Agent 自动获得全部 6 个 Hook 点。
 
 ---
 

@@ -88,14 +88,14 @@ async def _broadcast_to_subscribers(self, msg):
 # _msghub.py:42-71
 class MsgHub:
     def __init__(self, participants, announcement=None,
-                 enable_auto_broadcast=True):
+                 enable_auto_broadcast=True, name=None):
         self.name = name or shortuuid.uuid()
         self.participants = list(participants)
         self.enable_auto_broadcast = enable_auto_broadcast
 
     async def __aenter__(self):
         self._reset_subscriber()         # 注册订阅关系
-        if self.announcement:
+        if self.announcement is not None:
             await self.broadcast(self.announcement)  # 广播初始消息
         return self
 
@@ -315,10 +315,10 @@ git checkout src/agentscope/agent/_agent_base.py
 ```python
 # _agent_base.py:185
 async def observe(self, msg: Msg) -> None:
-    """接收并处理观察到的消息"""
+    """接收并处理观察到的消息（基类中 raise NotImplementedError，由子类实现）"""
 ```
 
-默认实现将消息存入 Agent 的工作记忆。这意味着当一个 Agent 广播消息时，所有订阅者的记忆中都会多出这条消息——它们在下一轮推理时就能看到上下文。
+`AgentBase.observe` 本身只是抽象占位（`raise NotImplementedError`）。具体怎么处理由子类决定——例如 `ReActAgent.observe`（`_react_agent.py:716`）把消息存入工作记忆 `self.memory.add(msg)`。这意味着当一个 Agent 广播消息时，所有订阅者（ReActAgent 类型）的记忆中都会多出这条消息——它们在下一轮推理时就能看到上下文。
 
 这就是为什么 `_strip_thinking_blocks` 很重要——如果 Agent 的内部推理（ThinkingBlock）被广播给其他 Agent，后者可能基于不应该看到的信息做出推理，产生"信息泄漏"问题。
 

@@ -55,6 +55,8 @@ def setup_tracing(endpoint: str) -> None:
 2. 创建批处理器（异步批量发送 Span）
 3. 设置全局 TracerProvider
 
+> 上面是主干逻辑。真实的 `setup_tracing` 还会先 `trace.get_tracer_provider()` 检查：如果外部已经设置过 `TracerProvider`（比如你的应用自己集成了 OpenTelemetry），就只追加 `add_span_processor(...)`，不重建/替换 provider——避免覆盖用户已有的配置。
+
 ### 开关：_check_tracing_enabled
 
 ```python
@@ -98,7 +100,7 @@ AgentScope 为不同操作提供了专用的追踪装饰器：
 | 装饰器 | 用途 | 目标方法 |
 |--------|------|----------|
 | `trace_toolkit` | 工具调用 | `Toolkit.call_tool_function` |
-| `trace_reply` | Agent 回复 | `Agent.reply` |
+| `trace_reply` | Agent 回复 | `ReActAgent.reply`（`_react_agent.py:375`） |
 | `trace_llm` | 模型调用 | `Model.__call__` |
 | `trace_format` | 消息格式化 | `Formatter.format` |
 | `trace_embedding` | 向量嵌入 | `Embedding.__call__` |
