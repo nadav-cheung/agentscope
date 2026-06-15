@@ -1,148 +1,104 @@
 # -*- coding: utf-8 -*-
-"""The Anthropic formatter unittests."""
-from unittest.async_case import IsolatedAsyncioTestCase
+"""Comprehensive formatter unit tests for AnthropicChatFormatter and
+AnthropicMultiAgentFormatter, following the reference test style with exact
+ground-truth comparisons.
+"""
+from unittest import IsolatedAsyncioTestCase
 
 from agentscope.formatter import (
-    AnthropicMultiAgentFormatter,
     AnthropicChatFormatter,
+    AnthropicMultiAgentFormatter,
 )
 from agentscope.message import (
-    Msg,
-    ToolUseBlock,
-    ToolResultBlock,
+    UserMsg,
+    AssistantMsg,
+    SystemMsg,
     TextBlock,
-    ImageBlock,
-    URLSource,
+    DataBlock,
+    ToolCallBlock,
+    ToolResultBlock,
+    ToolResultState,
+    Base64Source,
+    ThinkingBlock,
+    HintBlock,
 )
 
 
-class TestAnthropicChatFormatterFormatter(IsolatedAsyncioTestCase):
-    """Unittest for the AnthropicChatFormatter."""
+class TestAnthropicFormatter(IsolatedAsyncioTestCase):
+    """Comprehensive tests for Anthropic Chat and MultiAgent formatters."""
 
     async def asyncSetUp(self) -> None:
-        """Set up the test environment."""
-        self.image_url = "https://www.example.com/image.png"
-        self.image_path = "./image.png"
-        with open(self.image_path, "wb") as f:
-            f.write(b"fake image content")
+        """Set up shared message fixtures and expected ground-truth dicts."""
+        self.image_b64 = "ZmFrZSBpbWFnZSBkYXRh"
 
+        # ---------------------------------------------------------------
+        # Message fixtures
+        # (No URL images: Anthropic URL handling downloads from the network)
+        # ---------------------------------------------------------------
         self.msgs_system = [
-            Msg(
-                "system",
-                "You're a helpful assistant.",
-                "system",
+            SystemMsg(
+                name="system",
+                content="You're a helpful assistant.",
             ),
         ]
+
         self.msgs_conversation = [
-            Msg(
-                "user",
-                [
-                    TextBlock(
-                        type="text",
-                        text="What is the capital of France?",
-                    ),
-                    ImageBlock(
-                        type="image",
-                        source=URLSource(
-                            type="url",
-                            url=self.image_url,
-                        ),
-                    ),
-                ],
-                "user",
+            UserMsg(
+                name="user",
+                content="What is the capital of France?",
             ),
-            Msg(
-                "assistant",
-                "The capital of France is Paris.",
-                "assistant",
+            AssistantMsg(
+                name="assistant",
+                content="The capital of France is Paris.",
             ),
-            Msg(
-                "user",
-                "What is the capital of Japan?",
-                "user",
+            UserMsg(
+                name="user",
+                content="What is the capital of Germany?",
+            ),
+            AssistantMsg(
+                name="assistant",
+                content="The capital of Germany is Berlin.",
+            ),
+            UserMsg(
+                name="user",
+                content="What is the capital of Japan?",
             ),
         ]
 
         self.msgs_tools = [
-            Msg(
-                "assistant",
-                [
-                    ToolUseBlock(
-                        type="tool_use",
-                        id="1",
+            AssistantMsg(
+                name="assistant",
+                content=[
+                    ToolCallBlock(
+                        id="call_1",
                         name="get_capital",
-                        input={"country": "Japan"},
+                        input='{"country": "Japan"}',
                     ),
-                ],
-                "assistant",
-            ),
-            Msg(
-                "system",
-                [
                     ToolResultBlock(
-                        type="tool_result",
-                        id="1",
+                        id="call_1",
                         name="get_capital",
-                        output="The capital of Japan is Tokyo.",
+                        output=[
+                            TextBlock(text="The capital of Japan is Tokyo."),
+                        ],
+                        state=ToolResultState.SUCCESS,
                     ),
+                    TextBlock(text="The capital of Japan is Tokyo."),
                 ],
-                "system",
-            ),
-            Msg(
-                "assistant",
-                "The capital of Japan is Tokyo.",
-                "assistant",
             ),
         ]
 
-        self.msgs_conversation_2 = [
-            Msg(
-                "user",
-                "What is the capital of South Korea?",
-                "user",
-            ),
-        ]
-
-        self.msgs_tools_2 = [
-            Msg(
-                "assistant",
-                [
-                    ToolUseBlock(
-                        type="tool_use",
-                        id="2",
-                        name="get_capital",
-                        input={"country": "South Korea"},
-                    ),
-                ],
-                "assistant",
-            ),
-            Msg(
-                "system",
-                [
-                    ToolResultBlock(
-                        type="tool_result",
-                        id="2",
-                        name="get_capital",
-                        output="The capital of South Korea is Seoul.",
-                    ),
-                ],
-                "system",
-            ),
-            Msg(
-                "assistant",
-                "The capital of South Korea is Seoul.",
-                "assistant",
-            ),
-        ]
-
-        self.ground_truth_chat = [
+        # ---------------------------------------------------------------
+        # Ground truth: AnthropicChatFormatter
+        #   - No "name" field.
+        #   - Content is always a list of {"type": ..., ...} dicts.
+        #   - ToolResultBlock forces role to "user".
+        #   - ToolCallBlock "input" is a dict (parsed from JSON string).
+        # ---------------------------------------------------------------
+        self.gt_chat = [
             {
                 "role": "system",
                 "content": [
-                    {
-                        "type": "text",
-                        "text": "You're a helpful assistant.",
-                    },
+                    {"type": "text", "text": "You're a helpful assistant."},
                 ],
             },
             {
@@ -151,13 +107,6 @@ class TestAnthropicChatFormatterFormatter(IsolatedAsyncioTestCase):
                     {
                         "type": "text",
                         "text": "What is the capital of France?",
-                    },
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "url",
-                            "url": "https://www.example.com/image.png",
-                        },
                     },
                 ],
             },
@@ -175,6 +124,24 @@ class TestAnthropicChatFormatterFormatter(IsolatedAsyncioTestCase):
                 "content": [
                     {
                         "type": "text",
+                        "text": "What is the capital of Germany?",
+                    },
+                ],
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "The capital of Germany is Berlin.",
+                    },
+                ],
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
                         "text": "What is the capital of Japan?",
                     },
                 ],
@@ -183,12 +150,10 @@ class TestAnthropicChatFormatterFormatter(IsolatedAsyncioTestCase):
                 "role": "assistant",
                 "content": [
                     {
-                        "id": "1",
                         "type": "tool_use",
+                        "id": "call_1",
                         "name": "get_capital",
-                        "input": {
-                            "country": "Japan",
-                        },
+                        "input": {"country": "Japan"},
                     },
                 ],
             },
@@ -197,7 +162,7 @@ class TestAnthropicChatFormatterFormatter(IsolatedAsyncioTestCase):
                 "content": [
                     {
                         "type": "tool_result",
-                        "tool_use_id": "1",
+                        "tool_use_id": "call_1",
                         "content": [
                             {
                                 "type": "text",
@@ -218,460 +183,650 @@ class TestAnthropicChatFormatterFormatter(IsolatedAsyncioTestCase):
             },
         ]
 
-        self.ground_truth_multiagent = [
+        # ---------------------------------------------------------------
+        # Ground truth: AnthropicMultiAgentFormatter
+        #   - System: {"role": "system", "content": [{"type": "text", ...}]}
+        #   - Agent messages (is_first=True): wrapped in hist_prompt +
+        #     <history>...</history>.
+        #   - Agent messages (is_first=False): no wrapping at all.
+        # ---------------------------------------------------------------
+        _hist_prompt = (
+            AnthropicMultiAgentFormatter().conversation_history_prompt
+        )
+
+        _conv_text = (
+            "user: What is the capital of France?\n"
+            "assistant: The capital of France is Paris.\n"
+            "user: What is the capital of Germany?\n"
+            "assistant: The capital of Germany is Berlin.\n"
+            "user: What is the capital of Japan?"
+        )
+
+        self._gt_trailing_asst = {
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "The capital of Japan is Tokyo.",
+                },
+            ],
+        }
+
+        self._gt_tool_call = {
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "tool_use",
+                    "id": "call_1",
+                    "name": "get_capital",
+                    "input": {"country": "Japan"},
+                },
+            ],
+        }
+        self._gt_tool_result = {
+            "role": "user",
+            "content": [
+                {
+                    "type": "tool_result",
+                    "tool_use_id": "call_1",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "The capital of Japan is Tokyo.",
+                        },
+                    ],
+                },
+            ],
+        }
+
+        self.gt_multiagent = [
             {
                 "role": "system",
                 "content": [
-                    {
-                        "type": "text",
-                        "text": "You're a helpful assistant.",
-                    },
+                    {"type": "text", "text": "You're a helpful assistant."},
                 ],
             },
             {
                 "role": "user",
                 "content": [
                     {
-                        "text": "# Conversation History\nThe content "
-                        "between <history></history> tags contains "
-                        "your conversation history\n<history>\nuser:"
-                        " What is the capital of France?",
                         "type": "text",
-                    },
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "url",
-                            "url": "https://www.example.com/image.png",
-                        },
-                    },
-                    {
-                        "text": "assistant: The capital of France is Paris."
-                        "\nuser: What is the capital of Japan?"
-                        "\n</history>",
-                        "type": "text",
+                        "text": (
+                            _hist_prompt
+                            + "<history>\n"
+                            + _conv_text
+                            + "\n</history>"
+                        ),
                     },
                 ],
             },
-            {
-                "role": "assistant",
-                "content": [
-                    {
-                        "id": "1",
-                        "type": "tool_use",
-                        "name": "get_capital",
-                        "input": {
-                            "country": "Japan",
-                        },
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "tool_result",
-                        "tool_use_id": "1",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": "The capital of Japan is Tokyo.",
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "text": "<history>\nassistant:"
-                        " The capital of Japan is Tokyo.\n</history>",
-                        "type": "text",
-                    },
-                ],
-            },
+            self._gt_tool_call,
+            self._gt_tool_result,
+            self._gt_trailing_asst,
         ]
 
-        self.ground_truth_multiagent_without_first_conversation = [
-            {
-                "role": "system",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "You're a helpful assistant.",
-                    },
-                ],
-            },
-            {
-                "role": "assistant",
-                "content": [
-                    {
-                        "id": "1",
-                        "type": "tool_use",
-                        "name": "get_capital",
-                        "input": {
-                            "country": "Japan",
-                        },
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "tool_result",
-                        "tool_use_id": "1",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": "The capital of Japan is Tokyo.",
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "text": "# Conversation History\nThe content "
-                        "between <history></history> tags contains "
-                        "your conversation history\n<history>\nassistant:"
-                        " The capital of Japan is Tokyo.\n</history>",
-                        "type": "text",
-                    },
-                ],
-            },
-        ]
-
-        self.ground_truth_multiagent_2 = [
-            {
-                "role": "system",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "You're a helpful assistant.",
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "text": "# Conversation History\nThe content between"
-                        " <history></history> tags contains your"
-                        " conversation history\n<history>\nuser: What"
-                        " is the capital of France?",
-                        "type": "text",
-                    },
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "url",
-                            "url": "https://www.example.com/image.png",
-                        },
-                    },
-                    {
-                        "text": "assistant: The capital of France is Paris."
-                        "\nuser: What is the capital of Japan?"
-                        "\n</history>",
-                        "type": "text",
-                    },
-                ],
-            },
-            {
-                "role": "assistant",
-                "content": [
-                    {
-                        "id": "1",
-                        "type": "tool_use",
-                        "name": "get_capital",
-                        "input": {
-                            "country": "Japan",
-                        },
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "tool_result",
-                        "tool_use_id": "1",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": "The capital of Japan is Tokyo.",
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "text": "<history>\nassistant:"
-                        " The capital of Japan is Tokyo.\nuser: What"
-                        " is the capital of South Korea?\n</history>",
-                        "type": "text",
-                    },
-                ],
-            },
-            {
-                "role": "assistant",
-                "content": [
-                    {
-                        "id": "2",
-                        "type": "tool_use",
-                        "name": "get_capital",
-                        "input": {
-                            "country": "South Korea",
-                        },
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "tool_result",
-                        "tool_use_id": "2",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": "The capital of South Korea is Seoul.",
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "text": "<history>\nassistant:"
-                        " The capital of South Korea is Seoul."
-                        "\n</history>",
-                        "type": "text",
-                    },
-                ],
-            },
-        ]
+    # -------------------------------------------------------------------
+    # AnthropicChatFormatter tests
+    # -------------------------------------------------------------------
 
     async def test_chat_formatter(self) -> None:
-        """Test the chat formatter."""
-        formatter = AnthropicChatFormatter()
+        """Chat formatter produces exact output for various subsets."""
+        fmt = AnthropicChatFormatter()
 
         # Full history
-        res = await formatter.format(
+        res = await fmt.format(
             [*self.msgs_system, *self.msgs_conversation, *self.msgs_tools],
         )
+        self.assertListEqual(self.gt_chat, res)
 
-        self.assertListEqual(self.ground_truth_chat, res)
+        # Without system
+        res = await fmt.format([*self.msgs_conversation, *self.msgs_tools])
+        self.assertListEqual(self.gt_chat[1:], res)
 
-        # Without system message
-        res = await formatter.format(
-            [*self.msgs_conversation, *self.msgs_tools],
-        )
-
+        # Without conversation
+        n_tools_gt = len(self.gt_chat) - 1 - len(self.msgs_conversation)
+        res = await fmt.format([*self.msgs_system, *self.msgs_tools])
         self.assertListEqual(
+            [self.gt_chat[0]] + self.gt_chat[-n_tools_gt:],
             res,
-            self.ground_truth_chat[1:],
         )
 
-        # Without conversation messages
-        res = await formatter.format(
-            [*self.msgs_system, *self.msgs_tools],
-        )
-        self.assertListEqual(
-            res,
-            self.ground_truth_chat[:1]
-            + self.ground_truth_chat[
-                1
-                + len(self.msgs_conversation) : 1
-                + len(self.msgs_conversation)
-                + len(self.msgs_tools)
-            ],
-        )
+        # Without tools
+        res = await fmt.format([*self.msgs_system, *self.msgs_conversation])
+        self.assertListEqual(self.gt_chat[:-n_tools_gt], res)
 
-        # Without tool messages
-        res = await formatter.format(
-            [*self.msgs_system, *self.msgs_conversation],
-        )
-        self.assertListEqual(
-            res,
-            self.ground_truth_chat[: 1 + len(self.msgs_conversation)],
-        )
+        # Empty
+        res = await fmt.format([])
+        self.assertListEqual([], res)
 
-        # Empty messages
-        res = await formatter.format([])
-        self.assertListEqual(res, [])
-
-    async def test_multiagent_formater(self) -> None:
-        """Test the multi-agent formatter."""
-        formatter = AnthropicMultiAgentFormatter()
-
-        # system + conversation + tools + conversation + tools
-        res = await formatter.format(
-            [
-                *self.msgs_system,
-                *self.msgs_conversation,
-                *self.msgs_tools,
-                *self.msgs_conversation_2,
-                *self.msgs_tools_2,
-            ],
-        )
-
-        self.assertListEqual(res, self.ground_truth_multiagent_2)
-
-        # system + conversation + tools + conversation
-        res = await formatter.format(
-            [
-                *self.msgs_system,
-                *self.msgs_conversation,
-                *self.msgs_tools,
-                *self.msgs_conversation_2,
-            ],
-        )
-
-        self.assertListEqual(
-            res,
-            self.ground_truth_multiagent_2[: -len(self.msgs_tools_2)],
-        )
-
-        # system + conversation + tools
-        res = await formatter.format(
-            [
-                *self.msgs_system,
-                *self.msgs_conversation,
-                *self.msgs_tools,
-            ],
-        )
-
-        self.assertListEqual(res, self.ground_truth_multiagent)
-
-        # Without system message
-        res = await formatter.format(
-            [*self.msgs_conversation, *self.msgs_tools],
-        )
-
-        self.assertListEqual(
-            res,
-            self.ground_truth_multiagent[
-                1 : 1 + len(self.msgs_conversation) + len(self.msgs_tools) - 2
-            ],
-        )
-
-        # Without conversation messages
-        res = await formatter.format(
-            [*self.msgs_system, *self.msgs_tools],
-        )
-        self.assertListEqual(
-            res,
-            self.ground_truth_multiagent_without_first_conversation,
-        )
-
-        # Without tool messages
-        res = await formatter.format(
-            [*self.msgs_system, *self.msgs_conversation],
-        )
-        self.assertListEqual(
-            res,
-            self.ground_truth_multiagent[:2],
-        )
-
-        # With only system message
-        res = await formatter.format(self.msgs_system)
-        self.assertListEqual(
-            res,
-            self.ground_truth_multiagent[:1],
-        )
-
-        # With only conversation messages
-        res = await formatter.format(self.msgs_conversation)
-        self.assertListEqual(
-            res,
-            self.ground_truth_multiagent[1 : -len(self.msgs_tools)],
-        )
-
-        # With only tool messages
-        res = await formatter.format(self.msgs_tools)
-        self.assertListEqual(
-            res,
-            self.ground_truth_multiagent_without_first_conversation[1:],
-        )
-
-    async def test_chat_local_image_to_base64(self) -> None:
-        """Local image URL in user message and tool result should be
-        converted to base64."""
-        formatter = AnthropicChatFormatter()
+    async def test_chat_formatter_base64_image(self) -> None:
+        """Base64-encoded image is formatted as Anthropic image source."""
+        fmt = AnthropicChatFormatter()
         msgs = [
-            Msg(
-                "user",
-                [
-                    TextBlock(type="text", text="Describe the image."),
-                    ImageBlock(
-                        type="image",
-                        source=URLSource(type="url", url=self.image_path),
+            UserMsg(
+                name="user",
+                content=[
+                    TextBlock(text="What's in this image?"),
+                    DataBlock(
+                        source=Base64Source(
+                            data=self.image_b64,
+                            media_type="image/png",
+                        ),
                     ),
                 ],
-                "user",
             ),
-            Msg(
-                "assistant",
-                [
-                    ToolUseBlock(
-                        type="tool_use",
-                        id="tool_1",
-                        name="view_image",
-                        input={"path": "/tmp/img.png"},
+        ]
+        res = await fmt.format(msgs)
+        self.assertListEqual(
+            [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "What's in this image?"},
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": "image/png",
+                                "data": self.image_b64,
+                            },
+                        },
+                    ],
+                },
+            ],
+            res,
+        )
+
+    async def test_chat_formatter_thinking_preserved(self) -> None:
+        """ThinkingBlock with a signature is passed back as a thinking
+        content block."""
+        fmt = AnthropicChatFormatter()
+        msgs = [
+            AssistantMsg(
+                name="assistant",
+                content=[
+                    ThinkingBlock(
+                        thinking="inner thoughts",
+                        signature="sig_abc",
                     ),
+                    TextBlock(text="reply"),
                 ],
-                "assistant",
             ),
-            Msg(
-                "system",
-                [
+        ]
+        res = await fmt.format(msgs)
+        self.assertListEqual(
+            [
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "thinking",
+                            "thinking": "inner thoughts",
+                            "signature": "sig_abc",
+                        },
+                        {"type": "text", "text": "reply"},
+                    ],
+                },
+            ],
+            res,
+        )
+
+    async def test_chat_formatter_thinking_without_signature_dropped(
+        self,
+    ) -> None:
+        """ThinkingBlock from another provider (no signature) is dropped
+        rather than forwarded with an empty signature, which Anthropic
+        rejects with `Invalid signature in thinking block`. An empty-string
+        signature is treated the same as a missing one."""
+        fmt = AnthropicChatFormatter()
+        msgs = [
+            AssistantMsg(
+                name="assistant",
+                content=[
+                    ThinkingBlock(thinking="from another provider"),
+                    ThinkingBlock(thinking="empty sig", signature=""),
+                    TextBlock(text="reply"),
+                ],
+            ),
+        ]
+        res = await fmt.format(msgs)
+        self.assertListEqual(
+            [
+                {
+                    "role": "assistant",
+                    "content": [
+                        {"type": "text", "text": "reply"},
+                    ],
+                },
+            ],
+            res,
+        )
+
+        # Thinking-only message produces no output (no empty assistant msg).
+        res = await fmt.format(
+            [
+                AssistantMsg(
+                    name="assistant",
+                    content=[ThinkingBlock(thinking="only thinking")],
+                ),
+            ],
+        )
+        self.assertListEqual([], res)
+
+    async def test_chat_formatter_tool_result_role_forced_to_user(
+        self,
+    ) -> None:
+        """Anthropic forces tool_result messages to role='user'."""
+        fmt = AnthropicChatFormatter()
+        res = await fmt.format(
+            [*self.msgs_system, *self.msgs_conversation, *self.msgs_tools],
+        )
+        tool_result_roles = [
+            m["role"]
+            for m in res
+            if any(
+                b.get("type") == "tool_result"
+                for b in (m.get("content") or [])
+            )
+        ]
+        self.assertListEqual(tool_result_roles, ["user"])
+
+    async def test_chat_formatter_tool_result_with_image(self) -> None:
+        """Tool result containing an image DataBlock inlines the image in the
+        tool_result content without crashing on TextBlock system-reminders."""
+        fmt = AnthropicChatFormatter()
+        msgs = [
+            AssistantMsg(
+                name="assistant",
+                content=[
+                    ToolCallBlock(
+                        id="call_img",
+                        name="get_chart",
+                        input="{}",
+                    ),
                     ToolResultBlock(
-                        type="tool_result",
-                        id="tool_1",
-                        name="view_image",
+                        id="call_img",
+                        name="get_chart",
                         output=[
-                            ImageBlock(
-                                type="image",
-                                source=URLSource(
-                                    type="url",
-                                    url=self.image_path,
+                            TextBlock(text="Here is the chart."),
+                            DataBlock(
+                                source=Base64Source(
+                                    data=self.image_b64,
+                                    media_type="image/png",
                                 ),
                             ),
-                            TextBlock(type="text", text="Image loaded"),
+                        ],
+                        state=ToolResultState.SUCCESS,
+                    ),
+                    TextBlock(text="Here is the chart analysis."),
+                ],
+            ),
+        ]
+        res = await fmt.format(msgs)
+        self.assertListEqual(
+            [
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "tool_use",
+                            "id": "call_img",
+                            "name": "get_chart",
+                            "input": {},
+                        },
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": "call_img",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": "Here is the chart.",
+                                },
+                                {
+                                    "type": "image",
+                                    "source": {
+                                        "type": "base64",
+                                        "media_type": "image/png",
+                                        "data": self.image_b64,
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Here is the chart analysis.",
+                        },
+                    ],
+                },
+            ],
+            res,
+        )
+
+    # -------------------------------------------------------------------
+    # AnthropicMultiAgentFormatter tests
+    # -------------------------------------------------------------------
+
+    async def test_multiagent_formatter(self) -> None:
+        """MultiAgent formatter produces exact output for various subsets."""
+        fmt = AnthropicMultiAgentFormatter()
+
+        # Full history
+        res = await fmt.format(
+            [*self.msgs_system, *self.msgs_conversation, *self.msgs_tools],
+        )
+        self.assertListEqual(self.gt_multiagent, res)
+
+        # Without system
+        res = await fmt.format([*self.msgs_conversation, *self.msgs_tools])
+        self.assertListEqual(self.gt_multiagent[1:], res)
+
+        # Without tools
+        res = await fmt.format([*self.msgs_system, *self.msgs_conversation])
+        self.assertListEqual(self.gt_multiagent[:2], res)
+
+        # System only
+        res = await fmt.format(self.msgs_system)
+        self.assertListEqual([self.gt_multiagent[0]], res)
+
+        # Conversation only
+        res = await fmt.format(self.msgs_conversation)
+        self.assertListEqual([self.gt_multiagent[1]], res)
+
+        # Tools only
+        res = await fmt.format(self.msgs_tools)
+        self.assertListEqual(
+            [
+                self._gt_tool_call,
+                self._gt_tool_result,
+                self._gt_trailing_asst,
+            ],
+            res,
+        )
+
+        # System + tools (no conversation)
+        res = await fmt.format([*self.msgs_system, *self.msgs_tools])
+        self.assertListEqual(
+            [
+                self.gt_multiagent[0],
+                self._gt_tool_call,
+                self._gt_tool_result,
+                self._gt_trailing_asst,
+            ],
+            res,
+        )
+
+        # Empty
+        res = await fmt.format([])
+        self.assertListEqual([], res)
+
+    async def test_chat_formatter_complex_multi_step(self) -> None:
+        """Complex multi-step sequence with interleaved thinking, text,
+        tool calls, and tool results."""
+        fmt = AnthropicChatFormatter()
+        msgs = [
+            AssistantMsg(
+                name="assistant",
+                content=[
+                    ThinkingBlock(thinking="thinking_1", signature="sig_1"),
+                    TextBlock(text="text_1"),
+                    ToolCallBlock(
+                        id="call_1",
+                        name="func_1",
+                        input='{"arg": "value1"}',
+                    ),
+                    ToolCallBlock(
+                        id="call_2",
+                        name="func_2",
+                        input='{"arg": "value2"}',
+                    ),
+                    ToolResultBlock(
+                        id="call_1",
+                        name="func_1",
+                        output=[TextBlock(text="result_1")],
+                        state=ToolResultState.SUCCESS,
+                    ),
+                    ToolResultBlock(
+                        id="call_2",
+                        name="func_2",
+                        output=[TextBlock(text="result_2")],
+                        state=ToolResultState.SUCCESS,
+                    ),
+                    ThinkingBlock(thinking="thinking_2", signature="sig_2"),
+                    TextBlock(text="text_2"),
+                    ToolCallBlock(
+                        id="call_3",
+                        name="func_3",
+                        input='{"arg": "value3"}',
+                    ),
+                    ToolResultBlock(
+                        id="call_3",
+                        name="func_3",
+                        output=[TextBlock(text="result_3")],
+                        state=ToolResultState.SUCCESS,
+                    ),
+                    ToolCallBlock(
+                        id="call_4",
+                        name="func_4",
+                        input='{"arg": "value4"}',
+                    ),
+                    ToolResultBlock(
+                        id="call_4",
+                        name="func_4",
+                        output=[TextBlock(text="result_4")],
+                        state=ToolResultState.SUCCESS,
+                    ),
+                    ThinkingBlock(thinking="thinking_3", signature="sig_3"),
+                    TextBlock(text="text_3"),
+                ],
+            ),
+        ]
+        res = await fmt.format(msgs)
+        self.assertListEqual(
+            [
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "thinking",
+                            "thinking": "thinking_1",
+                            "signature": "sig_1",
+                        },
+                        {"type": "text", "text": "text_1"},
+                        {
+                            "type": "tool_use",
+                            "id": "call_1",
+                            "name": "func_1",
+                            "input": {"arg": "value1"},
+                        },
+                        {
+                            "type": "tool_use",
+                            "id": "call_2",
+                            "name": "func_2",
+                            "input": {"arg": "value2"},
+                        },
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": "call_1",
+                            "content": [
+                                {"type": "text", "text": "result_1"},
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": "call_2",
+                            "content": [
+                                {"type": "text", "text": "result_2"},
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "thinking",
+                            "thinking": "thinking_2",
+                            "signature": "sig_2",
+                        },
+                        {"type": "text", "text": "text_2"},
+                        {
+                            "type": "tool_use",
+                            "id": "call_3",
+                            "name": "func_3",
+                            "input": {"arg": "value3"},
+                        },
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": "call_3",
+                            "content": [
+                                {"type": "text", "text": "result_3"},
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "tool_use",
+                            "id": "call_4",
+                            "name": "func_4",
+                            "input": {"arg": "value4"},
+                        },
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": "call_4",
+                            "content": [
+                                {"type": "text", "text": "result_4"},
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "thinking",
+                            "thinking": "thinking_3",
+                            "signature": "sig_3",
+                        },
+                        {"type": "text", "text": "text_3"},
+                    ],
+                },
+            ],
+            res,
+        )
+
+    async def test_chat_formatter_hint_block(self) -> None:
+        """HintBlock flushes preceding content and becomes a user message."""
+        fmt = AnthropicChatFormatter()
+        msgs = [
+            AssistantMsg(
+                name="assistant",
+                content=[
+                    TextBlock(text="Let me think about that."),
+                    HintBlock(hint="Remember to be concise."),
+                    TextBlock(text="Here is my answer."),
+                ],
+            ),
+        ]
+        res = await fmt.format(msgs)
+        self.assertListEqual(
+            [
+                {
+                    "role": "assistant",
+                    "content": [
+                        {"type": "text", "text": "Let me think about that."},
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "Remember to be concise."},
+                    ],
+                },
+                {
+                    "role": "assistant",
+                    "content": [
+                        {"type": "text", "text": "Here is my answer."},
+                    ],
+                },
+            ],
+            res,
+        )
+
+    async def test_chat_formatter_hint_block_multimodal(self) -> None:
+        """Multimodal HintBlock becomes a single user message with text
+        + image."""
+        fmt = AnthropicChatFormatter()
+        msgs = [
+            AssistantMsg(
+                name="assistant",
+                content=[
+                    HintBlock(
+                        hint=[
+                            TextBlock(text="Inspect this screenshot:"),
+                            DataBlock(
+                                source=Base64Source(
+                                    data=self.image_b64,
+                                    media_type="image/png",
+                                ),
+                            ),
                         ],
                     ),
                 ],
-                "system",
             ),
         ]
-        res = await formatter.format(msgs)
-
-        # User message: local image should be base64
-        user_img = res[0]["content"][1]
-        self.assertEqual(user_img["source"]["type"], "base64")
-        self.assertEqual(user_img["source"]["media_type"], "image/png")
-        self.assertEqual(
-            user_img["source"]["data"],
-            "ZmFrZSBpbWFnZSBjb250ZW50",
-        )
-
-        # Tool result: local image should also be base64
-        tool_result_content = res[2]["content"][0]["content"]
-        img_items = [
-            b for b in tool_result_content if b.get("type") == "image"
-        ]
-        self.assertEqual(len(img_items), 1)
-        self.assertEqual(img_items[0]["source"]["type"], "base64")
-        self.assertEqual(
-            img_items[0]["source"]["data"],
-            "ZmFrZSBpbWFnZSBjb250ZW50",
+        res = await fmt.format(msgs)
+        self.assertListEqual(
+            [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Inspect this screenshot:",
+                        },
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": "image/png",
+                                "data": self.image_b64,
+                            },
+                        },
+                    ],
+                },
+            ],
+            res,
         )

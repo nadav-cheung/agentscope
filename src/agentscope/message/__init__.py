@@ -1,31 +1,39 @@
 # -*- coding: utf-8 -*-
 """The message module in agentscope."""
 
-from ._message_block import (
+from ._block import (
     ContentBlock,
+    ContentBlockTypes,
     TextBlock,
     ThinkingBlock,
-    ToolUseBlock,
+    HintBlock,
+    ToolCallBlock,
+    ToolCallState,
     ToolResultBlock,
-    ImageBlock,
-    AudioBlock,
-    VideoBlock,
+    ToolResultState,
+    DataBlock,
     Base64Source,
     URLSource,
 )
-from ._message_base import Msg
+from ._base import Msg, UserMsg, AssistantMsg, SystemMsg, Usage
 
 
 __all__ = [
     "TextBlock",
     "ThinkingBlock",
+    "HintBlock",
+    "ToolCallBlock",
+    "ToolCallState",
+    "ToolResultBlock",
+    "ToolResultState",
+    "DataBlock",
     "Base64Source",
     "URLSource",
-    "ImageBlock",
-    "AudioBlock",
-    "VideoBlock",
-    "ToolUseBlock",
-    "ToolResultBlock",
     "ContentBlock",
+    "ContentBlockTypes",
     "Msg",
+    "UserMsg",
+    "AssistantMsg",
+    "SystemMsg",
+    "Usage",
 ]

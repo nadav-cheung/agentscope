@@ -4,13 +4,11 @@ import asyncio
 from multiprocessing import Process
 from unittest.async_case import IsolatedAsyncioTestCase
 
-import mcp.types
 from mcp.server import FastMCP
 from mcp.types import EmbeddedResource, TextResourceContents
 
-from agentscope.mcp import HttpStatelessClient, HttpStatefulClient
-from agentscope.message import TextBlock
-from agentscope.tool import ToolResponse
+from agentscope.mcp import MCPClient, HttpMCPConfig
+from agentscope.tool import ToolChunk
 
 
 async def tool_1(arg1: str, arg2: list[int]) -> str:
@@ -70,48 +68,37 @@ class StreamableHttpMCPClientTest(IsolatedAsyncioTestCase):
     async def test_streamable_http_stateless_client(self) -> None:
         """Test the MCP server connection functionality."""
 
-        client = HttpStatelessClient(
+        # Test stateless client (is_stateful=False)
+        client = MCPClient(
             name="test_streamable_http_stateless_client",
-            transport="streamable_http",
-            url=f"http://127.0.0.1:{self.port}/mcp",
+            is_stateful=False,
+            mcp_config=HttpMCPConfig(
+                type="http_mcp",
+                url=f"http://127.0.0.1:{self.port}/mcp",
+            ),
         )
 
-        func_1 = await client.get_callable_function(
-            "tool_1",
-            wrap_tool_result=False,
-        )
-        res_1: mcp.types.CallToolResult = await func_1(
-            arg1="123",
-            arg2=[1, 2, 3],
-        )
+        my_tool_1 = await client.get_tool("tool_1")
+        res_1: ToolChunk = await my_tool_1(arg1="123", arg2=[1, 2, 3])
         self.assertEqual(
             res_1.content[0].text,
             "arg1: 123, arg2: [1, 2, 3]",
         )
 
-        func_2 = await client.get_callable_function(
-            "tool_1",
-            wrap_tool_result=True,
-        )
-        res_2: ToolResponse = await func_2(arg1="345", arg2=[4, 5, 6])
+        res_2: ToolChunk = await my_tool_1(arg1="345", arg2=[4, 5, 6])
         self.assertEqual(
-            res_2,
-            ToolResponse(
-                id=res_2.id,
-                content=[
-                    TextBlock(
-                        text="arg1: 345, arg2: [4, 5, 6]",
-                        type="text",
-                    ),
-                ],
-            ),
+            res_2.content[0].text,
+            "arg1: 345, arg2: [4, 5, 6]",
         )
 
-        # Test stateful client connection
-        client = HttpStatefulClient(
-            name="test_streamable_http_stateless_client",
-            transport="streamable_http",
-            url=f"http://127.0.0.1:{self.port}/mcp",
+        # Test stateful client (is_stateful=True)
+        client = MCPClient(
+            name="test_streamable_http_stateful_client",
+            is_stateful=True,
+            mcp_config=HttpMCPConfig(
+                type="http_mcp",
+                url=f"http://127.0.0.1:{self.port}/mcp",
+            ),
         )
 
         self.assertFalse(client.is_connected)
@@ -119,35 +106,17 @@ class StreamableHttpMCPClientTest(IsolatedAsyncioTestCase):
 
         self.assertTrue(client.is_connected)
 
-        func_1 = await client.get_callable_function(
-            "tool_1",
-            wrap_tool_result=False,
-        )
-        res_3: mcp.types.CallToolResult = await func_1(
-            arg1="12",
-            arg2=[1, 2],
-        )
+        my_tool_1 = await client.get_tool("tool_1")
+        res_3: ToolChunk = await my_tool_1(arg1="12", arg2=[1, 2])
         self.assertEqual(
             res_3.content[0].text,
             "arg1: 12, arg2: [1, 2]",
         )
 
-        func_2 = await client.get_callable_function(
-            "tool_1",
-            wrap_tool_result=True,
-        )
-        res_4: ToolResponse = await func_2(arg1="34", arg2=[4, 5])
+        res_4: ToolChunk = await my_tool_1(arg1="34", arg2=[4, 5])
         self.assertEqual(
-            res_4,
-            ToolResponse(
-                id=res_4.id,
-                content=[
-                    TextBlock(
-                        text="arg1: 34, arg2: [4, 5]",
-                        type="text",
-                    ),
-                ],
-            ),
+            res_4.content[0].text,
+            "arg1: 34, arg2: [4, 5]",
         )
 
         await client.close()
@@ -155,31 +124,24 @@ class StreamableHttpMCPClientTest(IsolatedAsyncioTestCase):
 
     async def test_embedded_content(self) -> None:
         """Test the EmbeddedContent functionality."""
-        client = HttpStatelessClient(
+        # Test with stateless client (is_stateful=False)
+        client = MCPClient(
             name="test_embedded_content",
-            transport="streamable_http",
-            url=f"http://127.0.0.1:{self.port}/mcp",
+            is_stateful=False,
+            mcp_config=HttpMCPConfig(
+                type="http_mcp",
+                url=f"http://127.0.0.1:{self.port}/mcp",
+            ),
         )
 
-        func_3 = await client.get_callable_function(
-            "tool_2",
-            wrap_tool_result=True,
-        )
-        res: ToolResponse = await func_3()
+        my_tool_2 = await client.get_tool("tool_2")
+        res: ToolChunk = await my_tool_2()
         self.assertEqual(
-            res,
-            ToolResponse(
-                id=res.id,
-                content=[
-                    TextBlock(
-                        type="text",
-                        text="""{
+            res.content[0].text,
+            """{
   "uri": "file://tmp.txt/",
   "mimeType": "text/plain",
   "meta": null,
   "text": "test content"
 }""",
-                    ),
-                ],
-            ),
         )

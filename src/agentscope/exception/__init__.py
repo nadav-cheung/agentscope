@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 """The exception module in agentscope."""
 
-from ._exception_base import AgentOrientedExceptionBase
+from ._base import (
+    AgentOrientedException,
+    DeveloperOrientedException,
+)
 from ._tool import (
     ToolInterruptedError,
     ToolNotFoundError,
-    ToolInvalidArgumentsError,
+    ToolJSONDecodeError,
+    ToolGroupInactiveError,
 )
 
 __all__ = [
-    "AgentOrientedExceptionBase",
+    "AgentOrientedException",
+    "DeveloperOrientedException",
     "ToolInterruptedError",
     "ToolNotFoundError",
-    "ToolInvalidArgumentsError",
+    "ToolJSONDecodeError",
+    "ToolGroupInactiveError",
 ]

@@ -8,17 +8,17 @@ authors = [
     { name = "SysML team of Alibaba Tongyi Lab", email = "gaodawei.gdw@alibaba-inc.com" }
 ]
 license = "Apache-2.0"
-keywords = ["deep-learning", "multi agents", "agents"]
+keywords = ["agent", "multi-agent", "LLM", "AI"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Operating System :: OS Independent",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "aioitertools",
     "anthropic",
@@ -27,7 +27,8 @@ dependencies = [
     "filetype",
     "json5",
     "json_repair",
-    "mcp>=1.13",
+    "mcp",
+    "httpx",
     "numpy",
     "openai",
     "python-datauri",
@@ -37,136 +38,52 @@ dependencies = [
     "opentelemetry-semantic-conventions>=0.60b0",
     "python-socketio",
     "shortuuid",
-    "tiktoken",
-    "sounddevice",
-    "sqlalchemy",
     "python-frontmatter",
+    "jinja2",
     "aiofiles",
+    "tree_sitter",
+    "tree_sitter_bash",
+    "jsonschema",
 ]
 
 [project.optional-dependencies]
-# ------------ A2A protocol ------------
-a2a = [
-    "a2a-sdk==0.3.26",
-    "httpx",
-    # TODO: split the card resolvers from the a2a dependency
-    "nacos-sdk-python>=3.0.0",
-]
-
-# ------------ Realtime -------------
-realtime = ["websockets>=14.0", "scipy"]
-
 # ------------ Model APIs ------------
 gemini = ["google-genai"]
 ollama = ["ollama>=0.5.4"]
+xai = ["xai-sdk"]
 models = [
     "agentscope[ollama]",
     "agentscope[gemini]",
+    "agentscope[xai]",
 ]
-
-# ------------ Tokenizers ------------
-tokens = [
-    "Pillow",
-    "transformers",
-    "jinja2",
+# ------------ Service ------------
+service = [
+    "fastapi",
+    "uvicorn",
+    "apscheduler",
+    "ag-ui-protocol>=0.1.10",
 ]
-
-# ------------ Memory ------------
-redis_memory = ["redis"]
-tablestore_memory = [
-    "tablestore-for-agent-memory",
-    "tablestore",
+# ------------ Storage ------------
+storage = [
+    "redis",
 ]
-
-mem0ai = [
-    "mem0ai<=1.0.3",
-    "packaging"
+# ------------ Workspace -----------
+workspace = [
+    "aiodocker",
+    "e2b",
 ]
-reme = ["reme-ai>=0.2.0.3"]
-memory = [
-    "agentscope[redis_memory]",
-    "agentscope[mem0ai]",
-    "agentscope[reme]",
-    "agentscope[tablestore_memory]",
-]
-
-# ------------ RAG ------------
-# readers
-text-reader = ["nltk"]
-pdf-reader = [
-    "agentscope[text-reader]",
-    # TODO: the latest pypdf has some issues with parsing PDFs
-    #  (2026-01-13), so we fix the version here temporarily.
-    "pypdf<=6.5.0",
-]
-docx-reader = [
-    "agentscope[text-reader]",
-    "python-docx"
-]
-excel-reader = [
-    "agentscope[text-reader]",
-    "pandas",
-    "openpyxl",
-]
-ppt-reader = [
-    "agentscope[text-reader]",
-    "python-pptx"
-]
-readers = [
-    "agentscope[text-reader]",
-    "agentscope[pdf-reader]",
-    "agentscope[docx-reader]",
-    "agentscope[excel-reader]",
-    "agentscope[ppt-reader]",
-]
-
-# vdb
-# The qdrant-client >= 1.16.0 has conflicts with pymilvus, so we fix
-# the version to 1.15.1 here.
-qdrant = ["qdrant-client==1.15.1"]
-milvus = ["pymilvus[milvus_lite]==2.6.2"]
-ali_mysql = ["mysql-connector-python"]
-mongodb = ["pymongo"]
-oceanbase = ["pyobvector>=0.2.0,<0.3.0"]
-vdbs = [
-    "agentscope[ali_mysql]",
-    "agentscope[qdrant]",
-    "agentscope[milvus]",
-    "agentscope[mongodb]",
-    "agentscope[oceanbase]",
-]
-
-rag = [
-    "agentscope[readers]",
-    "agentscope[vdbs]",
-]
-
-# ------------ Evaluation ------------
-evaluate = ["ray"]
-
-# ------------ Tuner ------------
-tuner = [
-    "dspy>=3.1.0",
-    "datasets>=4.0.0",
-    "litellm[proxy]>=1.75.3",
-]
-
-tuner-gpu = [
-    "trinity-rft>=0.5.0",
-    "dspy>=3.1.0",
-    "datasets>=4.0.0",
-    "litellm[proxy]>=1.75.3"
+# ------------ Tools ------------
+tools = [
+    "ripgrep",
 ]
 
 # ------------ Full ------------
 full = [
-    "agentscope[a2a]",
     "agentscope[models]",
-    "agentscope[tokens]",
-    "agentscope[memory]",
-    "agentscope[rag]",
-    "agentscope[evaluate]",
-    "agentscope[realtime]",
+    "agentscope[service]",
+    "agentscope[storage]",
+    "agentscope[workspace]",
+    "agentscope[tools]",
 ]
 
 # ------------ Development ------------
@@ -176,21 +93,10 @@ dev = [
     # Development tools
     "pre-commit",
     "pytest",
-    "pytest-asyncio",
     "pytest-forked",
-    "sphinx-gallery",
-    "furo",
     "myst_parser",
     "matplotlib",
-    # For unittests
-    # For mocking redis in unittests
     "fakeredis",
-    "aiosqlite",
-    "greenlet",
-    # For openjudge
-    "py-openjudge",
-    # For tuner
-    "dspy",
 ]
 
 [project.urls]
@@ -203,7 +109,14 @@ packages = { find = { where = ["src"] } }
 include-package-data = true
 
 [tool.setuptools.package-data]
-"*" = ["py.typed"]
+# ``"*"`` applies to every discovered package. Patterns:
+# - ``py.typed`` marks the typed package per PEP 561.
+# - ``_models/*.yaml`` reaches into the data-only ``_models/``
+#   subdirs that ship with each model provider (they have no
+#   ``__init__.py`` and are not packages, but the files still
+#   live alongside the parent package's source on disk).
+"*" = ["py.typed", "_models/*.yaml"]
+"agentscope.workspace._docker" = ["Dockerfile*.template"]
 
 [build-system]
 requires = ["setuptools>=45", "wheel"]

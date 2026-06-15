@@ -1,22 +1,33 @@
 # -*- coding: utf-8 -*-
 """The model module."""
 
-from ._model_base import ChatModelBase
-from ._model_response import ChatResponse
-from ._dashscope_model import DashScopeChatModel
-from ._openai_model import OpenAIChatModel
-from ._anthropic_model import AnthropicChatModel
-from ._ollama_model import OllamaChatModel
-from ._gemini_model import GeminiChatModel
-from ._trinity_model import TrinityChatModel
+from ._base import ChatModelBase
+from ._model_card import ModelCard
+from ._model_response import ChatResponse, StructuredResponse
+from ._model_usage import ChatUsage
+from ._anthropic import AnthropicChatModel
+from ._dashscope import DashScopeChatModel
+from ._deepseek import DeepSeekChatModel
+from ._gemini import GeminiChatModel
+from ._ollama import OllamaChatModel
+from ._openai_chat import OpenAIChatModel
+from ._xai import XAIChatModel
+from ._moonshot import MoonshotChatModel
+from ._openai_response import OpenAIResponseModel
 
 __all__ = [
+    "ChatUsage",
     "ChatModelBase",
     "ChatResponse",
-    "DashScopeChatModel",
-    "OpenAIChatModel",
+    "ModelCard",
+    "StructuredResponse",
     "AnthropicChatModel",
-    "OllamaChatModel",
+    "DashScopeChatModel",
+    "DeepSeekChatModel",
     "GeminiChatModel",
-    "TrinityChatModel",
+    "OllamaChatModel",
+    "OpenAIChatModel",
+    "XAIChatModel",
+    "MoonshotChatModel",
+    "OpenAIResponseModel",
 ]

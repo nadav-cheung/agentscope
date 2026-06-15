@@ -1,381 +1,846 @@
 # -*- coding: utf-8 -*-
-"""Unittests for the tracing functionality in AgentScope."""
-from typing import (
-    AsyncGenerator,
-    Generator,
-    Any,
-)
-from unittest import IsolatedAsyncioTestCase
+"""Unit tests for the tracing module using an in-memory OTel exporter."""
+import json
+from typing import Any
+from unittest.async_case import IsolatedAsyncioTestCase
 
-from agentscope import _config
-from agentscope.agent import AgentBase
-from agentscope.embedding import EmbeddingModelBase
-from agentscope.formatter import FormatterBase
+from opentelemetry import trace as otel_trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
+    InMemorySpanExporter,
+)
+
+from utils import MockModel
+
+from agentscope.agent import Agent
+from agentscope.event import (
+    ConfirmResult,
+    ExternalExecutionResultEvent,
+    RequireExternalExecutionEvent,
+    RequireUserConfirmEvent,
+    UserConfirmResultEvent,
+)
 from agentscope.message import (
     TextBlock,
-    Msg,
-    ToolUseBlock,
+    ToolCallBlock,
+    ToolResultBlock,
+    ToolResultState,
+    UserMsg,
 )
-from agentscope.model import ChatModelBase, ChatResponse
-from agentscope.tool import Toolkit, ToolResponse
-from agentscope.tracing import (
-    trace,
-    trace_llm,
-    trace_reply,
-    trace_format,
-    trace_embedding,
+from agentscope.model import ChatResponse, ChatUsage
+from agentscope.permission import (
+    PermissionContext,
+    PermissionDecision,
+    PermissionBehavior,
 )
+from agentscope.tool import Toolkit, ToolBase
+from agentscope.middleware import TracingMiddleware
+
+
+# ---------------------------------------------------------------------------
+# Shared test fixtures
+# ---------------------------------------------------------------------------
+
+
+class WeatherTool(ToolBase):
+    """Stub weather tool for tracing tests."""
+
+    name: str = "get_weather"
+    description: str = "Return stub weather for a city."
+    input_schema: dict = {
+        "type": "object",
+        "properties": {"city": {"type": "string"}},
+        "required": ["city"],
+    }
+    is_concurrency_safe: bool = True
+    is_read_only: bool = True
+    is_external_tool: bool = False
+    is_mcp: bool = False
+
+    async def check_permissions(
+        self,
+        tool_input: dict[str, Any],
+        context: PermissionContext,
+    ) -> PermissionDecision:
+        return PermissionDecision(
+            behavior=PermissionBehavior.ALLOW,
+            message="always allowed",
+        )
+
+    async def execute(self, city: str) -> str:
+        """Stub weather tool for tracing tests."""
+        return f"{city}: sunny, 25°C."
+
+
+class HitlWeatherTool(ToolBase):
+    """Weather tool that always asks user for confirmation (HITL)."""
+
+    name: str = "get_weather"
+    description: str = "Return weather for a city, requires user confirmation."
+    input_schema: dict = {
+        "type": "object",
+        "properties": {"city": {"type": "string"}},
+        "required": ["city"],
+    }
+    is_concurrency_safe: bool = True
+    is_read_only: bool = True
+    is_external_tool: bool = False
+    is_mcp: bool = False
+
+    async def check_permissions(
+        self,
+        tool_input: dict[str, Any],
+        context: PermissionContext,
+    ) -> PermissionDecision:
+        return PermissionDecision(
+            behavior=PermissionBehavior.ASK,
+            message="user must confirm this tool call",
+        )
+
+    async def execute(self, city: str) -> str:
+        """Stub weather tool for tracing tests."""
+        return f"{city}: sunny, 25°C."
+
+
+class ExternalWeatherTool(ToolBase):
+    """Weather tool that is always executed externally."""
+
+    name: str = "get_weather"
+    description: str = "Return weather for a city via external execution."
+    input_schema: dict = {
+        "type": "object",
+        "properties": {"city": {"type": "string"}},
+        "required": ["city"],
+    }
+    is_concurrency_safe: bool = True
+    is_read_only: bool = True
+    is_external_tool: bool = True  # Mark as external
+    is_mcp: bool = False
+
+    async def check_permissions(
+        self,
+        tool_input: dict[str, Any],
+        context: PermissionContext,
+    ) -> PermissionDecision:
+        return PermissionDecision(
+            behavior=PermissionBehavior.ALLOW,
+            message="always allowed",
+        )
+
+    async def execute(self, city: str) -> str:
+        """Stub weather tool for tracing tests."""
+        return f"{city}: sunny, 25°C."
+
+
+def _make_tool_call_response(tool_id: str, city: str) -> ChatResponse:
+    return ChatResponse(
+        content=[
+            ToolCallBlock(
+                id=tool_id,
+                name="get_weather",
+                input=json.dumps({"city": city}),
+            ),
+        ],
+        is_last=True,
+        usage=ChatUsage(input_tokens=10, output_tokens=5, time=0.05),
+    )
+
+
+def _make_text_response(text: str) -> ChatResponse:
+    return ChatResponse(
+        content=[TextBlock(text=text)],
+        is_last=True,
+        usage=ChatUsage(input_tokens=15, output_tokens=8, time=0.05),
+    )
 
 
 class TracingTest(IsolatedAsyncioTestCase):
-    """Test cases for tracing functionality"""
+    """Tests that OTel spans are emitted with correct attributes.
 
-    async def asyncSetUp(self) -> None:
-        """Set up the environment"""
-        _config.trace_enabled = True
+    The in-memory exporter is set up once per class (setUpClass) because
+    the OTel global TracerProvider cannot be replaced once installed.
+    setUp only creates fresh model/agent and clears the exporter.
+    """
 
-    async def test_trace(self) -> None:
-        """Test the basic tracing functionality"""
+    exporter: InMemorySpanExporter
 
-        @trace(name="test_func")
-        async def test_func(x: int) -> int:
-            """Test async function""" ""
-            return x * 2
+    @classmethod
+    def setUpClass(cls) -> None:
+        """Configure an in-memory OTel provider once for the whole class."""
+        cls.exporter = InMemorySpanExporter()
+        provider = TracerProvider()
+        provider.add_span_processor(SimpleSpanProcessor(cls.exporter))
+        otel_trace.set_tracer_provider(provider)
 
-        result = await test_func(5)
-        self.assertEqual(result, 10)
+    def setUp(self) -> None:
+        """Create a fresh agent and clear accumulated spans before each
+        test."""
+        self.exporter.clear()
+        self.model = MockModel()
+        self.agent = Agent(
+            name="test-agent",
+            system_prompt="You are a test assistant.",
+            model=self.model,
+            toolkit=Toolkit(tools=[WeatherTool()]),
+            middlewares=[TracingMiddleware()],
+        )
 
-        @trace(name="test_gen")
-        async def test_gen() -> AsyncGenerator[str, None]:
-            """Test async generator"""
-            for i in range(3):
-                yield f"chunk_{i}"
+    # -----------------------------------------------------------------------
+    # Helpers
+    # -----------------------------------------------------------------------
 
-        results = [_ async for _ in test_gen()]
-        self.assertListEqual(results, ["chunk_0", "chunk_1", "chunk_2"])
+    def _spans_by_name(self, fragment: str) -> list:
+        return [
+            s
+            for s in self.exporter.get_finished_spans()
+            if fragment in (s.name or "")
+        ]
 
-        @trace(name="test_func_return_with_sync_gen")
-        async def test_func_return_with_sync_gen() -> Generator[
+    def _all_conv_ids(self) -> set:
+        return {
+            dict(s.attributes or {}).get("gen_ai.conversation.id")
+            for s in self.exporter.get_finished_spans()
+            if "gen_ai.conversation.id" in (s.attributes or {})
+        }
+
+    # -----------------------------------------------------------------------
+    # Tests: Agent.reply
+    # -----------------------------------------------------------------------
+
+    async def test_reply_spans_share_conversation_id(self) -> None:
+        """All spans from a single reply must share the same
+        conversation_id."""
+        self.model.set_responses(
+            [
+                _make_tool_call_response("c3", "Guangzhou"),
+                _make_text_response("Guangzhou is sunny."),
+            ],
+        )
+        msg = UserMsg(name="user", content="Weather in Guangzhou?")
+        await self.agent.reply(msg)
+
+        conv_ids = self._all_conv_ids()
+        self.assertEqual(
+            len(conv_ids),
+            1,
+            f"All spans must share exactly one conversation_id, "
+            f"got: {conv_ids}",
+        )
+
+    async def test_invoke_agent_span_has_response_attributes(self) -> None:
+        """invoke_agent span must carry gen_ai.output.messages attribute."""
+        self.model.set_responses(
+            [
+                _make_tool_call_response("c4", "Wuhan"),
+                _make_text_response("Wuhan weather: clear sky."),
+            ],
+        )
+        msg = UserMsg(name="user", content="Weather in Wuhan?")
+        await self.agent.reply(msg)
+
+        agent_spans = self._spans_by_name("invoke_agent")
+        self.assertEqual(
+            len(agent_spans),
+            1,
+            "Expected exactly one invoke_agent span",
+        )
+        span_attrs = dict(agent_spans[0].attributes or {})
+        output_raw = span_attrs.get("gen_ai.output.messages")
+        assert isinstance(
+            output_raw,
             str,
-            None,
-            None,
-        ]:
-            """Test async func returning sync generator"""
-
-            def sync_gen() -> Generator[str, None, None]:
-                """sync generator"""
-                for i in range(3):
-                    yield f"sync_chunk_{i}"
-
-            return sync_gen()
-
-        results = list(await test_func_return_with_sync_gen())
-        self.assertListEqual(
-            results,
-            ["sync_chunk_0", "sync_chunk_1", "sync_chunk_2"],
-        )
-
-        @trace(name="sync_func")
-        def sync_func(x: int) -> int:
-            """Test synchronous function"""
-            return x + 3
-
-        result = sync_func(4)
-        self.assertEqual(result, 7)
-
-        @trace(name="sync_gen")
-        def sync_gen() -> Generator[str, None, None]:
-            """Test synchronous generator"""
-            for i in range(3):
-                yield f"sync_chunk_{i}"
-
-        results = list(sync_gen())
-        self.assertListEqual(
-            results,
-            ["sync_chunk_0", "sync_chunk_1", "sync_chunk_2"],
-        )
-
-        @trace(name="sync_func_return_with_async_gen")
-        def sync_func_return_with_async_gen() -> AsyncGenerator[str, None]:
-            """Test sync func returning async generator"""
-
-            async def async_gen() -> AsyncGenerator[str, None]:
-                """async generator"""
-                for i in range(3):
-                    yield f"chunk_{i}"
-
-            return async_gen()
-
-        results = [_ async for _ in sync_func_return_with_async_gen()]
-        self.assertListEqual(results, ["chunk_0", "chunk_1", "chunk_2"])
-
-        # Error handling
-        @trace(name="error_sync_func")
-        def error_sync_func() -> int:
-            """Test error handling in sync function"""
-            raise ValueError("Negative value not allowed")
-
-        with self.assertRaises(ValueError):
-            error_sync_func()
-
-        @trace(name="error_async_func")
-        async def error_async_func() -> int:
-            """Test error handling in async function"""
-            raise ValueError("Negative value not allowed")
-
-        with self.assertRaises(ValueError):
-            await error_async_func()
-
-    async def test_trace_llm(self) -> None:
-        """Test tracing LLM"""
-
-        class LLM(ChatModelBase):
-            """Test LLM class"""
-
-            def __init__(self, stream: bool, raise_error: bool) -> None:
-                """Initialize LLM"""
-                super().__init__("test", stream)
-                self.raise_error = raise_error
-
-            @trace_llm
-            async def __call__(
-                self,
-                messages: list[dict],
-                **kwargs: Any,
-            ) -> AsyncGenerator[ChatResponse, None] | ChatResponse:
-                """Simulate LLM call"""
-
-                if self.raise_error:
-                    raise ValueError("Simulated error in LLM call")
-
-                if self.stream:
-
-                    async def generator() -> AsyncGenerator[
-                        ChatResponse,
-                        None,
-                    ]:
-                        for i in range(3):
-                            yield ChatResponse(
-                                id=f"msg_{i}",
-                                content=[
-                                    TextBlock(
-                                        type="text",
-                                        text="x" * (i + 1),
-                                    ),
-                                ],
-                            )
-
-                    return generator()
-                return ChatResponse(
-                    id="msg_0",
-                    content=[
-                        TextBlock(
-                            type="text",
-                            text="Hello, world!",
-                        ),
+        ), "invoke_agent span gen_ai.output.messages should be a string"
+        output = json.loads(output_raw)
+        self.assertEqual(
+            output,
+            [
+                {
+                    "role": "assistant",
+                    "parts": [
+                        {
+                            "type": "text",
+                            "content": "Wuhan weather: clear sky.",
+                        },
                     ],
-                )
-
-        stream_llm = LLM(True, False)
-        res = [_.content async for _ in await stream_llm([])]
-        self.assertListEqual(
-            res,
-            [
-                [TextBlock(type="text", text="x")],
-                [TextBlock(type="text", text="xx")],
-                [TextBlock(type="text", text="xxx")],
+                    "name": "test-agent",
+                    "finish_reason": "stop",
+                },
             ],
         )
 
-        non_stream_llm = LLM(False, False)
-        res = await non_stream_llm([])
-        self.assertListEqual(
-            res.content,
+    async def test_invoke_agent_span_has_input_attributes(self) -> None:
+        """invoke_agent span must carry gen_ai.input.messages attribute."""
+        self.model.set_responses(
             [
-                TextBlock(type="text", text="Hello, world!"),
+                _make_text_response("Simple answer."),
+            ],
+        )
+        msg = UserMsg(name="user", content="Simple question?")
+        await self.agent.reply(msg)
+
+        agent_spans = self._spans_by_name("invoke_agent")
+        self.assertEqual(
+            len(agent_spans),
+            1,
+            "Expected exactly one invoke_agent span",
+        )
+        span_attrs = dict(agent_spans[0].attributes or {})
+        input_raw = span_attrs.get("gen_ai.input.messages")
+        assert isinstance(
+            input_raw,
+            str,
+        ), "invoke_agent span gen_ai.input.messages should be a string"
+        input_msgs = json.loads(input_raw)
+        self.assertEqual(
+            input_msgs,
+            [
+                {
+                    "role": "user",
+                    "parts": [
+                        {"type": "text", "content": "Simple question?"},
+                    ],
+                    "name": "user",
+                    "finish_reason": "stop",
+                },
             ],
         )
 
-        error_llm = LLM(False, True)
-        with self.assertRaises(ValueError):
-            await error_llm([])
+    async def test_execute_tool_span_has_tool_name_attribute(self) -> None:
+        """execute_tool span must have the correct gen_ai.tool.name
+        attribute."""
+        self.model.set_responses(
+            [
+                _make_tool_call_response("c8", "Nanjing"),
+                _make_text_response("Nanjing result."),
+            ],
+        )
+        msg = UserMsg(name="user", content="Weather in Nanjing?")
+        await self.agent.reply(msg)
 
-    async def test_trace_reply(self) -> None:
-        """Test tracing reply"""
-
-        class Agent(AgentBase):
-            """Test Agent class"""
-
-            @trace_reply
-            async def reply(self, raise_error: bool = False) -> Msg:
-                """Simulate agent reply"""
-                if raise_error:
-                    raise ValueError("Simulated error in reply")
-                return Msg(
-                    "assistant",
-                    [TextBlock(type="text", text="Hello, world!")],
-                    "assistant",
-                )
-
-            async def observe(self, msg: Msg) -> None:
-                raise NotImplementedError()
-
-            async def handle_interrupt(
-                self,
-                *args: Any,
-                **kwargs: Any,
-            ) -> Msg:
-                """Handle interrupt"""
-                raise NotImplementedError()
-
-        agent = Agent()
-        res = await agent()
-        self.assertListEqual(
-            res.content,
-            [TextBlock(type="text", text="Hello, world!")],
+        tool_spans = self._spans_by_name("execute_tool")
+        self.assertEqual(
+            len(tool_spans),
+            1,
+            "Expected exactly one execute_tool span",
+        )
+        span_attrs = dict(tool_spans[0].attributes or {})
+        self.assertEqual(
+            span_attrs.get("gen_ai.tool.name"),
+            "get_weather",
+            "execute_tool span should have gen_ai.tool.name = get_weather",
         )
 
-        with self.assertRaises(ValueError):
-            await agent.reply(raise_error=True)
+    # -----------------------------------------------------------------------
+    # Tests: chat (LLM) span
+    # -----------------------------------------------------------------------
 
-    async def test_trace_format(self) -> None:
-        """Test tracing formatter"""
+    async def test_chat_span_has_model_and_provider(self) -> None:
+        """chat span must carry gen_ai.request.model and
+        gen_ai.provider.name."""
+        self.model.set_responses(
+            [_make_text_response("Hello from model.")],
+        )
+        msg = UserMsg(name="user", content="Hello?")
+        await self.agent.reply(msg)
 
-        class Formatter(FormatterBase):
-            """Test Formatter class"""
-
-            @trace_format
-            async def format(self, raise_error: bool = False) -> list[dict]:
-                """Simulate formatting"""
-                if raise_error:
-                    raise ValueError("Simulated error in formatting")
-                return [{"role": "user", "content": "Hello, world!"}]
-
-        formatter = Formatter()
-        res = await formatter.format()
-        self.assertListEqual(
-            res,
-            [{"role": "user", "content": "Hello, world!"}],
+        chat_spans = self._spans_by_name("chat")
+        self.assertEqual(len(chat_spans), 1, "Expected exactly one chat span")
+        span_attrs = dict(chat_spans[0].attributes or {})
+        self.assertEqual(
+            span_attrs.get("gen_ai.request.model"),
+            "mock-model",
+            "chat span gen_ai.request.model should equal mock-model",
+        )
+        self.assertEqual(
+            span_attrs.get("gen_ai.operation.name"),
+            "chat",
+            "chat span gen_ai.operation.name should equal chat",
         )
 
-        with self.assertRaises(ValueError):
-            await formatter.format(raise_error=True)
-
-    async def test_trace_toolkit(self) -> None:
-        """Test tracing toolkit"""
-        toolkit = Toolkit()
-
-        def func(raise_error: bool) -> ToolResponse:
-            """Test tool function"""
-            if raise_error:
-                raise ValueError("Simulated error in tool function")
-            return ToolResponse(
-                content=[
-                    TextBlock(type="text", text="Tool executed successfully"),
-                ],
-            )
-
-        toolkit.register_tool_function(func)
-        res = await toolkit.call_tool_function(
-            ToolUseBlock(
-                type="tool_use",
-                id="xxx",
-                name="func",
-                input={"raise_error": False},
-            ),
+    async def test_chat_span_has_output_messages(self) -> None:
+        """chat span must carry gen_ai.output.messages with response
+        content."""
+        self.model.set_responses(
+            [_make_text_response("Weather is fine.")],
         )
-        async for chunk in res:
-            self.assertListEqual(
-                chunk.content,
-                [TextBlock(type="text", text="Tool executed successfully")],
-            )
-        res = await toolkit.call_tool_function(
-            ToolUseBlock(
-                type="tool_use",
-                id="xxx",
-                name="func",
-                input={"raise_error": True},
-            ),
+        msg = UserMsg(name="user", content="How is the weather?")
+        await self.agent.reply(msg)
+
+        chat_spans = self._spans_by_name("chat")
+        self.assertEqual(len(chat_spans), 1, "Expected exactly one chat span")
+        span_attrs = dict(chat_spans[0].attributes or {})
+        output_raw = span_attrs.get("gen_ai.output.messages")
+        assert isinstance(
+            output_raw,
+            str,
+        ), "chat span gen_ai.output.messages should be a string"
+        output = json.loads(output_raw)
+        self.assertEqual(
+            output,
+            [
+                {
+                    "role": "assistant",
+                    "parts": [
+                        {"type": "text", "content": "Weather is fine."},
+                    ],
+                    "finish_reason": "stop",
+                },
+            ],
         )
-        async for chunk in res:
-            self.assertListEqual(
-                chunk.content,
-                [
-                    TextBlock(
-                        type="text",
-                        text="Error: Simulated error in tool function",
-                    ),
-                ],
-            )
 
-        async def gen_func(
-            raise_error: bool,
-        ) -> AsyncGenerator[ToolResponse, None]:
-            """Test async generator tool function"""
-            yield ToolResponse(
-                content=[TextBlock(type="text", text="Chunk 0")],
-            )
-            if raise_error:
-                raise ValueError(
-                    "Simulated error in async generator tool function",
-                )
-            yield ToolResponse(
-                content=[TextBlock(type="text", text="Chunk 1")],
-            )
-
-        toolkit.register_tool_function(gen_func)
-        res = await toolkit.call_tool_function(
-            ToolUseBlock(
-                type="tool_use",
-                id="xxx",
-                name="gen_func",
-                input={"raise_error": False},
-            ),
+    async def test_chat_span_has_usage_tokens(self) -> None:
+        """chat span must carry input/output token counts from usage."""
+        self.model.set_responses(
+            [_make_text_response("Token test.")],
         )
-        index = 0
-        async for chunk in res:
-            self.assertListEqual(
-                chunk.content,
-                [TextBlock(type="text", text=f"Chunk {index}")],
-            )
-            index += 1
+        msg = UserMsg(name="user", content="Count tokens?")
+        await self.agent.reply(msg)
 
-        res = await toolkit.call_tool_function(
-            ToolUseBlock(
-                type="tool_use",
-                id="xxx",
-                name="gen_func",
-                input={"raise_error": True},
-            ),
+        chat_spans = self._spans_by_name("chat")
+        self.assertEqual(len(chat_spans), 1, "Expected exactly one chat span")
+        span_attrs = dict(chat_spans[0].attributes or {})
+        self.assertEqual(
+            span_attrs.get("gen_ai.usage.input_tokens"),
+            15,
+            "chat span gen_ai.usage.input_tokens should equal 15",
         )
-        with self.assertRaises(ValueError):
-            async for _ in res:
-                pass
+        self.assertEqual(
+            span_attrs.get("gen_ai.usage.output_tokens"),
+            8,
+            "chat span gen_ai.usage.output_tokens should equal 8",
+        )
 
-    async def test_trace_embedding(self) -> None:
-        """Test tracing embedding"""
+    # -----------------------------------------------------------------------
+    # Tests: reply_id attribute
+    # -----------------------------------------------------------------------
 
-        class EmbeddingModel(EmbeddingModelBase):
-            """Test embedding model class"""
+    async def test_invoke_agent_span_has_reply_id(self) -> None:
+        """invoke_agent span from a normal reply must carry reply_id.
 
-            def __init__(self) -> None:
-                """Initialize embedding model"""
-                super().__init__("test_embedding", 3)
+        reply() delegates to _reply(), which is the only decorated entry
+        point, so there is exactly one invoke_agent span.  We search by
+        attribute rather than relying on list order for robustness.
+        """
+        self.model.set_responses(
+            [
+                _make_tool_call_response("r1", "Wuhan"),
+                _make_text_response("Wuhan: clear sky."),
+            ],
+        )
+        msg = UserMsg(name="user", content="Weather in Wuhan?")
+        await self.agent.reply(msg)
 
-            @trace_embedding
-            async def __call__(self, raise_error: bool) -> list[list[float]]:
-                """Simulate embedding call"""
-                if raise_error:
-                    raise ValueError("Simulated error in embedding call")
-                return [[0, 1, 2]]
+        agent_spans = self._spans_by_name("invoke_agent")
+        self.assertEqual(
+            len(agent_spans),
+            1,
+            "Expected exactly one invoke_agent span",
+        )
+        span_attrs = dict(agent_spans[0].attributes or {})
+        self.assertIn(
+            "agentscope.agent.reply_id",
+            span_attrs,
+            "invoke_agent span should have agentscope.agent.reply_id",
+        )
 
-        model = EmbeddingModel()
-        res = await model(False)
-        self.assertListEqual(res, [[0, 1, 2]])
+    # -----------------------------------------------------------------------
+    # Tests: HITL (Human-in-the-loop)
+    # -----------------------------------------------------------------------
 
-        with self.assertRaises(ValueError):
-            await model(True)
+    async def test_hitl_first_call_has_hitl_pending_attribute(self) -> None:
+        """First call in HITL flow must have
+        agentscope.agent.hitl_pending_tools."""
+        hitl_agent = Agent(
+            name="hitl-agent",
+            system_prompt="You are a test assistant.",
+            model=self.model,
+            toolkit=Toolkit(tools=[HitlWeatherTool()]),
+            middlewares=[TracingMiddleware()],
+        )
+        # The HITL tool returns ASK;
+        # first call ends with RequireUserConfirmEvent
+        self.model.set_responses(
+            [_make_tool_call_response("h1", "Beijing")],
+        )
+        self.exporter.clear()
 
-    async def asyncTearDown(self) -> None:
-        """Tear down the environment"""
-        _config.trace_enabled = True
+        msg = UserMsg(name="user", content="Weather in Beijing?")
+        async for _ in hitl_agent.reply_stream(msg):
+            pass
+
+        first_spans = self._spans_by_name("invoke_agent")
+        self.assertEqual(
+            len(first_spans),
+            1,
+            "Expected exactly one invoke_agent span from first HITL call",
+        )
+        span_attrs = dict(first_spans[0].attributes or {})
+        self.assertIn(
+            "agentscope.agent.hitl_pending_tools",
+            span_attrs,
+            "First HITL span should carry agentscope.agent.hitl_pending_tools",
+        )
+        pending = json.loads(span_attrs["agentscope.agent.hitl_pending_tools"])
+        self.assertEqual(pending, ["get_weather"])
+
+    async def test_hitl_spans_share_reply_id(self) -> None:
+        """Both HITL calls must share the same agentscope.agent.reply_id."""
+        hitl_agent = Agent(
+            name="hitl-agent2",
+            system_prompt="You are a test assistant.",
+            model=self.model,
+            toolkit=Toolkit(tools=[HitlWeatherTool()]),
+            middlewares=[TracingMiddleware()],
+        )
+
+        # First call: agent asks for confirmation
+        self.model.set_responses(
+            [_make_tool_call_response("h2", "Shanghai")],
+        )
+        self.exporter.clear()
+
+        require_confirm_event = None
+        async for evt in hitl_agent.reply_stream(
+            UserMsg(name="user", content="Weather in Shanghai?"),
+        ):
+            if isinstance(evt, RequireUserConfirmEvent):
+                require_confirm_event = evt
+
+        self.assertIsNotNone(
+            require_confirm_event,
+            "Expected RequireUserConfirmEvent",
+        )
+
+        first_spans = self._spans_by_name("invoke_agent")
+        first_reply_ids = {
+            dict(s.attributes or {}).get("agentscope.agent.reply_id")
+            for s in first_spans
+            if "agentscope.agent.reply_id" in (s.attributes or {})
+        }
+        self.assertEqual(len(first_reply_ids), 1)
+        reply_id_first = next(iter(first_reply_ids))
+
+        # Second call: user confirms
+        self.model.set_responses(
+            [_make_text_response("Shanghai: 18°C, raining.")],
+        )
+        self.exporter.clear()
+
+        confirm_event = UserConfirmResultEvent(
+            reply_id=require_confirm_event.reply_id,
+            confirm_results=[
+                ConfirmResult(
+                    confirmed=True,
+                    tool_call=require_confirm_event.tool_calls[0],
+                ),
+            ],
+        )
+        await hitl_agent.reply(inputs=confirm_event)
+
+        second_spans = self._spans_by_name("invoke_agent")
+        second_reply_ids = {
+            dict(s.attributes or {}).get("agentscope.agent.reply_id")
+            for s in second_spans
+            if "agentscope.agent.reply_id" in (s.attributes or {})
+        }
+        self.assertEqual(len(second_reply_ids), 1)
+        reply_id_second = next(iter(second_reply_ids))
+
+        self.assertEqual(
+            reply_id_first,
+            reply_id_second,
+            "Both HITL calls must share the same reply_id",
+        )
+
+    async def test_hitl_second_call_has_incoming_event_type(self) -> None:
+        """Second call in HITL flow must carry
+        incoming_event_type=user_confirm_result."""
+        hitl_agent = Agent(
+            name="hitl-agent3",
+            system_prompt="You are a test assistant.",
+            model=self.model,
+            toolkit=Toolkit(tools=[HitlWeatherTool()]),
+            middlewares=[TracingMiddleware()],
+        )
+
+        # First call: agent asks for confirmation
+        self.model.set_responses(
+            [_make_tool_call_response("h3", "Tianjin")],
+        )
+        self.exporter.clear()
+
+        require_confirm_event = None
+        async for evt in hitl_agent.reply_stream(
+            UserMsg(name="user", content="Weather in Tianjin?"),
+        ):
+            if isinstance(evt, RequireUserConfirmEvent):
+                require_confirm_event = evt
+
+        self.assertIsNotNone(
+            require_confirm_event,
+            "Expected RequireUserConfirmEvent",
+        )
+
+        # Second call: user confirms
+        self.model.set_responses(
+            [_make_text_response("Tianjin: windy, 12°C.")],
+        )
+        self.exporter.clear()
+
+        confirm_event = UserConfirmResultEvent(
+            reply_id=require_confirm_event.reply_id,
+            confirm_results=[
+                ConfirmResult(
+                    confirmed=True,
+                    tool_call=require_confirm_event.tool_calls[0],
+                ),
+            ],
+        )
+        await hitl_agent.reply(inputs=confirm_event)
+
+        agent_spans = self._spans_by_name("invoke_agent")
+        self.assertEqual(
+            len(agent_spans),
+            1,
+            "Expected exactly one invoke_agent span from second HITL call",
+        )
+        span_attrs = dict(agent_spans[0].attributes or {})
+        self.assertEqual(
+            span_attrs.get("agentscope.agent.incoming_event_type"),
+            "user_confirm_result",
+            "Second HITL invoke_agent span should have "
+            "incoming_event_type=user_confirm_result",
+        )
+
+    # -----------------------------------------------------------------------
+    # Tests: External execution
+    # -----------------------------------------------------------------------
+
+    async def test_external_execution_first_call_has_pending_attribute(
+        self,
+    ) -> None:
+        """First call must have
+        agentscope.agent.external_execution_pending_tools."""
+        ext_agent = Agent(
+            name="ext-agent",
+            system_prompt="You are a test assistant.",
+            model=self.model,
+            toolkit=Toolkit(tools=[ExternalWeatherTool()]),
+            middlewares=[TracingMiddleware()],
+        )
+        self.model.set_responses(
+            [_make_tool_call_response("e1", "Guangzhou")],
+        )
+        self.exporter.clear()
+
+        async for _ in ext_agent.reply_stream(
+            UserMsg(name="user", content="Weather in Guangzhou?"),
+        ):
+            pass
+
+        first_spans = self._spans_by_name("invoke_agent")
+        self.assertEqual(
+            len(first_spans),
+            1,
+            "Expected exactly one invoke_agent span",
+        )
+        span_attrs = dict(first_spans[0].attributes or {})
+        self.assertIn(
+            "agentscope.agent.external_execution_pending_tools",
+            span_attrs,
+            "First external-execution span should carry "
+            "agentscope.agent.external_execution_pending_tools",
+        )
+        pending = json.loads(
+            span_attrs["agentscope.agent.external_execution_pending_tools"],
+        )
+        self.assertEqual(pending, ["get_weather"])
+
+    async def test_external_execution_spans_share_reply_id(self) -> None:
+        """Both external-execution calls must share the same reply_id."""
+        ext_agent = Agent(
+            name="ext-agent-rid",
+            system_prompt="You are a test assistant.",
+            model=self.model,
+            toolkit=Toolkit(tools=[ExternalWeatherTool()]),
+            middlewares=[TracingMiddleware()],
+        )
+
+        # First call: agent requires external execution
+        self.model.set_responses(
+            [_make_tool_call_response("ex-r1", "Nanjing")],
+        )
+        self.exporter.clear()
+
+        require_ext_event = None
+        async for evt in ext_agent.reply_stream(
+            UserMsg(name="user", content="Weather in Nanjing?"),
+        ):
+            if isinstance(evt, RequireExternalExecutionEvent):
+                require_ext_event = evt
+
+        self.assertIsNotNone(
+            require_ext_event,
+            "Expected RequireExternalExecutionEvent",
+        )
+
+        first_spans = self._spans_by_name("invoke_agent")
+        first_reply_ids = {
+            dict(s.attributes or {}).get("agentscope.agent.reply_id")
+            for s in first_spans
+            if "agentscope.agent.reply_id" in (s.attributes or {})
+        }
+        self.assertEqual(len(first_reply_ids), 1)
+        reply_id_first = next(iter(first_reply_ids))
+
+        # Second call: inject external result
+        self.model.set_responses(
+            [_make_text_response("Nanjing: clear, 18°C.")],
+        )
+        self.exporter.clear()
+
+        ext_result = ExternalExecutionResultEvent(
+            reply_id=require_ext_event.reply_id,
+            execution_results=[
+                ToolResultBlock(
+                    id=require_ext_event.tool_calls[0].id,
+                    name="get_weather",
+                    output="Nanjing: clear, 18°C.",
+                    state=ToolResultState.SUCCESS,
+                ),
+            ],
+        )
+        await ext_agent.reply(inputs=ext_result)
+
+        second_spans = self._spans_by_name("invoke_agent")
+        second_reply_ids = {
+            dict(s.attributes or {}).get("agentscope.agent.reply_id")
+            for s in second_spans
+            if "agentscope.agent.reply_id" in (s.attributes or {})
+        }
+        self.assertEqual(len(second_reply_ids), 1)
+        reply_id_second = next(iter(second_reply_ids))
+
+        self.assertEqual(
+            reply_id_first,
+            reply_id_second,
+            "Both external-execution calls must share the same reply_id",
+        )
+
+    async def test_external_execution_second_call_has_synthetic_tool_span(
+        self,
+    ) -> None:
+        """Second call with ExternalExecutionResultEvent must produce
+        execute_tool span."""
+        ext_agent = Agent(
+            name="ext-agent2",
+            system_prompt="You are a test assistant.",
+            model=self.model,
+            toolkit=Toolkit(tools=[ExternalWeatherTool()]),
+            middlewares=[TracingMiddleware()],
+        )
+
+        # First call
+        self.model.set_responses(
+            [_make_tool_call_response("e2", "Shenzhen")],
+        )
+        self.exporter.clear()
+
+        require_ext_event = None
+        async for evt in ext_agent.reply_stream(
+            UserMsg(name="user", content="Weather in Shenzhen?"),
+        ):
+            if isinstance(evt, RequireExternalExecutionEvent):
+                require_ext_event = evt
+
+        self.assertIsNotNone(require_ext_event)
+
+        # Second call: inject external result
+        self.model.set_responses(
+            [_make_text_response("Shenzhen: warm, 28°C.")],
+        )
+        self.exporter.clear()
+
+        ext_result = ExternalExecutionResultEvent(
+            reply_id=require_ext_event.reply_id,
+            execution_results=[
+                ToolResultBlock(
+                    id=require_ext_event.tool_calls[0].id,
+                    name="get_weather",
+                    output="Shenzhen: warm, 28°C.",
+                    state=ToolResultState.SUCCESS,
+                ),
+            ],
+        )
+        await ext_agent.reply(inputs=ext_result)
+
+        tool_spans = self._spans_by_name("execute_tool")
+        self.assertEqual(
+            len(tool_spans),
+            1,
+            "Expected exactly one synthetic execute_tool span",
+        )
+        span_attrs = dict(tool_spans[0].attributes or {})
+        self.assertEqual(
+            span_attrs.get("agentscope.agent.is_external_execution"),
+            True,
+            "Synthetic execute_tool span should have "
+            "is_external_execution=True",
+        )
+        self.assertEqual(span_attrs.get("gen_ai.tool.name"), "get_weather")
+
+    async def test_external_execution_second_call_has_incoming_event_type(
+        self,
+    ) -> None:
+        """Second call span must have
+        incoming_event_type=external_execution_result."""
+        ext_agent = Agent(
+            name="ext-agent3",
+            system_prompt="You are a test assistant.",
+            model=self.model,
+            toolkit=Toolkit(tools=[ExternalWeatherTool()]),
+            middlewares=[TracingMiddleware()],
+        )
+
+        # First call
+        self.model.set_responses(
+            [_make_tool_call_response("e3", "Chengdu")],
+        )
+        self.exporter.clear()
+
+        require_ext_event = None
+        async for evt in ext_agent.reply_stream(
+            UserMsg(name="user", content="Weather in Chengdu?"),
+        ):
+            if isinstance(evt, RequireExternalExecutionEvent):
+                require_ext_event = evt
+
+        # Second call
+        self.model.set_responses([_make_text_response("Chengdu: cloudy.")])
+        self.exporter.clear()
+
+        ext_result = ExternalExecutionResultEvent(
+            reply_id=require_ext_event.reply_id,
+            execution_results=[
+                ToolResultBlock(
+                    id=require_ext_event.tool_calls[0].id,
+                    name="get_weather",
+                    output="Chengdu: cloudy, 15°C.",
+                    state=ToolResultState.SUCCESS,
+                ),
+            ],
+        )
+        await ext_agent.reply(inputs=ext_result)
+
+        agent_spans = self._spans_by_name("invoke_agent")
+        self.assertEqual(
+            len(agent_spans),
+            1,
+            "Expected exactly one invoke_agent span",
+        )
+        span_attrs = dict(agent_spans[0].attributes or {})
+        self.assertEqual(
+            span_attrs.get("agentscope.agent.incoming_event_type"),
+            "external_execution_result",
+        )

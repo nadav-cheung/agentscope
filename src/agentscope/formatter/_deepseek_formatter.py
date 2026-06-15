@@ -1,39 +1,37 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=too-many-branches
 """The DeepSeek formatter module."""
-import json
 from typing import Any
 
-from ._truncated_formatter_base import TruncatedFormatterBase
+from pydantic import Field
+
+from ._formatter_base import FormatterBase
 from .._logging import logger
-from ..message import Msg, TextBlock, ToolUseBlock, ToolResultBlock
-from ..token import TokenCounterBase
+from ..message import (
+    Msg,
+    TextBlock,
+    DataBlock,
+    ThinkingBlock,
+    HintBlock,
+    ToolCallBlock,
+    ToolResultBlock,
+)
 
 
-class DeepSeekChatFormatter(TruncatedFormatterBase):
+class DeepSeekChatFormatter(FormatterBase):
     """The DeepSeek formatter class for chatbot scenario, where only a user
     and an agent are involved. We use the `role` field to identify different
     entities in the conversation.
     """
 
-    support_tools_api: bool = True
-    """Whether support tools API"""
+    input_types: list[str] = Field(
+        default_factory=lambda: ["text/plain"],
+        description=(
+            'The supported input types. Defaults to ``["text/plain"]`` '
+            "(DeepSeek does not support multimodal input)."
+        ),
+    )
 
-    support_multiagent: bool = False
-    """Whether support multi-agent conversations"""
-
-    support_vision: bool = False
-    """Whether support vision data"""
-
-    supported_blocks: list[type] = [
-        TextBlock,
-        # Tool use
-        ToolUseBlock,
-        ToolResultBlock,
-    ]
-    """The list of supported message blocks"""
-
-    async def _format(
+    async def format(
         self,
         msgs: list[Msg],
     ) -> list[dict[str, Any]]:
@@ -56,136 +54,213 @@ class DeepSeekChatFormatter(TruncatedFormatterBase):
             tool_calls = []
 
             for block in msg.get_content_blocks():
-                typ = block.get("type")
-                if typ == "text":
-                    content_blocks.append({**block})
-                elif typ == "thinking":
-                    reasoning_content_blocks.append({**block})
+                if isinstance(block, TextBlock):
+                    content_blocks.append({"type": "text", "text": block.text})
 
-                elif typ == "tool_use":
+                elif isinstance(block, ThinkingBlock):
+                    reasoning_content_blocks.append(block.thinking)
+
+                elif isinstance(block, HintBlock):
+                    if (
+                        content_blocks
+                        or tool_calls
+                        or reasoning_content_blocks
+                    ):
+                        content_text = "\n".join(
+                            b.get("text", "") for b in content_blocks
+                        )
+                        msg_flush_hint: dict[str, Any] = {
+                            "role": msg.role,
+                            "content": content_text
+                            or (None if tool_calls else ""),
+                        }
+                        if msg.role == "assistant":
+                            msg_flush_hint["reasoning_content"] = (
+                                "\n".join(reasoning_content_blocks)
+                                if reasoning_content_blocks
+                                else ""
+                            )
+                        if tool_calls:
+                            msg_flush_hint["tool_calls"] = tool_calls
+                        messages.append(msg_flush_hint)
+                        content_blocks = []
+                        reasoning_content_blocks = []
+                        tool_calls = []
+
+                    if isinstance(block.hint, str):
+                        messages.append(
+                            {"role": "user", "content": block.hint},
+                        )
+                    else:
+                        hint_text_parts: list[str] = []
+                        for sub in block.hint:
+                            if isinstance(sub, TextBlock):
+                                hint_text_parts.append(sub.text)
+                            elif isinstance(sub, DataBlock):
+                                hint_text_parts.append(
+                                    f"[{sub.source.media_type} attached, "
+                                    "not supported by this provider]",
+                                )
+                        if hint_text_parts:
+                            messages.append(
+                                {
+                                    "role": "user",
+                                    "content": "\n".join(hint_text_parts),
+                                },
+                            )
+
+                elif isinstance(block, ToolCallBlock):
                     tool_calls.append(
                         {
-                            "id": block.get("id"),
+                            "id": block.id,
                             "type": "function",
                             "function": {
-                                "name": block.get("name"),
-                                "arguments": json.dumps(
-                                    block.get("input", {}),
-                                    ensure_ascii=False,
-                                ),
+                                "name": block.name,
+                                "arguments": block.input,
                             },
                         },
                     )
 
-                elif typ == "tool_result":
+                elif isinstance(block, ToolResultBlock):
+                    if (
+                        content_blocks
+                        or tool_calls
+                        or reasoning_content_blocks
+                    ):
+                        content_text = "\n".join(
+                            b.get("text", "") for b in content_blocks
+                        )
+                        msg_flush: dict[str, Any] = {
+                            "role": msg.role,
+                            "content": content_text
+                            or (None if tool_calls else ""),
+                        }
+                        if msg.role == "assistant":
+                            msg_flush["reasoning_content"] = (
+                                "\n".join(reasoning_content_blocks)
+                                if reasoning_content_blocks
+                                else ""
+                            )
+                        if tool_calls:
+                            msg_flush["tool_calls"] = tool_calls
+                        messages.append(msg_flush)
+                        content_blocks = []
+                        reasoning_content_blocks = []
+                        tool_calls = []
+
                     textual_output, _ = self.convert_tool_result_to_string(
-                        block.get("output"),  # type: ignore[arg-type]
+                        block.output,
                     )
                     messages.append(
                         {
                             "role": "tool",
-                            "tool_call_id": block.get("id"),
+                            "tool_call_id": block.id,
                             "content": textual_output,
-                            "name": block.get("name"),
+                            "name": block.name,
                         },
                     )
 
                 else:
                     logger.warning(
                         "Unsupported block type %s in the message, skipped.",
-                        typ,
+                        type(block),
                     )
-            content_msg = "\n".join(
-                content.get("text", "") for content in content_blocks
-            )
-            reasoning_msg = "\n".join(
-                reasoning.get("thinking", "")
-                for reasoning in reasoning_content_blocks
-            )
 
-            msg_deepseek = {
+            content_msg = "\n".join(b.get("text", "") for b in content_blocks)
+
+            msg_deepseek: dict[str, Any] = {
                 "role": msg.role,
-                "content": content_msg or None,
+                "content": content_msg or (None if tool_calls else ""),
             }
 
-            if reasoning_msg:
-                msg_deepseek["reasoning_content"] = reasoning_msg
+            # DeepSeek requires `reasoning_content` to be present on ALL
+            # assistant messages in multi-turn conversations that use thinking
+            # mode.  When switching from a non-thinking model, historical
+            # messages will have no ThinkingBlock, so we always include the
+            # field (as None) for assistant messages to keep the context valid.
+            if msg.role == "assistant":
+                msg_deepseek["reasoning_content"] = (
+                    "\n".join(reasoning_content_blocks)
+                    if reasoning_content_blocks
+                    else ""
+                )
 
             if tool_calls:
                 msg_deepseek["tool_calls"] = tool_calls
 
-            if msg_deepseek["content"] or msg_deepseek.get("tool_calls"):
+            if (
+                msg_deepseek["content"]
+                or msg_deepseek.get("tool_calls")
+                or reasoning_content_blocks
+            ):
                 messages.append(msg_deepseek)
 
         return messages
 
 
-class DeepSeekMultiAgentFormatter(TruncatedFormatterBase):
+class DeepSeekMultiAgentFormatter(FormatterBase):
     """
     DeepSeek formatter for multi-agent conversations, where more than
     a user and an agent are involved.
     """
 
-    support_tools_api: bool = True
-    """Whether support tools API"""
-
-    support_multiagent: bool = True
-    """Whether support multi-agent conversations"""
-
-    support_vision: bool = False
-    """Whether support vision data"""
-
-    supported_blocks: list[type] = [
-        TextBlock,
-        # Tool use
-        ToolUseBlock,
-        ToolResultBlock,
-    ]
-    """The list of supported message blocks"""
-
-    def __init__(
-        self,
-        conversation_history_prompt: str = (
+    conversation_history_prompt: str = Field(
+        default=(
             "# Conversation History\n"
             "The content between <history></history> tags contains "
             "your conversation history\n"
         ),
-        token_counter: TokenCounterBase | None = None,
-        max_tokens: int | None = None,
-    ) -> None:
-        """Initialize the DeepSeek multi-agent formatter.
+        description="The prompt to use for the conversation history section.",
+    )
 
-        Args:
-            conversation_history_prompt (`str`):
-                The prompt to use for the conversation history section.
-            token_counter (`TokenCounterBase | None`, optional):
-                A token counter instance used to count tokens in the messages.
-                If not provided, the formatter will format the messages
-                without considering token limits.
-            max_tokens (`int | None`, optional):
-                The maximum number of tokens allowed in the formatted
-                messages. If not provided, the formatter will not truncate
-                the messages.
-        """
-        super().__init__(token_counter=token_counter, max_tokens=max_tokens)
-        self.conversation_history_prompt = conversation_history_prompt
+    input_types: list[str] = Field(
+        default_factory=lambda: ["text/plain"],
+        description=(
+            'The supported input types. Defaults to ``["text/plain"]`` '
+            "(DeepSeek does not support multimodal input)."
+        ),
+    )
+
+    async def format(self, msgs: list[Msg]) -> list[dict[str, Any]]:
+        """Format input messages into the structure required by the DeepSeek
+        API for multi-agent conversations."""
+        self.assert_list_of_msgs(msgs)
+
+        formatted_msgs = []
+        start_index = 0
+        if len(msgs) > 0 and msgs[0].role == "system":
+            formatted_msgs.append(
+                await self._format_system_message(msgs[0]),
+            )
+            start_index = 1
+
+        is_first_agent_message = True
+        async for typ, group in self._group_messages(msgs[start_index:]):
+            match typ:
+                case "tool_sequence":
+                    formatted_msgs.extend(
+                        await self._format_tool_sequence(group),
+                    )
+                case "agent_message":
+                    formatted_msgs.extend(
+                        await self._format_agent_message(
+                            group,
+                            is_first_agent_message,
+                        ),
+                    )
+                    is_first_agent_message = False
+
+        return formatted_msgs
 
     async def _format_tool_sequence(
         self,
         msgs: list[Msg],
     ) -> list[dict[str, Any]]:
         """Given a sequence of tool call/result messages, format them into
-        the required format for the DeepSeek API.
-
-        Args:
-            msgs (`list[Msg]`):
-                The list of messages containing tool calls/results to format.
-
-        Returns:
-            `list[dict[str, Any]]`:
-                A list of dictionaries formatted for the DeepSeek API.
-        """
-        return await DeepSeekChatFormatter().format(msgs)
+        the required format for the DeepSeek API."""
+        return await DeepSeekChatFormatter(
+            input_types=self.input_types,
+        ).format(msgs)
 
     async def _format_agent_message(
         self,
@@ -193,73 +268,46 @@ class DeepSeekMultiAgentFormatter(TruncatedFormatterBase):
         is_first: bool = True,
     ) -> list[dict[str, Any]]:
         """Given a sequence of messages without tool calls/results, format
-        them into the required format for the DeepSeek API.
-
-        Args:
-            msgs (`list[Msg]`):
-                A list of Msg objects to be formatted.
-            is_first (`bool`, defaults to `True`):
-                Whether this is the first agent message in the conversation.
-                If `True`, the conversation history prompt will be included.
-
-        Returns:
-            `list[dict[str, Any]]`:
-                A list of dictionaries formatted for the DeepSeek API.
-        """
+        them into the required format for the DeepSeek API."""
 
         if is_first:
             conversation_history_prompt = self.conversation_history_prompt
         else:
             conversation_history_prompt = ""
 
-        # Format into required DeepSeek format
         formatted_msgs: list[dict] = []
-
-        conversation_blocks: list = []
         accumulated_text = []
+
         for msg in msgs:
             for block in msg.get_content_blocks():
-                if block["type"] == "text":
-                    accumulated_text.append(f"{msg.name}: {block['text']}")
+                if isinstance(block, TextBlock):
+                    accumulated_text.append(f"{msg.name}: {block.text}")
 
+        conversation_blocks_text = ""
         if accumulated_text:
-            conversation_blocks.append(
-                {"text": "\n".join(accumulated_text)},
+            conversation_blocks_text = (
+                conversation_history_prompt
+                + "<history>\n"
+                + "\n".join(accumulated_text)
+                + "\n</history>"
             )
 
-        if conversation_blocks:
-            if conversation_blocks[0].get("text"):
-                conversation_blocks[0]["text"] = (
-                    conversation_history_prompt
-                    + "<history>\n"
-                    + conversation_blocks[0]["text"]
-                )
-
-            else:
-                conversation_blocks.insert(
-                    0,
-                    {
-                        "text": conversation_history_prompt + "<history>\n",
-                    },
-                )
-
-            if conversation_blocks[-1].get("text"):
-                conversation_blocks[-1]["text"] += "\n</history>"
-
-            else:
-                conversation_blocks.append({"text": "</history>"})
-
-        conversation_blocks_text = "\n".join(
-            conversation_block.get("text", "")
-            for conversation_block in conversation_blocks
-        )
-
-        user_message = {
-            "role": "user",
-            "content": conversation_blocks_text,
-        }
-
-        if conversation_blocks:
-            formatted_msgs.append(user_message)
+        if conversation_blocks_text:
+            formatted_msgs.append(
+                {
+                    "role": "user",
+                    "content": conversation_blocks_text,
+                },
+            )
 
         return formatted_msgs
+
+    @staticmethod
+    async def _format_system_message(
+        msg: Msg,
+    ) -> dict[str, Any]:
+        """Format system message for DeepSeek API."""
+        return {
+            "role": "system",
+            "content": msg.get_text_content(),
+        }

@@ -13,6 +13,10 @@ repos:
       - id: check-toml
       - id: check-docstring-first
       - id: check-json
+        exclude: |
+          (?x)^(
+              .*tsconfig(\.[^.]+)?\.json
+          )$
       - id: fix-encoding-pragma
       - id: detect-private-key
       - id: trailing-whitespace
@@ -99,6 +103,11 @@ repos:
           --disable=W0632,
           --disable=W0123,
           --disable=C3001,
+          --max-branches=30,
+          --max-nested-blocks=7,
+          --max-statements=100,
+          --max-returns=10,
+          --max-module-lines=3000,
         ]
   - repo: https://github.com/regebro/pyroma
     rev: "5.0"

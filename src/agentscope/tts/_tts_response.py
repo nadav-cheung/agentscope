@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """The TTS response module."""
-
 from dataclasses import dataclass, field
 from typing import Literal
 
 from .._utils._common import _get_timestamp
 from .._utils._mixin import DictMixin
-from ..message import AudioBlock
+from ..message import DataBlock
 from ..types import JSONSerializableObject
 
 
@@ -31,8 +30,10 @@ class TTSUsage(DictMixin):
 class TTSResponse(DictMixin):
     """The response of TTS models."""
 
-    content: AudioBlock | None
-    """The content of the TTS response, which contains audio block"""
+    content: DataBlock | None
+    """The audio chunk produced by the TTS model. The audio format is
+    indicated by ``content.source.media_type`` (e.g.
+    ``"audio/pcm;rate=24000"``, ``"audio/mpeg"``)."""
 
     id: str = field(default_factory=lambda: _get_timestamp(True))
     """The unique identifier of the response."""
@@ -51,5 +52,5 @@ class TTSResponse(DictMixin):
     )
     """The metadata of the TTS response."""
 
-    is_last: bool = True
+    is_last: bool = field(default_factory=lambda: True)
     """Whether this is the last response in a stream of TTS responses."""

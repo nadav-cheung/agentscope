@@ -1,545 +1,589 @@
 # -*- coding: utf-8 -*-
-"""Unit tests for DashScope API model class."""
-from typing import Any, AsyncGenerator
-from unittest.async_case import IsolatedAsyncioTestCase
-from unittest.mock import AsyncMock, Mock, patch
-from http import HTTPStatus
-from pydantic import BaseModel
+# pylint: disable=protected-access
+"""Unit tests for DashScopeChatModel with mocked API responses.
 
-from agentscope.model import DashScopeChatModel, ChatResponse
-from agentscope.message import TextBlock, ToolUseBlock, ThinkingBlock
+Tests cover both non-streaming and streaming modes.
+"""
+import base64
+import io
+import wave
+from typing import Any
+import unittest
+from unittest import IsolatedAsyncioTestCase
+from unittest.mock import AsyncMock, MagicMock, patch
+
+from utils import AnyString
+
+from agentscope.message import (
+    TextBlock,
+    ToolCallBlock,
+    ThinkingBlock,
+    DataBlock,
+)
+from agentscope.model import DashScopeChatModel
+from agentscope.credential import DashScopeCredential
+from agentscope.tool import ToolChoice
+
+A = AnyString()
 
 
-class MessageMock(dict):
-    """Mock class for message objects, supports both dictionary and
-    attribute access."""
-
-    def __init__(self, data: dict[str, Any]):
-        super().__init__(data)
-        for key, value in data.items():
-            setattr(self, key, value)
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 
 
-class SampleModel(BaseModel):
-    """Sample Pydantic model for testing structured output."""
+def _make_model(stream: bool = False) -> Any:
+    return DashScopeChatModel(
+        credential=DashScopeCredential(api_key="test"),
+        model="qwen3-max",
+        stream=stream,
+        max_retries=3,
+        context_size=131_072,
+        parameters=DashScopeChatModel.Parameters(
+            max_tokens=1000,
+            thinking_enable=True,
+            thinking_budget=100,
+        ),
+    )
 
-    name: str
-    age: int
+
+def _mock_completion(
+    text: Any = None,
+    tool_calls: Any = None,
+    reasoning: Any = None,
+    response_id: str = "req-1",
+) -> MagicMock:
+    """Build a mock non-streaming ChatCompletion response."""
+    msg = MagicMock()
+    msg.content = text
+    msg.reasoning_content = reasoning
+    msg.tool_calls = None
+
+    if tool_calls:
+        tc_mocks = []
+        for tc in tool_calls:
+            m = MagicMock()
+            m.id = tc["id"]
+            m.function.name = tc["name"]
+            m.function.arguments = tc["arguments"]
+            tc_mocks.append(m)
+        msg.tool_calls = tc_mocks
+
+    choice = MagicMock()
+    choice.message = msg
+
+    resp = MagicMock()
+    resp.id = response_id
+    resp.choices = [choice]
+    resp.usage = MagicMock()
+    resp.usage.prompt_tokens = 10
+    resp.usage.completion_tokens = 5
+    resp.usage.prompt_tokens_details = None
+    return resp
 
 
-class TestDashScopeChatModel(IsolatedAsyncioTestCase):
-    """Test cases for DashScopeChatModel."""
+def _make_stream_chunk(
+    delta_text: str | None = None,
+    delta_reasoning: str | None = None,
+    tool_calls: list | None = None,
+    delta_audio: dict | None = None,
+    response_id: str = "req-1",
+    usage: dict | None = None,
+    has_choices: bool = True,
+) -> MagicMock:
+    """Build a single mock streaming chunk."""
+    chunk = MagicMock()
+    chunk.id = response_id
 
-    def test_init_default_params(self) -> None:
-        """Test initialization with default parameters."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-        )
-        self.assertEqual(model.model_name, "qwen-turbo")
-        self.assertEqual(model.api_key, "test_key")
-        self.assertTrue(model.stream)
-        self.assertIsNone(model.enable_thinking)
-        self.assertEqual(model.generate_kwargs, {})
+    if usage:
+        chunk.usage = MagicMock()
+        chunk.usage.prompt_tokens = usage.get("prompt_tokens", 0)
+        chunk.usage.completion_tokens = usage.get("completion_tokens", 0)
+        chunk.usage.prompt_tokens_details = None
+    else:
+        chunk.usage = None
 
-    def test_init_with_enable_thinking_forces_stream(self) -> None:
-        """Test that enable_thinking=True forces stream=True."""
-        with patch("agentscope.model._dashscope_model.logger") as mock_logger:
-            model = DashScopeChatModel(
-                model_name="qwen-turbo",
-                api_key="test_key",
-                stream=False,
-                enable_thinking=True,
-            )
-            self.assertTrue(model.stream)
-            self.assertTrue(model.enable_thinking)
-            mock_logger.info.assert_called_once()
+    if has_choices:
+        delta = MagicMock()
+        delta.content = delta_text
+        delta.reasoning_content = delta_reasoning
+        delta.tool_calls = tool_calls
+        delta.audio = delta_audio
+        choice = MagicMock()
+        choice.delta = delta
+        chunk.choices = [choice]
+    else:
+        chunk.choices = []
 
-    def test_init_with_custom_params(self) -> None:
-        """Test initialization with custom parameters."""
-        generate_kwargs = {"temperature": 0.7, "max_tokens": 1000}
-        model = DashScopeChatModel(
-            model_name="qwen-max",
-            api_key="test_key",
-            stream=False,
-            enable_thinking=False,
-            generate_kwargs=generate_kwargs,
-        )
-        self.assertEqual(model.model_name, "qwen-max")
-        self.assertFalse(model.stream)
-        self.assertFalse(model.enable_thinking)
-        self.assertEqual(model.generate_kwargs, generate_kwargs)
+    return chunk
 
-    async def test_call_with_regular_model(self) -> None:
-        """Test calling a regular model."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-            stream=False,
-        )
-        messages = [{"role": "user", "content": "Hello"}]
 
-        mock_response = self._create_mock_response(
-            "Hello! How can I help you?",
-        )
-        with patch(
-            "dashscope.aigc.generation.AioGeneration.call",
-        ) as mock_call:
-            mock_call.return_value = mock_response
-            result = await model(messages)
-            call_args = mock_call.call_args[1]
-            self.assertEqual(call_args["messages"], messages)
-            self.assertEqual(call_args["model"], "qwen-turbo")
-            self.assertFalse(call_args["stream"])
-            self.assertIsInstance(result, ChatResponse)
-            expected_content = [
-                TextBlock(type="text", text="Hello! How can I help you?"),
-            ]
-            self.assertEqual(result.content, expected_content)
+def _make_tool_call_delta(
+    index: int,
+    tc_id: str | None = None,
+    name: str | None = None,
+    arguments: str | None = None,
+) -> MagicMock:
+    tc = MagicMock()
+    tc.index = index
+    tc.id = tc_id
+    tc.function = MagicMock()
+    tc.function.name = name
+    tc.function.arguments = arguments
+    return tc
 
-    async def test_call_with_tools_integration(self) -> None:
-        """Test full integration of tool calls."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-            stream=False,
-        )
-        messages = [{"role": "user", "content": "What's the weather?"}]
-        tools = [
-            {
-                "type": "function",
-                "function": {
-                    "name": "get_weather",
-                    "description": "Get weather info",
-                    "parameters": {"type": "object"},
-                },
-            },
-        ]
 
-        mock_response = self._create_mock_response_with_tools(
-            "I'll check the weather for you.",
-            [
-                {
-                    "id": "call_123",
-                    "function": {
-                        "name": "get_weather",
-                        "arguments": '{"location": "Beijing"}',
-                    },
-                },
-            ],
-        )
+class _MockAsyncStream:
+    """Mock async stream (context manager + async iterator)."""
 
-        with patch(
-            "dashscope.aigc.generation.AioGeneration.call",
-        ) as mock_call:
-            mock_call.return_value = mock_response
-            result = await model(messages, tools=tools, tool_choice="auto")
-            call_args = mock_call.call_args[1]
-            self.assertIn("tools", call_args)
-            self.assertIn("tool_choice", call_args)
-            self.assertEqual(call_args["tool_choice"], "auto")
+    def __init__(self, chunks: list) -> None:
+        self._chunks = chunks
+        self._index = 0
 
-            expected_content = [
-                TextBlock(type="text", text="I'll check the weather for you."),
-                ToolUseBlock(
-                    type="tool_use",
-                    id="call_123",
-                    name="get_weather",
-                    input={"location": "Beijing"},
-                ),
-            ]
-            self.assertEqual(result.content, expected_content)
+    async def __aenter__(self) -> "_MockAsyncStream":
+        return self
 
-    async def test_call_with_enable_thinking_streaming(self) -> None:
-        """Test streaming response with thinking mode enabled."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-            enable_thinking=True,
-        )
-        messages = [{"role": "user", "content": "Solve this problem"}]
+    async def __aexit__(self, *args: Any) -> None:
+        pass
 
-        chunks = [
-            self._create_mock_chunk(
-                content="Solution",
-                reasoning_content="Let me think...",
-            ),
-        ]
+    def __aiter__(self) -> "_MockAsyncStream":
+        return self
 
-        with patch(
-            "dashscope.aigc.generation.AioGeneration.call",
-        ) as mock_call:
-            mock_call.return_value = self._create_async_generator(chunks)
-            result = await model(messages)
-
-            call_args = mock_call.call_args[1]
-            self.assertTrue(call_args["enable_thinking"])
-            self.assertTrue(call_args["stream"])
-            responses = []
-            async for response in result:
-                responses.append(response)
-            self.assertGreater(len(responses), 0)
-            self.assertIsInstance(responses[0], ChatResponse)
-
-            expected_content = [
-                ThinkingBlock(type="thinking", thinking="Let me think..."),
-                TextBlock(type="text", text="Solution"),
-            ]
-            self.assertEqual(responses[0].content, expected_content)
-
-    async def test_call_with_structured_model_integration(self) -> None:
-        """Test full integration of a structured model."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-            stream=False,
-        )
-        messages = [{"role": "user", "content": "Generate a person"}]
-
-        mock_response = self._create_mock_response_with_tools(
-            "Here's a person",
-            [
-                {
-                    "id": "call_123",
-                    "function": {
-                        "name": "generate_structured_output",
-                        "arguments": '{"name": "John", "age": 30}',
-                    },
-                },
-            ],
-        )
-
-        with patch(
-            "dashscope.aigc.generation.AioGeneration.call",
-        ) as mock_call:
-            mock_call.return_value = mock_response
-
-            result = await model(messages, structured_model=SampleModel)
-            call_args = mock_call.call_args[1]
-
-            expected_tools = [
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "generate_structured_output",
-                        "description": "Generate the required structured"
-                        " output with this function",
-                        "parameters": {
-                            "description": "Sample Pydantic model for "
-                            "testing structured output.",
-                            "properties": {
-                                "name": {
-                                    "type": "string",
-                                },
-                                "age": {
-                                    "type": "integer",
-                                },
-                            },
-                            "required": [
-                                "name",
-                                "age",
-                            ],
-                            "type": "object",
-                        },
-                    },
-                },
-            ]
-            self.assertEqual(call_args["tools"], expected_tools)
-            self.assertEqual(
-                call_args["tool_choice"],
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "generate_structured_output",
-                    },
-                },
-            )
-
-            self.assertIsInstance(result, ChatResponse)
-            self.assertEqual(result.metadata, {"name": "John", "age": 30})
-            expected_content = [
-                TextBlock(type="text", text="Here's a person"),
-                ToolUseBlock(
-                    type="tool_use",
-                    id="call_123",
-                    name="generate_structured_output",
-                    input={"name": "John", "age": 30},
-                ),
-            ]
-            self.assertEqual(result.content, expected_content)
-
-    async def test_streaming_response_processing(self) -> None:
-        """Test processing of streaming response."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-            stream=True,
-        )
-        messages = [{"role": "user", "content": "Hello"}]
-
-        chunks = [
-            self._create_mock_chunk(
-                content="Hello",
-                reasoning_content="I should greet",
-                tool_calls=[],
-            ),
-            self._create_mock_chunk(
-                content=" there",
-                reasoning_content=" the",
-                tool_calls=[
-                    {
-                        "index": 0,
-                        "id": "call_123",
-                        "function": {
-                            "name": "greet",
-                            "arguments": '{"name": ',
-                        },
-                    },
-                ],
-            ),
-            self._create_mock_chunk(
-                content="!",
-                reasoning_content=" user",
-                tool_calls=[
-                    {
-                        "index": 0,
-                        "id": "call_123",
-                        "function": {
-                            "arguments": '"user"}',
-                        },
-                    },
-                ],
-            ),
-        ]
-
-        with patch(
-            "dashscope.aigc.generation.AioGeneration.call",
-        ) as mock_call:
-            mock_call.return_value = self._create_async_generator(chunks)
-            result = await model(messages)
-
-            responses = []
-            async for response in result:
-                responses.append(response)
-            self.assertEqual(len(responses), 3)
-            final_response = responses[-1]
-
-            expected_content = [
-                ThinkingBlock(
-                    type="thinking",
-                    thinking="I should greet the user",
-                ),
-                TextBlock(type="text", text="Hello there!"),
-                ToolUseBlock(
-                    id="call_123",
-                    name="greet",
-                    input={"name": "user"},
-                    type="tool_use",
-                    raw_input='{"name": "user"}',
-                ),
-            ]
-            self.assertEqual(final_response.content, expected_content)
-
-    async def test_streaming_tool_input_prefers_valid_final_json(self) -> None:
-        """Test streaming tool input keeps the final valid JSON dict."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-            stream=True,
-        )
-
-        chunks = [
-            self._create_mock_chunk(
-                tool_calls=[
-                    {
-                        "index": 0,
-                        "id": "call_123",
-                        "function": {
-                            "name": "score",
-                            "arguments": '{"points": ',
-                        },
-                    },
-                ],
-            ),
-            self._create_mock_chunk(
-                tool_calls=[
-                    {
-                        "index": 0,
-                        "id": "call_123",
-                        "function": {
-                            "arguments": "1}",
-                        },
-                    },
-                ],
-            ),
-        ]
-
-        with patch(
-            "dashscope.aigc.generation.AioGeneration.call",
-        ) as mock_call:
-            mock_call.return_value = self._create_async_generator(chunks)
-            result = await model([{"role": "user", "content": "Score it"}])
-
-            responses = []
-            async for response in result:
-                responses.append(response)
-
-            final_response = responses[-1]
-            expected_content = [
-                ToolUseBlock(
-                    type="tool_use",
-                    id="call_123",
-                    name="score",
-                    input={"points": 1},
-                    raw_input='{"points": 1}',
-                ),
-            ]
-            self.assertEqual(final_response.content, expected_content)
-
-    def test_tools_schema_validation_through_api(self) -> None:
-        """Test tools schema validation through API call."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-            stream=False,
-        )
-        # Test valid tools schema
-        valid_tools = [
-            {
-                "type": "function",
-                "function": {
-                    "name": "get_weather",
-                    "description": "Get weather info",
-                },
-            },
-        ]
-
-        # This test validates the format of the tools schema via an actual
-        # API call
-        messages = [{"role": "user", "content": "Test"}]
-        mock_response = self._create_mock_response("Test")
-
-        with patch(
-            "dashscope.aigc.generation.AioGeneration.call",
-        ) as mock_call:
-            mock_call.return_value = mock_response
-
-            # Should not throw an exception
-            try:
-                import asyncio
-
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    # If event loop is already running, create a task
-                    loop.create_task(model(messages, tools=valid_tools))
-                else:
-                    loop.run_until_complete(model(messages, tools=valid_tools))
-            except Exception as e:
-                if "schema must be a dict" in str(e):
-                    self.fail("Valid tools schema was rejected")
-
-    async def test_call_with_multimodal_model(self) -> None:
-        """Test multimodal model uses AioMultiModalConversation (async)."""
-        model = DashScopeChatModel(
-            model_name="qwen-vl-plus",
-            api_key="test_key",
-            stream=False,
-            multimodality=True,
-        )
-        messages = [{"role": "user", "content": "Describe this image."}]
-        mock_response = self._create_mock_response("This is a test image.")
-        with patch(
-            "dashscope.AioMultiModalConversation.call",
-            new_callable=AsyncMock,
-        ) as mock_call:
-            mock_call.return_value = mock_response
-            result = await model(messages)
-            mock_call.assert_called_once()
-            call_kwargs = mock_call.call_args[1]
-            self.assertEqual(call_kwargs["messages"], messages)
-            self.assertEqual(call_kwargs["model"], "qwen-vl-plus")
-            self.assertIsInstance(result, ChatResponse)
-            self.assertEqual(
-                result.content,
-                [TextBlock(type="text", text="This is a test image.")],
-            )
-
-    async def test_error_handling_scenarios(self) -> None:
-        """Test various error handling scenarios."""
-        model = DashScopeChatModel(
-            model_name="qwen-turbo",
-            api_key="test_key",
-            stream=False,
-        )
-        messages = [{"role": "user", "content": "Hello"}]
-
-        # Test failure of non-streaming API call
-        mock_response = Mock()
-        mock_response.status_code = 400
-        with patch(
-            "dashscope.aigc.generation.AioGeneration.call",
-        ) as mock_call:
-            mock_call.return_value = mock_response
-            with self.assertRaises(RuntimeError):
-                await model(messages)
-
-    # Auxiliary methods
-    def _create_mock_response(self, content: str) -> Mock:
-        """Create a standard mock response."""
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.output.choices = [Mock()]
-        mock_response.output.choices[0].message = MessageMock(
-            {"content": content},
-        )
-        mock_response.usage = Mock()
-        mock_response.usage.input_tokens = 10
-        mock_response.usage.output_tokens = 20
-        return mock_response
-
-    def _create_mock_response_with_tools(
-        self,
-        content: str,
-        tool_calls: list,
-    ) -> Mock:
-        """Create a mock response containing tool calls."""
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.output.choices = [Mock()]
-        mock_response.output.choices[0].message = MessageMock(
-            {
-                "content": content,
-                "tool_calls": tool_calls,
-            },
-        )
-        mock_response.usage = Mock()
-        mock_response.usage.input_tokens = 20
-        mock_response.usage.output_tokens = 30
-        return mock_response
-
-    def _create_mock_chunk(
-        self,
-        content: str = "",
-        reasoning_content: str = "",
-        tool_calls: list = None,
-    ) -> Mock:
-        """Create a mock chunk for streaming responses."""
-        chunk = Mock()
-        chunk.status_code = HTTPStatus.OK
-        chunk.output.choices = [Mock()]
-        chunk.output.choices[0].message = MessageMock(
-            {
-                "content": content,
-                "reasoning_content": reasoning_content,
-                "tool_calls": tool_calls or [],
-            },
-        )
-        chunk.usage = Mock()
-        chunk.usage.input_tokens = 5
-        chunk.usage.output_tokens = 10
+    async def __anext__(self) -> Any:
+        if self._index >= len(self._chunks):
+            raise StopAsyncIteration
+        chunk = self._chunks[self._index]
+        self._index += 1
         return chunk
 
-    async def _create_async_generator(self, items: list) -> AsyncGenerator:
-        """Create an asynchronous generator."""
-        for item in items:
-            yield item
+
+# ---------------------------------------------------------------------------
+# Non-streaming tests
+# ---------------------------------------------------------------------------
+
+
+class TestDashScopeNonStream(IsolatedAsyncioTestCase):
+    """Tests for DashScopeChatModel in non-streaming mode."""
+
+    def setUp(self) -> None:
+        self.model = _make_model(stream=False)
+
+    @patch("openai.AsyncClient")
+    async def test_text_response(self, mock_client_cls: MagicMock) -> None:
+        """Non-stream text response returns a single ChatResponse."""
+        mock_create = AsyncMock(
+            return_value=_mock_completion(text="Hello!"),
+        )
+        mock_client_cls.return_value.chat.completions.create = mock_create
+
+        result = await self.model([])
+
+        self.assertEqual(
+            (result.is_last, result.content),
+            (True, [TextBlock.model_construct(id=A, text="Hello!")]),
+        )
+        self.assertEqual(result.id, "req-1")
+
+    @patch("openai.AsyncClient")
+    async def test_tool_call_response(
+        self,
+        mock_client_cls: MagicMock,
+    ) -> None:
+        """Non-stream tool call response creates ToolCallBlocks."""
+        mock_create = AsyncMock(
+            return_value=_mock_completion(
+                tool_calls=[
+                    {
+                        "id": "call-1",
+                        "name": "get_weather",
+                        "arguments": '{"city":"Hangzhou"}',
+                    },
+                ],
+            ),
+        )
+        mock_client_cls.return_value.chat.completions.create = mock_create
+
+        result = await self.model([])
+
+        self.assertEqual(
+            (result.is_last, result.content),
+            (
+                True,
+                [
+                    ToolCallBlock(
+                        id="call-1",
+                        name="get_weather",
+                        input='{"city":"Hangzhou"}',
+                    ),
+                ],
+            ),
+        )
+
+    @patch("openai.AsyncClient")
+    async def test_thinking_response(
+        self,
+        mock_client_cls: MagicMock,
+    ) -> None:
+        """Non-stream response with reasoning creates ThinkingBlock."""
+        mock_create = AsyncMock(
+            return_value=_mock_completion(
+                text="42",
+                reasoning="Reasoning step...",
+            ),
+        )
+        mock_client_cls.return_value.chat.completions.create = mock_create
+
+        result = await self.model([])
+
+        self.assertEqual(
+            (result.is_last, result.content),
+            (
+                True,
+                [
+                    ThinkingBlock.model_construct(
+                        id=A,
+                        thinking="Reasoning step...",
+                    ),
+                    TextBlock.model_construct(id=A, text="42"),
+                ],
+            ),
+        )
+
+
+# ---------------------------------------------------------------------------
+# Streaming tests
+# ---------------------------------------------------------------------------
+
+
+class TestDashScopeStream(IsolatedAsyncioTestCase):
+    """Tests for DashScopeChatModel in streaming mode."""
+
+    def setUp(self) -> None:
+        self.model = _make_model(stream=True)
+
+    @patch("openai.AsyncClient")
+    async def test_stream_text(self, mock_client_cls: MagicMock) -> None:
+        """Stream text yields n deltas + 1 final with full content."""
+        chunks = [
+            _make_stream_chunk(delta_text="Hello"),
+            _make_stream_chunk(delta_text=" world"),
+            _make_stream_chunk(
+                has_choices=False,
+                usage={"prompt_tokens": 10, "completion_tokens": 2},
+            ),
+        ]
+        mock_create = AsyncMock(return_value=_MockAsyncStream(chunks))
+        mock_client_cls.return_value.chat.completions.create = mock_create
+
+        gen = await self.model([])
+        responses = [r async for r in gen]
+
+        self.assertListEqual(
+            [(r.is_last, r.content) for r in responses],
+            [
+                (False, [TextBlock.model_construct(id=A, text="Hello")]),
+                (False, [TextBlock.model_construct(id=A, text=" world")]),
+                (True, [TextBlock.model_construct(id=A, text="Hello world")]),
+            ],
+        )
+
+    @patch("openai.AsyncClient")
+    async def test_stream_thinking_and_text(
+        self,
+        mock_client_cls: MagicMock,
+    ) -> None:
+        """Stream reasoning + text yields deltas then accumulated final."""
+        chunks = [
+            _make_stream_chunk(delta_reasoning="Think"),
+            _make_stream_chunk(delta_reasoning="ing"),
+            _make_stream_chunk(delta_text="Answer"),
+            _make_stream_chunk(
+                has_choices=False,
+                usage={"prompt_tokens": 10, "completion_tokens": 5},
+            ),
+        ]
+        mock_create = AsyncMock(return_value=_MockAsyncStream(chunks))
+        mock_client_cls.return_value.chat.completions.create = mock_create
+
+        gen = await self.model([])
+        responses = [r async for r in gen]
+
+        self.assertListEqual(
+            [(r.is_last, r.content) for r in responses],
+            [
+                (
+                    False,
+                    [ThinkingBlock.model_construct(id=A, thinking="Think")],
+                ),
+                (False, [ThinkingBlock.model_construct(id=A, thinking="ing")]),
+                (False, [TextBlock.model_construct(id=A, text="Answer")]),
+                (
+                    True,
+                    [
+                        ThinkingBlock.model_construct(
+                            id=A,
+                            thinking="Thinking",
+                        ),
+                        TextBlock.model_construct(id=A, text="Answer"),
+                    ],
+                ),
+            ],
+        )
+
+    @patch("openai.AsyncClient")
+    async def test_stream_tool_calls(
+        self,
+        mock_client_cls: MagicMock,
+    ) -> None:
+        """Stream tool call chunks accumulate into final ToolCallBlock."""
+        chunks = [
+            _make_stream_chunk(
+                tool_calls=[
+                    _make_tool_call_delta(0, "call-1", "search", '{"q":'),
+                ],
+            ),
+            _make_stream_chunk(
+                tool_calls=[
+                    _make_tool_call_delta(0, None, None, '"hello"}'),
+                ],
+            ),
+            _make_stream_chunk(
+                has_choices=False,
+                usage={"prompt_tokens": 10, "completion_tokens": 5},
+            ),
+        ]
+        mock_create = AsyncMock(return_value=_MockAsyncStream(chunks))
+        mock_client_cls.return_value.chat.completions.create = mock_create
+
+        gen = await self.model([])
+        responses = [r async for r in gen]
+
+        self.assertListEqual(
+            [(r.is_last, r.content) for r in responses],
+            [
+                (
+                    False,
+                    [
+                        ToolCallBlock(
+                            id="call-1",
+                            name="search",
+                            input='{"q":',
+                        ),
+                    ],
+                ),
+                (
+                    False,
+                    [
+                        ToolCallBlock(
+                            id="call-1",
+                            name="search",
+                            input='"hello"}',
+                        ),
+                    ],
+                ),
+                (
+                    True,
+                    [
+                        ToolCallBlock(
+                            id="call-1",
+                            name="search",
+                            input='{"q":"hello"}',
+                        ),
+                    ],
+                ),
+            ],
+        )
+
+    @patch("openai.AsyncClient")
+    async def test_stream_usage(self, mock_client_cls: MagicMock) -> None:
+        """Stream usage chunk attaches token counts to final response."""
+        chunks = [
+            _make_stream_chunk(delta_text="X"),
+            _make_stream_chunk(
+                has_choices=False,
+                usage={"prompt_tokens": 50, "completion_tokens": 10},
+            ),
+        ]
+        mock_create = AsyncMock(return_value=_MockAsyncStream(chunks))
+        mock_client_cls.return_value.chat.completions.create = mock_create
+
+        gen = await self.model([])
+        responses = [r async for r in gen]
+
+        self.assertListEqual(
+            [(r.is_last, r.content) for r in responses],
+            [
+                (False, [TextBlock.model_construct(id=A, text="X")]),
+                (True, [TextBlock.model_construct(id=A, text="X")]),
+            ],
+        )
+        self.assertEqual(responses[-1].usage.input_tokens, 50)
+        self.assertEqual(responses[-1].usage.output_tokens, 10)
+
+    @patch("openai.AsyncClient")
+    async def test_stream_audio_response(
+        self,
+        mock_client_cls: MagicMock,
+    ) -> None:
+        """Stream PCM deltas produce per-chunk DataBlocks (first chunk
+        prefixed with a streaming WAV header) sharing a stable id, plus a
+        final fixed-size WAV block readable by the ``wave`` module."""
+        pcm1 = bytes([1, 2, 3, 4])
+        pcm2 = bytes([5, 6, 7, 8])
+        pcm3 = bytes([9, 10, 11, 12])
+        pcm_full = pcm1 + pcm2 + pcm3
+
+        chunks = [
+            _make_stream_chunk(
+                delta_audio={"data": base64.b64encode(pcm1).decode()},
+            ),
+            _make_stream_chunk(
+                delta_audio={"data": base64.b64encode(pcm2).decode()},
+            ),
+            _make_stream_chunk(
+                delta_audio={"data": base64.b64encode(pcm3).decode()},
+            ),
+            _make_stream_chunk(
+                has_choices=False,
+                usage={"prompt_tokens": 5, "completion_tokens": 3},
+            ),
+        ]
+        mock_create = AsyncMock(return_value=_MockAsyncStream(chunks))
+        mock_client_cls.return_value.chat.completions.create = mock_create
+
+        gen = await self.model([])
+        responses = [r async for r in gen]
+        self.assertEqual(len(responses), 4)
+
+        # All four chunks (3 deltas + 1 final) must share the same audio
+        # block id so downstream consumers stitch them as one stream.
+        all_audio_ids = {
+            block.id
+            for r in responses
+            for block in r.content
+            if isinstance(block, DataBlock)
+        }
+        self.assertEqual(len(all_audio_ids), 1)
+
+        # First delta: WAV header (44 bytes, "RIFF"..."WAVE") + pcm1.
+        first_payload = base64.b64decode(responses[0].content[0].source.data)
+        self.assertEqual(len(first_payload), 44 + len(pcm1))
+        self.assertEqual(first_payload[:4], b"RIFF")
+        self.assertEqual(first_payload[8:12], b"WAVE")
+        self.assertEqual(first_payload[44:], pcm1)
+
+        # Subsequent deltas: raw PCM only, no header.
+        for resp, pcm in zip(responses[1:3], [pcm2, pcm3]):
+            payload = base64.b64decode(resp.content[0].source.data)
+            self.assertEqual(payload, pcm)
+
+        # Final ``is_last`` block: a fixed-size WAV the ``wave`` module
+        # can parse end-to-end at 24kHz / mono / 16-bit.
+        final = responses[-1]
+        self.assertTrue(final.is_last)
+        final_audio = next(
+            b for b in final.content if isinstance(b, DataBlock)
+        )
+        wav_bytes = base64.b64decode(final_audio.source.data)
+        with wave.open(io.BytesIO(wav_bytes), "rb") as wav:
+            self.assertEqual(wav.getnchannels(), 1)
+            self.assertEqual(wav.getsampwidth(), 2)
+            self.assertEqual(wav.getframerate(), 24000)
+            frames = wav.readframes(wav.getnframes())
+        self.assertEqual(frames, pcm_full)
+
+
+# ---------------------------------------------------------------------------
+# _format_tools tests
+# ---------------------------------------------------------------------------
+
+_FT_TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get the weather",
+            "parameters": {
+                "type": "object",
+                "properties": {"city": {"type": "string"}},
+                "required": ["city"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_time",
+            "description": "Get the time",
+            "parameters": {
+                "type": "object",
+                "properties": {"timezone": {"type": "string"}},
+                "required": ["timezone"],
+            },
+        },
+    },
+]
+
+
+class TestDashScopeFormatTools(unittest.TestCase):
+    """Tests for DashScopeChatModel._format_tools."""
+
+    def setUp(self) -> None:
+        """Set up model instance."""
+        self.model = _make_model()
+
+    def test_auto_mode(self) -> None:
+        """Auto mode returns tools unchanged and string 'auto'."""
+        fmt_tools, fmt_choice = self.model._format_tools(
+            _FT_TOOLS,
+            ToolChoice(mode="auto"),
+        )
+        self.assertEqual(fmt_tools, _FT_TOOLS)
+        self.assertEqual(fmt_choice, "auto")
+
+    def test_none_mode(self) -> None:
+        """None mode returns tools unchanged and string 'none'."""
+        fmt_tools, fmt_choice = self.model._format_tools(
+            _FT_TOOLS,
+            ToolChoice(mode="none"),
+        )
+        self.assertEqual(fmt_tools, _FT_TOOLS)
+        self.assertEqual(fmt_choice, "none")
+
+    def test_required_mode_warns(self) -> None:
+        """Required mode emits a DeprecationWarning and falls back to auto."""
+        with self.assertWarns(DeprecationWarning):
+            fmt_tools, fmt_choice = self.model._format_tools(
+                _FT_TOOLS,
+                ToolChoice(mode="required"),
+            )
+        self.assertEqual(fmt_tools, _FT_TOOLS)
+        self.assertEqual(fmt_choice, "auto")
+
+    def test_str_mode_force_call(self) -> None:
+        """A specific tool name forces that tool call."""
+        fmt_tools, fmt_choice = self.model._format_tools(
+            _FT_TOOLS,
+            ToolChoice(mode="get_weather"),
+        )
+        self.assertEqual(fmt_tools, _FT_TOOLS)
+        self.assertEqual(
+            fmt_choice,
+            {"type": "function", "function": {"name": "get_weather"}},
+        )
+
+    def test_tools_filtered(self) -> None:
+        """When tool_choice.tools is set, only those tools are included."""
+        fmt_tools, fmt_choice = self.model._format_tools(
+            _FT_TOOLS,
+            ToolChoice(mode="auto", tools=["get_weather"]),
+        )
+        self.assertEqual(len(fmt_tools), 1)
+        self.assertEqual(fmt_tools[0]["function"]["name"], "get_weather")
+        self.assertEqual(fmt_choice, "auto")
+
+    def test_no_tool_choice(self) -> None:
+        """Without tool_choice, returns tools and None."""
+        fmt_tools, fmt_choice = self.model._format_tools(_FT_TOOLS, None)
+        self.assertEqual(fmt_tools, _FT_TOOLS)
+        self.assertIsNone(fmt_choice)

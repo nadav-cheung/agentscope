@@ -1,369 +1,365 @@
 # -*- coding: utf-8 -*-
-"""Unit tests for Ollama API model class."""
+# pylint: disable=protected-access
+"""Unit tests for OllamaChatModel with mocked API responses.
+
+Tests cover both non-streaming and streaming modes.
+Ollama uses ollama.AsyncClient with async iterator streaming.
+"""
 import json
-from typing import AsyncGenerator, Any
-from unittest.async_case import IsolatedAsyncioTestCase
-from unittest.mock import patch, AsyncMock
-from pydantic import BaseModel
+from typing import Any
+import unittest
+from unittest import IsolatedAsyncioTestCase
+from unittest.mock import AsyncMock, MagicMock, patch
 
-from agentscope.model import OllamaChatModel, ChatResponse
-from agentscope.message import TextBlock, ToolUseBlock, ThinkingBlock
+from utils import AnyString
+
+from agentscope.message import TextBlock, ToolCallBlock, ThinkingBlock
+from agentscope.model import OllamaChatModel
+from agentscope.tool import ToolChoice
+
+A = AnyString()
 
 
-class OllamaMessageMock:
-    """Mock class for Ollama message objects."""
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 
-    def __init__(
+
+def _make_model(stream: bool = False) -> Any:
+    return OllamaChatModel(
+        model="qwen3:8b",
+        stream=stream,
+        context_size=40_960,
+    )
+
+
+def _mock_completion(
+    content: str = "",
+    thinking: str | None = None,
+    tool_calls: list | None = None,
+) -> MagicMock:
+    """Build a mock non-streaming Ollama response."""
+    msg = MagicMock()
+    msg.content = content
+    msg.thinking = thinking
+
+    if tool_calls:
+        tc_mocks = []
+        for tc in tool_calls:
+            m = MagicMock()
+            m.function.name = tc["name"]
+            m.function.arguments = tc["args"]
+            tc_mocks.append(m)
+        msg.tool_calls = tc_mocks
+    else:
+        msg.tool_calls = None
+
+    resp = MagicMock()
+    resp.message = msg
+    resp.prompt_eval_count = 10
+    resp.eval_count = 5
+    resp.id = None
+    return resp
+
+
+def _make_stream_chunk(
+    content: str = "",
+    thinking: str | None = None,
+    tool_calls: list | None = None,
+) -> MagicMock:
+    """Build a single mock Ollama streaming chunk."""
+    msg = MagicMock()
+    msg.content = content
+    msg.thinking = thinking
+
+    if tool_calls:
+        tc_mocks = []
+        for tc in tool_calls:
+            m = MagicMock()
+            m.function.name = tc["name"]
+            m.function.arguments = tc["args"]
+            tc_mocks.append(m)
+        msg.tool_calls = tc_mocks
+    else:
+        msg.tool_calls = None
+
+    chunk = MagicMock()
+    chunk.message = msg
+    chunk.prompt_eval_count = 10
+    chunk.eval_count = 5
+    chunk.id = None
+    return chunk
+
+
+class _MockAsyncStream:
+    """Mock async iterator for Ollama stream."""
+
+    def __init__(self, chunks: list) -> None:
+        self._chunks = chunks
+        self._index = 0
+
+    def __aiter__(self) -> "_MockAsyncStream":
+        return self
+
+    async def __anext__(self) -> Any:
+        if self._index >= len(self._chunks):
+            raise StopAsyncIteration
+        chunk = self._chunks[self._index]
+        self._index += 1
+        return chunk
+
+
+# ---------------------------------------------------------------------------
+# Non-streaming tests
+# ---------------------------------------------------------------------------
+
+
+class TestOllamaNonStream(IsolatedAsyncioTestCase):
+    """Tests for OllamaChatModel in non-streaming mode."""
+
+    def setUp(self) -> None:
+        self.model = _make_model(stream=False)
+
+    @patch("ollama.AsyncClient")
+    async def test_text_response(self, mock_client_cls: MagicMock) -> None:
+        """Non-stream text response returns a single ChatResponse."""
+        mock_client_cls.return_value.chat = AsyncMock(
+            return_value=_mock_completion(content="Hello!"),
+        )
+
+        result = await self.model([])
+
+        self.assertEqual(
+            (result.is_last, result.content),
+            (True, [TextBlock.model_construct(id=A, text="Hello!")]),
+        )
+
+    @patch("ollama.AsyncClient")
+    async def test_tool_call_response(
         self,
-        content: str = "",
-        thinking: str = "",
-        tool_calls: list = None,
-    ):
-        self.content = content
-        self.thinking = thinking
-        self.tool_calls = tool_calls or []
-
-
-class OllamaFunctionMock:
-    """Mock class for Ollama function objects."""
-
-    def __init__(self, name: str, arguments: dict = None):
-        self.name = name
-        self.arguments = arguments or {}
-
-
-class OllamaToolCallMock:
-    """Mock class for Ollama tool call objects."""
-
-    def __init__(
-        self,
-        call_id: str = None,
-        function: OllamaFunctionMock = None,
-    ):
-        self.id = call_id
-        self.function = function
-
-
-class OllamaResponseMock:
-    """Mock class for Ollama response objects."""
-
-    def __init__(
-        self,
-        message: OllamaMessageMock = None,
-        done: bool = True,
-        prompt_eval_count: int = 0,
-        eval_count: int = 0,
+        mock_client_cls: MagicMock,
     ) -> None:
-        self.message = message or OllamaMessageMock()
-        self.done = done
-        self.prompt_eval_count = prompt_eval_count
-        self.eval_count = eval_count
+        """Parsing a tool-call response creates a ToolCallBlock."""
+        mock_client_cls.return_value.chat = AsyncMock(
+            return_value=_mock_completion(
+                tool_calls=[
+                    {"name": "get_weather", "args": {"city": "SH"}},
+                ],
+            ),
+        )
 
-    def get(self, key: str, default: Any = None) -> Any:
-        """Mock dict-like get method."""
-        return getattr(self, key, default)
+        result = await self.model([])
 
-    def __contains__(self, key: str) -> bool:
-        """Mock dict-like contains method."""
-        return hasattr(self, key)
+        self.assertEqual(
+            (result.is_last, result.content),
+            (
+                True,
+                [
+                    ToolCallBlock(
+                        id="0_get_weather",
+                        name="get_weather",
+                        input=json.dumps({"city": "SH"}),
+                    ),
+                ],
+            ),
+        )
+
+    @patch("ollama.AsyncClient")
+    async def test_thinking_response(
+        self,
+        mock_client_cls: MagicMock,
+    ) -> None:
+        """Non-stream thinking plus text returns ThinkingBlock then
+        TextBlock."""
+        mock_client_cls.return_value.chat = AsyncMock(
+            return_value=_mock_completion(
+                content="Answer",
+                thinking="Let me think...",
+            ),
+        )
+
+        result = await self.model([])
+
+        self.assertEqual(
+            (result.is_last, result.content),
+            (
+                True,
+                [
+                    ThinkingBlock.model_construct(
+                        id=A,
+                        thinking="Let me think...",
+                    ),
+                    TextBlock.model_construct(id=A, text="Answer"),
+                ],
+            ),
+        )
 
 
-class SampleModel(BaseModel):
-    """Sample Pydantic model for testing structured output."""
-
-    name: str
-    age: int
+# ---------------------------------------------------------------------------
+# Streaming tests
+# ---------------------------------------------------------------------------
 
 
-class TestOllamaChatModel(IsolatedAsyncioTestCase):
-    """Test cases for OllamaChatModel."""
+class TestOllamaStream(IsolatedAsyncioTestCase):
+    """Tests for OllamaChatModel in streaming mode."""
 
-    def test_init_default_params(self) -> None:
-        """Test initialization with default parameters."""
-        with patch("ollama.AsyncClient") as mock_client:
-            model = OllamaChatModel(model_name="llama3.2")
-            self.assertEqual(model.model_name, "llama3.2")
-            self.assertFalse(model.stream)
-            self.assertIsNone(model.options)
-            self.assertEqual(model.keep_alive, "5m")
-            self.assertIsNone(model.think)
-            mock_client.assert_called_once_with(host=None)
+    def setUp(self) -> None:
+        self.model = _make_model(stream=True)
 
-    def test_init_with_custom_params(self) -> None:
-        """Test initialization with custom parameters."""
-        options = {"temperature": 0.7, "top_p": 0.9}
-        with patch("ollama.AsyncClient") as mock_client:
-            model = OllamaChatModel(
-                model_name="qwen2.5",
-                stream=True,
-                options=options,
-                keep_alive="10m",
-                enable_thinking=True,
-                host="http://localhost:11434",
-                timeout=30,
-            )
-            self.assertEqual(model.model_name, "qwen2.5")
-            self.assertTrue(model.stream)
-            self.assertEqual(model.options, options)
-            self.assertEqual(model.keep_alive, "10m")
-            self.assertTrue(model.think)
-            mock_client.assert_called_once_with(
-                host="http://localhost:11434",
-                timeout=30,
-            )
+    @patch("ollama.AsyncClient")
+    async def test_stream_text(self, mock_client_cls: MagicMock) -> None:
+        """Stream text yields deltas then final with full content."""
+        chunks = [
+            _make_stream_chunk(content="Hi"),
+            _make_stream_chunk(content=" there"),
+        ]
+        mock_client_cls.return_value.chat = AsyncMock(
+            return_value=_MockAsyncStream(chunks),
+        )
 
-    async def test_call_with_regular_model(self) -> None:
-        """Test calling a regular model."""
-        with patch("ollama.AsyncClient") as mock_client_class:
-            mock_client = AsyncMock()
-            mock_client_class.return_value = mock_client
+        gen = await self.model([])
+        responses = [r async for r in gen]
 
-            model = OllamaChatModel(model_name="llama3.2", stream=False)
-            model.client = mock_client
+        self.assertListEqual(
+            [(r.is_last, r.content) for r in responses],
+            [
+                (False, [TextBlock.model_construct(id=A, text="Hi")]),
+                (False, [TextBlock.model_construct(id=A, text=" there")]),
+                (True, [TextBlock.model_construct(id=A, text="Hi there")]),
+            ],
+        )
 
-            messages = [{"role": "user", "content": "Hello"}]
-            mock_response = self._create_mock_response(
-                "Hello! How can I help you?",
-            )
-            mock_client.chat = AsyncMock(return_value=mock_response)
+    @patch("ollama.AsyncClient")
+    async def test_stream_thinking_and_text(
+        self,
+        mock_client_cls: MagicMock,
+    ) -> None:
+        """Stream thinking and text deltas then final with accumulated
+        content."""
+        chunks = [
+            _make_stream_chunk(thinking="Think step"),
+            _make_stream_chunk(content="Result"),
+        ]
+        mock_client_cls.return_value.chat = AsyncMock(
+            return_value=_MockAsyncStream(chunks),
+        )
 
-            result = await model(messages)
-            call_args = mock_client.chat.call_args[1]
-            self.assertEqual(call_args["model"], "llama3.2")
-            self.assertEqual(call_args["messages"], messages)
-            self.assertFalse(call_args["stream"])
-            self.assertIsInstance(result, ChatResponse)
-            expected_content = [
-                TextBlock(type="text", text="Hello! How can I help you?"),
-            ]
-            self.assertEqual(result.content, expected_content)
+        gen = await self.model([])
+        responses = [r async for r in gen]
 
-    async def test_call_with_tools_integration(self) -> None:
-        """Test full integration of tool calls."""
-        with patch("ollama.AsyncClient") as mock_client_class:
-            mock_client = AsyncMock()
-            mock_client_class.return_value = mock_client
-
-            model = OllamaChatModel(model_name="llama3.2", stream=False)
-            model.client = mock_client
-
-            messages = [{"role": "user", "content": "What's the weather?"}]
-            tools = [
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "get_weather",
-                        "description": "Get weather info",
-                        "parameters": {"type": "object"},
-                    },
-                },
-            ]
-
-            function_mock = OllamaFunctionMock(
-                name="get_weather",
-                arguments={"location": "Beijing"},
-            )
-            tool_call_mock = OllamaToolCallMock(
-                call_id="call_123",
-                function=function_mock,
-            )
-            message_mock = OllamaMessageMock(
-                content="I'll check the weather for you.",
-                tool_calls=[tool_call_mock],
-            )
-            mock_response = self._create_mock_response_with_message(
-                message_mock,
-            )
-
-            mock_client.chat = AsyncMock(return_value=mock_response)
-            result = await model(messages, tools=tools)
-
-            call_args = mock_client.chat.call_args[1]
-            self.assertIn("tools", call_args)
-            self.assertEqual(call_args["tools"], tools)
-            expected_content = [
-                TextBlock(type="text", text="I'll check the weather for you."),
-                ToolUseBlock(
-                    type="tool_use",
-                    id="0_get_weather",
-                    name="get_weather",
-                    input={"location": "Beijing"},
-                    raw_input=json.dumps({"location": "Beijing"}),
+        self.assertListEqual(
+            [(r.is_last, r.content) for r in responses],
+            [
+                (
+                    False,
+                    [
+                        ThinkingBlock.model_construct(
+                            id=A,
+                            thinking="Think step",
+                        ),
+                    ],
                 ),
-            ]
-            self.assertEqual(result.content, expected_content)
-
-    async def test_call_with_thinking_enabled(self) -> None:
-        """Test calling with thinking functionality enabled."""
-        with patch("ollama.AsyncClient") as mock_client_class:
-            mock_client = AsyncMock()
-            mock_client_class.return_value = mock_client
-
-            model = OllamaChatModel(
-                model_name="qwen2.5",
-                stream=False,
-                enable_thinking=True,
-            )
-            model.client = mock_client
-
-            messages = [
-                {"role": "user", "content": "Think about this problem"},
-            ]
-            message_mock = OllamaMessageMock(
-                content="Here's my analysis",
-                thinking="Let me analyze this step by step...",
-            )
-            mock_response = self._create_mock_response_with_message(
-                message_mock,
-            )
-
-            mock_client.chat = AsyncMock(return_value=mock_response)
-            result = await model(messages)
-
-            call_args = mock_client.chat.call_args[1]
-            self.assertTrue(call_args["think"])
-            expected_content = [
-                ThinkingBlock(
-                    type="thinking",
-                    thinking="Let me analyze this step by step...",
+                (False, [TextBlock.model_construct(id=A, text="Result")]),
+                (
+                    True,
+                    [
+                        ThinkingBlock.model_construct(
+                            id=A,
+                            thinking="Think step",
+                        ),
+                        TextBlock.model_construct(id=A, text="Result"),
+                    ],
                 ),
-                TextBlock(type="text", text="Here's my analysis"),
-            ]
-            self.assertEqual(result.content, expected_content)
+            ],
+        )
 
-    async def test_call_with_structured_model_integration(self) -> None:
-        """Test full integration of a structured model."""
-        with patch("ollama.AsyncClient") as mock_client_class:
-            mock_client = AsyncMock()
-            mock_client_class.return_value = mock_client
-
-            model = OllamaChatModel(model_name="llama3.2", stream=False)
-            model.client = mock_client
-
-            messages = [{"role": "user", "content": "Generate a person"}]
-            mock_response = self._create_mock_response(
-                '{"name": "John", "age": 30}',
-            )
-            mock_client.chat = AsyncMock(return_value=mock_response)
-
-            result = await model(messages, structured_model=SampleModel)
-            call_args = mock_client.chat.call_args[1]
-            self.assertIn("format", call_args)
-            self.assertEqual(
-                call_args["format"],
-                SampleModel.model_json_schema(),
-            )
-            self.assertIsInstance(result, ChatResponse)
-            self.assertEqual(result.metadata, {"name": "John", "age": 30})
-            expected_content = [
-                TextBlock(type="text", text='{"name": "John", "age": 30}'),
-            ]
-            self.assertEqual(result.content, expected_content)
-
-    async def test_streaming_response_processing(self) -> None:
-        """Test processing of streaming response."""
-        with patch("ollama.AsyncClient") as mock_client_class:
-            mock_client = AsyncMock()
-            mock_client_class.return_value = mock_client
-
-            model = OllamaChatModel(model_name="llama3.2", stream=True)
-            model.client = mock_client
-
-            messages = [{"role": "user", "content": "Hello"}]
-            chunks = [
-                self._create_mock_chunk(content="Hello", done=False),
-                self._create_mock_chunk(content=" there!", done=True),
-            ]
-
-            mock_client.chat = AsyncMock(
-                return_value=self._create_async_generator(chunks),
-            )
-            result = await model(messages)
-            responses = []
-            async for response in result:
-                responses.append(response)
-
-            self.assertEqual(len(responses), 2)
-            final_response = responses[-1]
-            expected_content = [TextBlock(type="text", text="Hello there!")]
-            self.assertEqual(final_response.content, expected_content)
-
-    async def test_options_integration(self) -> None:
-        """Test integration of options parameter."""
-        with patch("ollama.AsyncClient") as mock_client_class:
-            mock_client = AsyncMock()
-            mock_client_class.return_value = mock_client
-
-            options = {"temperature": 0.7, "top_p": 0.9}
-            model = OllamaChatModel(
-                model_name="llama3.2",
-                stream=False,
-                options=options,
-            )
-            model.client = mock_client
-
-            messages = [{"role": "user", "content": "Test"}]
-            mock_response = self._create_mock_response("Test response")
-            mock_client.chat = AsyncMock(return_value=mock_response)
-
-            await model(messages, top_k=40)
-
-            call_args = mock_client.chat.call_args[1]
-            self.assertEqual(call_args["options"], options)
-            self.assertEqual(call_args["keep_alive"], "5m")
-            self.assertEqual(call_args["top_k"], 40)
-
-    # Auxiliary methods
-    def _create_mock_response(
+    @patch("ollama.AsyncClient")
+    async def test_stream_tool_call(
         self,
-        content: str = "",
-        prompt_eval_count: int = 10,
-        eval_count: int = 20,
-    ) -> OllamaResponseMock:
-        """Create a standard mock response."""
-        message = OllamaMessageMock(content=content)
-        return OllamaResponseMock(
-            message=message,
-            prompt_eval_count=prompt_eval_count,
-            eval_count=eval_count,
+        mock_client_cls: MagicMock,
+    ) -> None:
+        """Stream tool-call chunk yields delta then final with same
+        ToolCallBlock."""
+        chunks = [
+            _make_stream_chunk(
+                tool_calls=[
+                    {"name": "search", "args": {"q": "hello"}},
+                ],
+            ),
+        ]
+        mock_client_cls.return_value.chat = AsyncMock(
+            return_value=_MockAsyncStream(chunks),
         )
 
-    def _create_mock_response_with_message(
-        self,
-        message: OllamaMessageMock,
-        prompt_eval_count: int = 10,
-        eval_count: int = 20,
-    ) -> OllamaResponseMock:
-        """Create a mock response with specific message."""
-        return OllamaResponseMock(
-            message=message,
-            prompt_eval_count=prompt_eval_count,
-            eval_count=eval_count,
+        gen = await self.model([])
+        responses = [r async for r in gen]
+
+        tool_block = ToolCallBlock(
+            id="0_search",
+            name="search",
+            input=json.dumps({"q": "hello"}),
+        )
+        self.assertListEqual(
+            [(r.is_last, r.content) for r in responses],
+            [
+                (False, [tool_block]),
+                (True, [tool_block]),
+            ],
         )
 
-    def _create_mock_chunk(
-        self,
-        content: str = "",
-        thinking: str = "",
-        tool_calls: list = None,
-        done: bool = True,
-        prompt_eval_count: int = 5,
-        eval_count: int = 10,
-    ) -> OllamaResponseMock:
-        """Create a mock chunk for streaming responses."""
-        message = OllamaMessageMock(
-            content=content,
-            thinking=thinking,
-            tool_calls=tool_calls or [],
-        )
-        return OllamaResponseMock(
-            message=message,
-            done=done,
-            prompt_eval_count=prompt_eval_count,
-            eval_count=eval_count,
-        )
 
-    async def _create_async_generator(self, items: list) -> AsyncGenerator:
-        """Create an asynchronous generator."""
-        for item in items:
-            yield item
+# ---------------------------------------------------------------------------
+# _format_tools tests
+# ---------------------------------------------------------------------------
+
+_FT_TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get the weather",
+            "parameters": {
+                "type": "object",
+                "properties": {"city": {"type": "string"}},
+                "required": ["city"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_time",
+            "description": "Get the time",
+            "parameters": {
+                "type": "object",
+                "properties": {"timezone": {"type": "string"}},
+                "required": ["timezone"],
+            },
+        },
+    },
+]
+
+
+class TestOllamaFormatTools(unittest.TestCase):
+    """Tests for OllamaChatModel._format_tools."""
+
+    def setUp(self) -> None:
+        self.model = _make_model()
+
+    def test_tools_forwarded_no_choice(self) -> None:
+        """Tools are forwarded unchanged when tool_choice is None."""
+        fmt_tools, fmt_choice = self.model._format_tools(_FT_TOOLS, None)
+        self.assertEqual(fmt_tools, _FT_TOOLS)
+        self.assertIsNone(fmt_choice)
+
+    def test_tools_filtered(self) -> None:
+        """ToolChoice with tools list filters to matching function names."""
+        fmt_tools, fmt_choice = self.model._format_tools(
+            _FT_TOOLS,
+            ToolChoice(mode="auto", tools=["get_weather"]),
+        )
+        self.assertIsNotNone(fmt_tools)
+        assert fmt_tools is not None
+        self.assertEqual(len(fmt_tools), 1)
+        self.assertEqual(fmt_tools[0]["function"]["name"], "get_weather")
+        self.assertIsNone(fmt_choice)
